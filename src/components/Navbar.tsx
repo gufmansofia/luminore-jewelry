@@ -1,0 +1,262 @@
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useLanguage } from '../i18n';
+const logoFullUrl = '/logo-full.png';
+
+export function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const location = useLocation();
+  const isProductPage = location.pathname.startsWith('/product');
+  const isHomePage = location.pathname === '/';
+  const { t, language, toggleLanguage } = useLanguage();
+
+  // Mobile nav visibility — hidden until logo scrolls behind navbar
+  const [mobileNavVisible, setMobileNavVisible] = useState(!isHomePage);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Watch the sentinel placed at the logo's vertical center in HeroMobile.
+  // When it scrolls past the navbar bottom (96px), reveal the navbar on mobile.
+  useEffect(() => {
+    if (!isHomePage) {
+      setMobileNavVisible(true);
+      return;
+    }
+    setMobileNavVisible(false);
+
+    const sentinel = document.getElementById('hero-logo-sentinel');
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // rootMargin shrinks the root by 96px from the top (= navbar height).
+        // isIntersecting flips to false the moment the sentinel enters that zone,
+        // which is exactly when the navbar would start overlapping the logo.
+        setMobileNavVisible(!entry.isIntersecting);
+      },
+      { rootMargin: '-96px 0px 0px 0px' }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [isHomePage]);
+
+  // Track active section on scroll
+  useEffect(() => {
+    if (isProductPage) return;
+    const sectionIds = ['about', 'products', 'blog', 'contact'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: '-80px 0px -40% 0px' }
+    );
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [isProductPage]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const top = element.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
+
+  const navLinks = [
+    { id: 'about', label: t.nav.about },
+    { id: 'products', label: t.nav.collection },
+    { id: 'blog', label: t.nav.blog },
+    { id: 'contact', label: t.nav.contact },
+  ];
+
+  return (
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled || isProductPage
+            ? 'bg-[#1B0D14]/95 backdrop-blur-[20px]'
+            : 'bg-transparent'
+        } ${
+          isHomePage && !mobileNavVisible && !isMenuOpen
+            ? '-translate-y-full md:translate-y-0'
+            : 'translate-y-0'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="flex items-center justify-between h-24">
+            {/* Logo */}
+            <Link 
+              to="/"
+              className="relative z-50 transition-opacity duration-300 hover:opacity-100 opacity-90"
+            >
+              <img 
+                src={logoFullUrl} 
+                alt="Luminore Jewelry" 
+                className="h-10 w-auto brightness-0 invert"
+              />
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-12">
+              {navLinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className={`relative font-cinzel text-sm transition-colors duration-300 tracking-[0.15em] group ${
+                    activeSection === link.id ? 'text-[#D1642E]' : 'text-[#C5C9C6]/80 hover:text-[#D1642E]'
+                  }`}
+                >
+                  {link.label}
+                  <span className={`absolute bottom-[-4px] left-0 h-px bg-[#D1642E] transition-all duration-300 ${
+                    activeSection === link.id ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}></span>
+                </button>
+              ))}
+            </div>
+
+            {/* Right Side: Language Switcher + CTA */}
+            <div className="hidden md:flex items-center gap-6">
+              {/* Language Switcher */}
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-2 px-3 py-2 text-[#C5C9C6]/80 hover:text-[#D1642E] transition-colors duration-300"
+                aria-label="Switch language"
+              >
+                <span className={`font-cinzel text-sm ${language === 'ru' ? 'text-[#D1642E]' : ''}`}>RU</span>
+                <span className="text-[#C5C9C6]/40">|</span>
+                <span className={`font-cinzel text-sm ${language === 'en' ? 'text-[#D1642E]' : ''}`}>EN</span>
+              </button>
+
+              {/* CTA Button */}
+              <button 
+                onClick={() => scrollToSection('custom-order')}
+                className="px-6 py-3 border border-[#D1642E] text-[#D1642E] font-cinzel text-xs tracking-[0.15em] uppercase transition-all duration-300 hover:bg-[#D1642E] hover:text-white"
+              >
+                {t.nav.consultation}
+              </button>
+            </div>
+
+            {/* Mobile Menu Button - HIGHER z-index */}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden relative z-50 p-2 text-[#C5C9C6]"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            >
+              <div className="w-6 flex flex-col gap-1.5">
+                <span 
+                  className={`block h-px bg-current transition-all duration-300 ${
+                    isMenuOpen ? 'rotate-45 translate-y-[7px]' : ''
+                  }`} 
+                  style={{ width: '24px' }}
+                ></span>
+                <span 
+                  className={`block h-px bg-current transition-all duration-300 ${
+                    isMenuOpen ? 'opacity-0' : ''
+                  }`} 
+                  style={{ width: '18px' }}
+                ></span>
+                <span 
+                  className={`block h-px bg-current transition-all duration-300 ${
+                    isMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''
+                  }`} 
+                  style={{ width: isMenuOpen ? '24px' : '14px' }}
+                ></span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu - SEPARATE from navbar, full screen overlay */}
+      <div 
+        className={`md:hidden fixed inset-0 z-40 bg-[#1B0D14] transition-all duration-500 ${
+          isMenuOpen 
+            ? 'opacity-100 visible pointer-events-auto' 
+            : 'opacity-0 invisible pointer-events-none'
+        }`}
+      >
+        <div className="flex flex-col items-center justify-center h-full gap-8 pt-24 pb-20">
+          {/* Mobile Language Switcher */}
+          <div 
+            className="flex items-center gap-4 mb-4"
+            style={{
+              opacity: isMenuOpen ? 1 : 0,
+              transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.4s ease'
+            }}
+          >
+            <button
+              onClick={() => { setIsMenuOpen(false); if (language !== 'ru') toggleLanguage(); }}
+              className={`font-cinzel text-xl ${language === 'ru' ? 'text-[#D1642E]' : 'text-[#C5C9C6]'}`}
+            >
+              RU
+            </button>
+            <span className="text-[#C5C9C6]/40">|</span>
+            <button
+              onClick={() => { setIsMenuOpen(false); if (language !== 'en') toggleLanguage(); }}
+              className={`font-cinzel text-xl ${language === 'en' ? 'text-[#D1642E]' : 'text-[#C5C9C6]'}`}
+            >
+              EN
+            </button>
+          </div>
+
+          {navLinks.map((link, index) => (
+            <button
+              key={link.id}
+              onClick={() => scrollToSection(link.id)}
+              className="font-cinzel text-2xl text-[#C5C9C6] hover:text-[#D1642E] transition-colors tracking-[0.1em]"
+              style={{
+                opacity: isMenuOpen ? 1 : 0,
+                transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',
+                transition: `all 0.4s ease ${(index + 1) * 0.1}s`
+              }}
+            >
+              {link.label}
+            </button>
+          ))}
+          <button 
+            onClick={() => scrollToSection('custom-order')}
+            className="mt-8 px-8 py-4 bg-[#D1642E] text-white font-cinzel text-sm tracking-[0.15em]"
+            style={{
+              opacity: isMenuOpen ? 1 : 0,
+              transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.4s ease 0.4s'
+            }}
+          >
+            {t.nav.consultation}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
