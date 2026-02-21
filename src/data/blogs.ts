@@ -29,7 +29,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'how-to-choose-engagement-ring',
     category: 'Руководство',
     categoryEn: 'Guide',
-    categoryUk: 'Довідник',
+    categoryUk: 'Посібник',
     date: '27 января 2026',
     dateEn: 'January 27, 2026',
     dateUk: '27 січня 2026',

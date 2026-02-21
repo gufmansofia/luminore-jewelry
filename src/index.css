@@ -6,27 +6,28 @@
 /* Cormorant Garamond - Secondary font for body text */
 
 /* Font face definitions with proper fallbacks */
+/* Playfair Display provides Cyrillic support as fallback for Cinzel (Latin-only) */
 .font-cinzel {
-  font-family: 'Cinzel', serif;
+  font-family: 'Cinzel', 'Playfair Display', serif;
   font-weight: 400;
 }
 
 .font-cinzel-medium {
-  font-family: 'Cinzel', serif;
+  font-family: 'Cinzel', 'Playfair Display', serif;
   font-weight: 500;
 }
 
 .font-cinzel-semibold {
-  font-family: 'Cinzel', serif;
+  font-family: 'Cinzel', 'Playfair Display', serif;
   font-weight: 600;
 }
 
 .font-cinzel-bold {
-  font-family: 'Cinzel', serif;
+  font-family: 'Cinzel', 'Playfair Display', serif;
   font-weight: 700;
 }
 
-/* Body text font */
+/* Body text font — Georgia provides Cyrillic fallback */
 .font-body {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 400;
