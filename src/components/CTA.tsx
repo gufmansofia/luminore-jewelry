@@ -284,7 +284,7 @@ export function CTA() {
                           style={{
                             ...inputBase,
                             paddingRight: '40px',
-                            color: formData.pieceType ? 'white' : 'rgba(255,255,255,0.35)',
+                            color: formData.pieceType ? '#1B0D14' : 'rgba(27,13,20,0.35)',
                             appearance: 'none',
                             WebkitAppearance: 'none',
                           }}
@@ -316,7 +316,7 @@ export function CTA() {
                           style={{
                             ...inputBase,
                             paddingRight: '40px',
-                            color: formData.budget ? 'white' : 'rgba(255,255,255,0.35)',
+                            color: formData.budget ? '#1B0D14' : 'rgba(27,13,20,0.35)',
                             appearance: 'none',
                             WebkitAppearance: 'none',
                           }}

@@ -81,10 +81,10 @@ export function About() {
   }, []);
 
   const stats = [
-    { end: 500, suffix: '+', label: t.about.stat1Label },
+    { end: 200, suffix: '+', label: t.about.stat1Label },
     { end: 18, suffix: 'K', label: t.about.stat2Label },
     { end: 100, suffix: '%', label: t.about.stat3Label },
-    { end: 15, suffix: '+', label: t.about.stat4Label },
+    { end: 10, suffix: '+', label: t.about.stat4Label },
   ];
 
   return (

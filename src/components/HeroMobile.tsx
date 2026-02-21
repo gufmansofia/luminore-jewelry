@@ -41,6 +41,7 @@ export function HeroMobile() {
           autoPlay
           muted
           playsInline
+          poster="/hero-bg.png"
           onLoadedMetadata={handleLoadedMetadata}
           onPlay={handlePlay}
         >

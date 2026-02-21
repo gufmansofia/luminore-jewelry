@@ -217,28 +217,8 @@ export function Testimonials() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D1642E]/8 rounded-full blur-[180px]"></div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Trust Signals Row */}
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          {trustSignals.map((signal, i) => (
-            <div
-              key={i}
-              className="text-center py-6 border border-[#C5C9C6]/10 hover:border-[#D1642E]/30 transition-all duration-500 group"
-              style={{ transitionDelay: `${i * 100}ms` }}
-            >
-              <div className="flex items-center justify-center text-[#D1642E] mb-3 group-hover:scale-110 transition-transform duration-300">
-                <TrustIcon type={signal.icon} />
-              </div>
-              <div className="font-body text-sm text-[#C5C9C6]/70" style={{ letterSpacing: '0.03em' }}>
-                {language === 'ru' ? signal.labelRu : language === 'uk' ? signal.labelUk : signal.labelEn}
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 delay-200 ${
+        <div className={`text-center mb-16 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div className="flex items-center justify-center gap-4 mb-6">
@@ -258,7 +238,7 @@ export function Testimonials() {
         </div>
 
         {/* Testimonial Card */}
-        <div className={`max-w-3xl mx-auto transition-all duration-1000 delay-400 ${
+        <div className={`max-w-3xl mx-auto transition-all duration-1000 delay-200 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           {/* Prev/Next Arrows + Card wrapper */}
@@ -343,6 +323,26 @@ export function Testimonials() {
               </svg>
             </button>
           </div>
+        </div>
+
+        {/* Trust Signals Row */}
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 transition-all duration-1000 delay-400 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}>
+          {trustSignals.map((signal, i) => (
+            <div
+              key={i}
+              className="text-center py-6 border border-[#C5C9C6]/10 hover:border-[#D1642E]/30 transition-all duration-500 group"
+              style={{ transitionDelay: `${i * 100}ms` }}
+            >
+              <div className="flex items-center justify-center text-[#D1642E] mb-3 group-hover:scale-110 transition-transform duration-300">
+                <TrustIcon type={signal.icon} />
+              </div>
+              <div className="font-body text-sm text-[#C5C9C6]/70" style={{ letterSpacing: '0.03em' }}>
+                {language === 'ru' ? signal.labelRu : language === 'uk' ? signal.labelUk : signal.labelEn}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
