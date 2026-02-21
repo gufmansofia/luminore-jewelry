@@ -21,12 +21,17 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  const allContent: Record<string, { ru: { title: string; text: string; cta: string }; en: { title: string; text: string; cta: string } }> = {
+  const allContent: Record<string, { ru: { title: string; text: string; cta: string }; uk: { title: string; text: string; cta: string }; en: { title: string; text: string; cta: string } }> = {
     delivery: {
       ru: {
         title: 'Доставка и оплата',
         text: 'Мы стремимся сделать процесс покупки максимально удобным и прозрачным. Каждый заказ обрабатывается индивидуально, и наша команда сопровождает вас на каждом этапе — от выбора украшения до его доставки к вашей двери. Мы осуществляем доставку по всему миру. Способы оплаты включают банковский перевод и оплату при получении. Для получения подробной информации — свяжитесь с нами удобным для вас способом.',
         cta: 'Напишите нам',
+      },
+      uk: {
+        title: 'Доставка та оплата',
+        text: 'Ми прагнемо зробити процес купівлі максимально зручним і прозорим. Кожне замовлення обробляється індивідуально, і наша команда супроводжує вас на кожному етапі — від вибору прикраси до доставки до ваших дверей. Ми здійснюємо доставку по всьому світу. Способи оплати включають банківський переказ та оплату при отриманні. Для отримання детальної інформації — зв\'яжіться з нами зручним для вас способом.',
+        cta: 'Напишіть нам',
       },
       en: {
         title: 'Shipping & Payment',
@@ -40,6 +45,11 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
         text: 'Все изделия Luminore сопровождаются пожизненной гарантией на производственные дефекты. Мы уверены в качестве каждого украшения, потому что каждое изделие проходит строгий контроль качества. Если вы не полностью довольны покупкой, мы предлагаем возврат или обмен в течение 14 дней с момента получения при сохранении оригинальной упаковки. Свяжитесь с нами для оформления возврата.',
         cta: 'Напишите нам',
       },
+      uk: {
+        title: 'Гарантія та повернення',
+        text: 'Усі вироби Luminore супроводжуються довічною гарантією на виробничі дефекти. Ми впевнені в якості кожної прикраси, адже кожен виріб проходить суворий контроль якості. Якщо ви не повністю задоволені покупкою, ми пропонуємо повернення або обмін протягом 14 днів з моменту отримання за умови збереження оригінальної упаковки. Зв\'яжіться з нами для оформлення повернення.',
+        cta: 'Напишіть нам',
+      },
       en: {
         title: 'Warranty & Returns',
         text: 'All Luminore pieces come with a lifetime warranty against manufacturing defects. We stand behind the quality of every piece because each item undergoes rigorous quality control. If you are not completely satisfied with your purchase, we offer returns or exchanges within 14 days of delivery, provided the original packaging is preserved. Contact us to arrange a return.',
@@ -51,6 +61,11 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
         title: 'Уход за украшениями',
         text: 'Чтобы ваши украшения Luminore сияли долгие годы, рекомендуем соблюдать простые правила ухода. Храните изделия в мягком футляре отдельно друг от друга. Снимайте украшения перед занятиями спортом, посещением бассейна и нанесением косметики. Для чистки используйте мягкий мыльный раствор и безворсовую ткань. Раз в год приносите украшения на профессиональный осмотр и чистку.',
         cta: 'Напишите нам',
+      },
+      uk: {
+        title: 'Догляд за прикрасами',
+        text: 'Щоб ваші прикраси Luminore сяяли довгі роки, рекомендуємо дотримуватися простих правил догляду. Зберігайте вироби в м\'якому чохлі окремо один від одного. Знімайте прикраси перед заняттями спортом, відвідуванням басейну та нанесенням косметики. Для чистки використовуйте м\'який мильний розчин і безворсову тканину. Раз на рік приносьте прикраси на професійний огляд і чищення.',
+        cta: 'Напишіть нам',
       },
       en: {
         title: 'Jewelry Care',
@@ -64,6 +79,11 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
         text: 'Luminore Jewelry уважает вашу конфиденциальность и защищает ваши персональные данные. Мы собираем только необходимую информацию для обработки заказов и улучшения обслуживания. Ваши данные никогда не передаются третьим лицам без вашего согласия. Мы используем современные методы шифрования для защиты ваших данных. Вы можете запросить удаление ваших данных в любое время, связавшись с нами.',
         cta: 'Напишите нам',
       },
+      uk: {
+        title: 'Політика конфіденційності',
+        text: 'Luminore Jewelry поважає вашу конфіденційність і захищає ваші персональні дані. Ми збираємо лише необхідну інформацію для обробки замовлень і покращення обслуговування. Ваші дані ніколи не передаються третім особам без вашої згоди. Ми використовуємо сучасні методи шифрування для захисту ваших даних. Ви можете запросити видалення ваших даних будь-коли, зв\'язавшись з нами.',
+        cta: 'Напишіть нам',
+      },
       en: {
         title: 'Privacy Policy',
         text: 'Luminore Jewelry respects your privacy and protects your personal data. We collect only the information necessary to process orders and improve our service. Your data is never shared with third parties without your consent. We use modern encryption methods to safeguard your information. You may request deletion of your data at any time by contacting us.',
@@ -72,7 +92,7 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
     },
   };
 
-  const lang = language === 'ru' ? 'ru' : 'en';
+  const lang = language === 'ru' ? 'ru' : language === 'uk' ? 'uk' : 'en';
   const content = allContent[infoKey]?.[lang] || allContent.delivery[lang];
 
   return (

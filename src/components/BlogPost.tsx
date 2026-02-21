@@ -113,11 +113,11 @@ export function BlogPost() {
     );
   };
 
-  const content = language === 'ru' ? post.content : post.contentEn;
-  const title = language === 'ru' ? post.title : post.titleEn;
-  const category = language === 'ru' ? post.category : post.categoryEn;
-  const date = language === 'ru' ? post.date : post.dateEn;
-  const readTime = language === 'ru' ? post.readTime : post.readTimeEn;
+  const content = language === 'ru' ? post.content : language === 'uk' ? post.contentUk : post.contentEn;
+  const title = language === 'ru' ? post.title : language === 'uk' ? post.titleUk : post.titleEn;
+  const category = language === 'ru' ? post.category : language === 'uk' ? post.categoryUk : post.categoryEn;
+  const date = language === 'ru' ? post.date : language === 'uk' ? post.dateUk : post.dateEn;
+  const readTime = language === 'ru' ? post.readTime : language === 'uk' ? post.readTimeUk : post.readTimeEn;
 
   return (
     <div className="min-h-screen bg-[#1B0D14]">
@@ -193,7 +193,7 @@ export function BlogPost() {
               <span className="font-body text-sm text-[#C5C9C6]/70">{date}</span>
               <span className="w-1 h-1 bg-[#C5C9C6]/40 rounded-full"></span>
               <span className="font-body text-sm text-[#C5C9C6]/70">
-                {readTime} {language === 'ru' ? 'чтения' : 'read'}
+                {readTime} {language === 'ru' ? 'чтения' : language === 'uk' ? 'читання' : 'read'}
               </span>
             </div>
 
@@ -362,9 +362,9 @@ export function BlogPost() {
               className="font-cinzel text-2xl text-white mb-12 text-center"
               style={{ letterSpacing: '0.03em' }}
             >
-              {language === 'ru' ? 'Похожие ' : 'Related '}
+              {language === 'ru' ? 'Похожие ' : language === 'uk' ? 'Схожі ' : 'Related '}
               <span className="text-[#D1642E]">
-                {language === 'ru' ? 'статьи' : 'articles'}
+                {language === 'ru' ? 'статьи' : language === 'uk' ? 'статті' : 'articles'}
               </span>
             </h2>
             
@@ -380,18 +380,18 @@ export function BlogPost() {
                       className="font-cinzel text-xs text-[#D1642E]"
                       style={{ letterSpacing: '0.1em' }}
                     >
-                      {language === 'ru' ? relatedPost.category : relatedPost.categoryEn}
+                      {language === 'ru' ? relatedPost.category : language === 'uk' ? relatedPost.categoryUk : relatedPost.categoryEn}
                     </span>
                     <span className="w-1 h-1 bg-[#C5C9C6]/40 rounded-full"></span>
                     <span className="font-body text-sm text-[#C5C9C6]/70">
-                      {language === 'ru' ? relatedPost.readTime : relatedPost.readTimeEn}
+                      {language === 'ru' ? relatedPost.readTime : language === 'uk' ? relatedPost.readTimeUk : relatedPost.readTimeEn}
                     </span>
                   </div>
                   <h3 
                     className="font-cinzel text-lg text-white group-hover:text-[#D1642E] transition-colors leading-snug"
                     style={{ letterSpacing: '0.03em' }}
                   >
-                    {language === 'ru' ? relatedPost.title : relatedPost.titleEn}
+                    {language === 'ru' ? relatedPost.title : language === 'uk' ? relatedPost.titleUk : relatedPost.titleEn}
                   </h3>
                 </button>
               ))}

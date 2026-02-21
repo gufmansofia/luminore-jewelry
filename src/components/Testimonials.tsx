@@ -4,10 +4,13 @@ import { useLanguage } from '../i18n';
 interface Testimonial {
   name: string;
   nameEn: string;
+  nameUk: string;
   role: string;
   roleEn: string;
+  roleUk: string;
   text: string;
   textEn: string;
+  textUk: string;
   rating: number;
 }
 
@@ -15,37 +18,49 @@ const testimonials: Testimonial[] = [
   {
     name: 'Анна К.',
     nameEn: 'Anna K.',
+    nameUk: 'Анна К.',
     role: 'Обручальное кольцо',
     roleEn: 'Engagement Ring',
+    roleUk: 'Заручинна каблучка',
     text: 'Кольцо превзошло все ожидания. Бриллиант играет невероятно, а качество исполнения безупречно. Luminore создали именно то, о чем я мечтала.',
     textEn: 'The ring exceeded all expectations. The diamond sparkles incredibly, and the craftsmanship is flawless. Luminore created exactly what I dreamed of.',
+    textUk: 'Каблучка перевершила всі очікування. Діамант грає неймовірно, а якість виконання бездоганна. Luminore створили саме те, про що я мріяла.',
     rating: 5,
   },
   {
     name: 'Михаил Д.',
     nameEn: 'Michael D.',
+    nameUk: 'Михайло Д.',
     role: 'Подарок на юбилей',
     roleEn: 'Anniversary Gift',
+    roleUk: 'Подарунок на річницю',
     text: 'Заказывал серьги для жены. Индивидуальный подход, прозрачность на каждом этапе и потрясающий результат. Жена была в восторге.',
     textEn: 'Ordered earrings for my wife. Personal approach, transparency at every stage, and a stunning result. My wife was thrilled.',
+    textUk: 'Замовляв сережки для дружини. Індивідуальний підхід, прозорість на кожному етапі та приголомшливий результат. Дружина була в захваті.',
     rating: 5,
   },
   {
     name: 'Елена С.',
     nameEn: 'Elena S.',
+    nameUk: 'Олена С.',
     role: 'Коллекция украшений',
     roleEn: 'Jewelry Collection',
+    roleUk: 'Колекція прикрас',
     text: 'Уже третье украшение от Luminore. Каждый раз — идеальное сочетание дизайна и качества. Лабораторные бриллианты ничем не уступают натуральным.',
     textEn: 'This is my third piece from Luminore. Every time — a perfect blend of design and quality. Lab-grown diamonds are every bit as beautiful as natural ones.',
+    textUk: 'Вже третя прикраса від Luminore. Щоразу — ідеальне поєднання дизайну та якості. Лабораторні діаманти жодним чином не поступаються природним.',
     rating: 5,
   },
   {
     name: 'Дарья Л.',
     nameEn: 'Daria L.',
+    nameUk: 'Дар\'я Л.',
     role: 'Кольцо на заказ',
     roleEn: 'Custom Ring',
+    roleUk: 'Каблучка на замовлення',
     text: 'Сделали кольцо по моему эскизу. Команда была невероятно внимательна к деталям. Результат — произведение искусства, которым я горжусь каждый день.',
     textEn: 'They made a ring from my sketch. The team was incredibly attentive to detail. The result is a work of art I am proud to wear every day.',
+    textUk: 'Зробили каблучку за моїм ескізом. Команда була неймовірно уважна до деталей. Результат — витвір мистецтва, яким я пишаюся щодня.',
     rating: 5,
   },
 ];
@@ -83,10 +98,10 @@ function TrustIcon({ type }: { type: string }) {
 }
 
 const trustSignals = [
-  { icon: 'certified', labelRu: 'Сертифицированные камни', labelEn: 'Certified Stones' },
-  { icon: 'sustainable', labelRu: 'Устойчивая роскошь', labelEn: 'Sustainable Luxury' },
-  { icon: 'warranty', labelRu: 'Пожизненная гарантия', labelEn: 'Lifetime Warranty' },
-  { icon: 'conflict-free', labelRu: 'Бесконфликтные бриллианты', labelEn: 'Conflict-Free Diamonds' },
+  { icon: 'certified', labelRu: 'Сертифицированные камни', labelUk: 'Сертифіковані камені', labelEn: 'Certified Stones' },
+  { icon: 'sustainable', labelRu: 'Устойчивая роскошь', labelUk: 'Стала розкіш', labelEn: 'Sustainable Luxury' },
+  { icon: 'warranty', labelRu: 'Пожизненная гарантия', labelUk: 'Довічна гарантія', labelEn: 'Lifetime Warranty' },
+  { icon: 'conflict-free', labelRu: 'Бесконфликтные бриллианты', labelUk: 'Безконфліктні діаманти', labelEn: 'Conflict-Free Diamonds' },
 ];
 
 export function Testimonials() {
@@ -187,7 +202,7 @@ export function Testimonials() {
     <section
       ref={sectionRef}
       tabIndex={0}
-      aria-label={language === 'ru' ? 'Отзывы клиентов' : 'Client testimonials'}
+      aria-label={language === 'ru' ? 'Отзывы клиентов' : language === 'uk' ? 'Відгуки клієнтів' : 'Client testimonials'}
       className="relative py-24 lg:py-32 bg-[#1B0D14] overflow-hidden outline-none"
     >
       {/* Background */}
@@ -216,7 +231,7 @@ export function Testimonials() {
                 <TrustIcon type={signal.icon} />
               </div>
               <div className="font-body text-sm text-[#C5C9C6]/70" style={{ letterSpacing: '0.03em' }}>
-                {language === 'ru' ? signal.labelRu : signal.labelEn}
+                {language === 'ru' ? signal.labelRu : language === 'uk' ? signal.labelUk : signal.labelEn}
               </div>
             </div>
           ))}
@@ -251,7 +266,7 @@ export function Testimonials() {
             {/* Previous arrow */}
             <button
               onClick={goPrev}
-              aria-label={language === 'ru' ? 'Предыдущий отзыв' : 'Previous testimonial'}
+              aria-label={language === 'ru' ? 'Предыдущий отзыв' : language === 'uk' ? 'Попередній відгук' : 'Previous testimonial'}
               className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-[#C5C9C6]/20 text-[#C5C9C6]/50 hover:border-[#D1642E] hover:text-[#D1642E] transition-all duration-300 flex-shrink-0 -ml-14 absolute left-0"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -283,22 +298,22 @@ export function Testimonials() {
 
               {/* Quote text */}
               <blockquote className="font-body text-xl md:text-2xl text-[#C5C9C6]/90 leading-relaxed text-center mb-8 italic">
-                {language === 'ru' ? current.text : current.textEn}
+                {language === 'ru' ? current.text : language === 'uk' ? current.textUk : current.textEn}
               </blockquote>
 
               {/* Author */}
               <div className="text-center">
                 <p className="font-cinzel text-white text-sm mb-1" style={{ letterSpacing: '0.1em' }}>
-                  {language === 'ru' ? current.name : current.nameEn}
+                  {language === 'ru' ? current.name : language === 'uk' ? current.nameUk : current.nameEn}
                 </p>
                 <p className="font-body text-[#D1642E] text-sm">
-                  {language === 'ru' ? current.role : current.roleEn}
+                  {language === 'ru' ? current.role : language === 'uk' ? current.roleUk : current.roleEn}
                 </p>
               </div>
             </div>
 
             {/* Navigation dots */}
-            <div className="flex justify-center gap-3 mt-8" role="tablist" aria-label={language === 'ru' ? 'Навигация по отзывам' : 'Testimonial navigation'}>
+            <div className="flex justify-center gap-3 mt-8" role="tablist" aria-label={language === 'ru' ? 'Навигация по отзывам' : language === 'uk' ? 'Навігація по відгуках' : 'Testimonial navigation'}>
               {testimonials.map((t, i) => (
                 <button
                   key={i}
@@ -310,7 +325,7 @@ export function Testimonials() {
                       ? 'w-8 h-2 bg-[#D1642E]'
                       : 'w-2 h-2 bg-[#C5C9C6]/30 hover:bg-[#C5C9C6]/50'
                   }`}
-                  aria-label={`${language === 'ru' ? 'Показать отзыв от' : 'Show testimonial from'} ${language === 'ru' ? t.name : t.nameEn}`}
+                  aria-label={`${language === 'ru' ? 'Показать отзыв от' : language === 'uk' ? 'Показати відгук від' : 'Show testimonial from'} ${language === 'ru' ? t.name : language === 'uk' ? t.nameUk : t.nameEn}`}
                 />
               ))}
             </div>
@@ -320,7 +335,7 @@ export function Testimonials() {
             {/* Next arrow */}
             <button
               onClick={goNext}
-              aria-label={language === 'ru' ? 'Следующий отзыв' : 'Next testimonial'}
+              aria-label={language === 'ru' ? 'Следующий отзыв' : language === 'uk' ? 'Наступний відгук' : 'Next testimonial'}
               className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-[#C5C9C6]/20 text-[#C5C9C6]/50 hover:border-[#D1642E] hover:text-[#D1642E] transition-all duration-300 flex-shrink-0 -mr-14 absolute right-0"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

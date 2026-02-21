@@ -3,8 +3,10 @@ export interface Product {
   sku: string;
   name: string;
   nameEn: string;
+  nameUk: string;
   category: string;
   categoryEn: string;
+  categoryUk: string;
   productType: string;
   metalType: string;
   goldWeight: number | null;
@@ -19,6 +21,7 @@ export interface Product {
   priceUsd: number | null;
   description: string;
   descriptionEn: string;
+  descriptionUk: string;
   careInstructions: string;
   images: string[];
   altText: string;
@@ -31,8 +34,10 @@ export const products: Product[] = [
     "sku": "P001",
     "name": "Пусеты с бриллиантами 1ct",
     "nameEn": "Diamond Stud Earrings 1ct",
+    "nameUk": "Пусети з діамантами 1ct",
     "category": "Серьги",
     "categoryEn": "Earrings",
+    "categoryUk": "Сережки",
     "productType": "Stud Earrings",
     "metalType": "18K White Gold",
     "goldWeight": 3,
@@ -47,6 +52,7 @@ export const products: Product[] = [
     "priceUsd": 950,
     "description": "Классические пусеты общим весом 1 карат с лабораторными бриллиантами в оправе из белого золота 18K. Вечная элегантность для повседневной носки.",
     "descriptionEn": "Classic stud earrings featuring 1 carat total weight of lab-grown diamonds set in 18K white gold. Timeless elegance for everyday wear.",
+    "descriptionUk": "Класичні пусети загальною вагою 1 карат із лабораторними діамантами в оправі з білого золота 18K. Вічна елегантність для щоденного носіння.",
     "careInstructions": "Clean with mild soap and warm water. Store separately to prevent scratching.",
     "images": [
       "/Products/earrings/Round Diamond Stud Earrings 1ct (P001)/luminore-stud-earrings-1ct-18k-white-gold-front.jpg",
@@ -62,8 +68,10 @@ export const products: Product[] = [
     "sku": "P002",
     "name": "Трансформеры с бриллиантами 2ct",
     "nameEn": "Convertible Diamond Stud Earrings 2ct",
+    "nameUk": "Трансформери з діамантами 2ct",
     "category": "Серьги",
     "categoryEn": "Earrings",
+    "categoryUk": "Сережки",
     "productType": "Stud Earrings",
     "metalType": "18K White Gold",
     "goldWeight": 3.9,
@@ -78,6 +86,7 @@ export const products: Product[] = [
     "priceUsd": 2300,
     "description": "Универсальные серьги-трансформеры с центральными камнями по 1 карат каждый, лабораторные бриллианты с сертификатом IGI E VS1. Оправа из белого золота 18K с конвертируемым дизайном для нескольких вариантов носки.",
     "descriptionEn": "Versatile transformer stud earrings with 1 carat each central stones, IGI certified E VS1 lab-grown diamonds. Set in 18K white gold with convertible design for multiple wearing styles.",
+    "descriptionUk": "Універсальні сережки-трансформери з центральними каменями по 1 карат кожен, лабораторні діаманти з сертифікатом IGI E VS1. Оправа з білого золота 18K з конвертованим дизайном для кількох варіантів носіння.",
     "careInstructions": "Clean with mild soap and warm water. Store separately to prevent scratching.",
     "images": [
       "/Products/earrings/Diamond Transformer Stud Earrings (P002)/luminore-stud-earrings-transformers-2ct-18k-white-gold-front.jpg",
@@ -93,8 +102,10 @@ export const products: Product[] = [
     "sku": "P003",
     "name": "Пусеты с бриллиантами 2ct",
     "nameEn": "Diamond Stud Earrings 2ct",
+    "nameUk": "Пусети з діамантами 2ct",
     "category": "Серьги",
     "categoryEn": "Earrings",
+    "categoryUk": "Сережки",
     "productType": "Stud Earrings",
     "metalType": "18K White Gold",
     "goldWeight": 3.3,
@@ -109,6 +120,7 @@ export const products: Product[] = [
     "priceUsd": 1700,
     "description": "Классические пусеты с лабораторными бриллиантами по 1 карат каждый с сертификатом IGI, класс F VS1. Элегантная оправа из белого золота 18K для вневременной изысканности.",
     "descriptionEn": "Classic stud earrings featuring 1 carat each lab-grown diamonds with IGI certificate, F VS1 grade. Elegant 18K white gold setting for timeless sophistication.",
+    "descriptionUk": "Класичні пусети з лабораторними діамантами по 1 карат кожен із сертифікатом IGI, клас F VS1. Елегантна оправа з білого золота 18K для вічної вишуканості.",
     "careInstructions": "Clean with mild soap and warm water. Store separately to prevent scratching.",
     "images": [
       "/Products/earrings/Diamond Stud Earrings 2ct (P003)/luminore-stud-earrings-2ct-18k-white-gold-front.jpg",
@@ -124,8 +136,10 @@ export const products: Product[] = [
     "sku": "P004",
     "name": "Кольцо с бриллиантами 0.6ct",
     "nameEn": "Half Eternity Diamond Ring",
+    "nameUk": "Каблучка з діамантами 0.6ct",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Half Eternity Ring",
     "metalType": "18K White Gold",
     "goldWeight": 3,
@@ -140,6 +154,7 @@ export const products: Product[] = [
     "priceUsd": 1800,
     "description": "Классическое кольцо полувечности с лабораторными бриллиантами по 0.3 карат каждый, общим весом 0.6 карат. Выполнено из белого золота 18K для элегантной повседневной носки или в качестве обручального кольца.",
     "descriptionEn": "Classic half eternity ring with 0.3 carat each lab-grown diamonds, totaling 0.6 carats. Crafted in 18K white gold for elegant everyday wear or as a wedding band.",
+    "descriptionUk": "Класична каблучка напіввічності з лабораторними діамантами по 0,3 карат кожен, загальною вагою 0,6 карат. Виготовлена з білого золота 18K для елегантного щоденного носіння або як обручка.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Half Eternity Diamond Ring  (P004)/luminore-half-diamond-ring-0-6ct-18k-white-gold-top.jpg",
@@ -155,8 +170,10 @@ export const products: Product[] = [
     "sku": "P005",
     "name": "Кольцо Solitaire",
     "nameEn": "Solitaire Diamond Ring",
+    "nameUk": "Каблучка Solitaire",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Solitaire Ring",
     "metalType": "18K White Gold",
     "goldWeight": 3,
@@ -171,6 +188,7 @@ export const products: Product[] = [
     "priceUsd": 800,
     "description": "Классическое кольцо солитер с лабораторным бриллиантом 0.5 карат исключительного класса F VVS2. Простая, но потрясающая оправа из белого золота 18K, идеальная для помолвки или повседневной элегантности.",
     "descriptionEn": "Classic solitaire ring featuring a 0.5 carat lab-grown diamond with exceptional F VVS2 grade. Simple yet stunning 18K white gold setting perfect for engagements or everyday elegance.",
+    "descriptionUk": "Класична каблучка-солітер із лабораторним діамантом 0,5 карат виняткового класу F VVS2. Проста, але вражаюча оправа з білого золота 18K, ідеальна для заручин або щоденної елегантності.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Solitaire Diamond Ring (P005)/luminore-lab-grown-diamond-solitaire-ring-0-5ct-f-vvs2-18k-white-gold-front.jpg",
@@ -186,8 +204,10 @@ export const products: Product[] = [
     "sku": "P006",
     "name": "Кольцо с розовым бриллиантом 3ct",
     "nameEn": "Vivid Pink Diamond Ring 3ct",
+    "nameUk": "Каблучка з рожевим діамантом 3ct",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Statement Ring",
     "metalType": "18K White Gold",
     "goldWeight": 4,
@@ -202,6 +222,7 @@ export const products: Product[] = [
     "priceUsd": 3900,
     "description": "Экстраординарное кольцо с лабораторным бриллиантом огранки кушон 3 карат насыщенного розового цвета VS1, обрамленное двумя боковыми камнями огранки сердце по 0.2 карат. Оправа из белого золота 18K для по-настоящему уникального украшения.",
     "descriptionEn": "Extraordinary ring featuring a 3 carat cushion cut fancy vivid pink lab-grown diamond VS1, flanked by two 0.2 carat heart-shaped side stones. Set in 18K white gold for a truly unique statement piece.",
+    "descriptionUk": "Надзвичайна каблучка з лабораторним діамантом огранювання кушон 3 карати насиченого рожевого кольору VS1, обрамлена двома бічними каменями огранювання серце по 0,2 карат. Оправа з білого золота 18K для справді унікальної прикраси.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Vivid Pink Diamond Ring 3ct (P006)/luminore-lab-grown-diamond-statement-ring-3-4ct-fancy-vivid-pink-vs1-18k-white-gold-front.jpg",
@@ -217,8 +238,10 @@ export const products: Product[] = [
     "sku": "P007",
     "name": "Кольцо Solitaire",
     "nameEn": "Oval Solitaire Diamond Ring 2ct",
+    "nameUk": "Каблучка Solitaire овальна 2ct",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Solitaire Ring",
     "metalType": "18K White Gold",
     "goldWeight": 3.3,
@@ -233,6 +256,7 @@ export const products: Product[] = [
     "priceUsd": 2200,
     "description": "Потрясающее кольцо-солитер с овальным лабораторным бриллиантом 2 карат F VVS2 с сертификатом IGI. Элегантная оправа из белого золота 18K подчеркивает блестящую овальную огранку для максимального сияния.",
     "descriptionEn": "Stunning oval diamond solitaire ring with IGI certified 2 carat F VVS2 lab-grown diamond. Elegant 18K white gold setting showcases the brilliant oval cut for maximum sparkle.",
+    "descriptionUk": "Приголомшлива каблучка-солітер з овальним лабораторним діамантом 2 карати F VVS2 із сертифікатом IGI. Елегантна оправа з білого золота 18K підкреслює блискуче овальне огранювання для максимального сяяння.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Oval Solitaire Diamond Ring 2ct(P007)/luminore-lab-grown-diamond-solitaire-ring-2ct-f-vvs2-18k-white-gold-front.jpg",
@@ -248,8 +272,10 @@ export const products: Product[] = [
     "sku": "P008",
     "name": "Помолвочное кольцо Halo",
     "nameEn": "Halo Diamond Engagement Ring",
+    "nameUk": "Заручинна каблучка Halo",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Halo Ring",
     "metalType": "18K White Gold",
     "goldWeight": 4.5,
@@ -264,6 +290,7 @@ export const products: Product[] = [
     "priceUsd": 1900,
     "description": "Элегантное кольцо в стиле гало с центральным лабораторным бриллиантом 1 карат F VS1, окруженным сверкающим ореолом из мелких бриллиантов. Оправа из белого золота 18K для усиленного сияния и винтажного шарма.",
     "descriptionEn": "Elegant halo style ring with 1 carat F VS1 lab-grown diamond center stone surrounded by a brilliant halo of smaller diamonds. Set in 18K white gold for enhanced radiance and vintage appeal.",
+    "descriptionUk": "Елегантна каблучка в стилі гало з центральним лабораторним діамантом 1 карат F VS1, оточеним сяючим ореолом із дрібних діамантів. Оправа з білого золота 18K для посиленого сяяння і вінтажного шарму.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Halo Diamond Engagement Ring (P008)/luminore-lab-grown-diamond-halo-ring-1-2ct-f-vs1-18k-white-gold-front.jpg",
@@ -279,8 +306,10 @@ export const products: Product[] = [
     "sku": "P009",
     "name": "Кольцо Full Eternity 5ct",
     "nameEn": "Full Eternity Diamond Band 5ct",
+    "nameUk": "Каблучка Full Eternity 5ct",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Eternity Ring",
     "metalType": "18K White Gold",
     "goldWeight": 5.5,
@@ -295,6 +324,7 @@ export const products: Product[] = [
     "priceUsd": 2700,
     "description": "Потрясающее кольцо полной вечности общим весом 5.1 карат с лабораторными бриллиантами круглой огранки класса EF VVS-VS. Роскошное кольцо из белого золота 18K со сплошным покрытием бриллиантами для непревзойденного сияния.",
     "descriptionEn": "Stunning full eternity ring featuring 5.1 carats total weight of round brilliant lab-grown diamonds in EF VVS-VS grades. Luxurious 18K white gold band with continuous diamond coverage for ultimate sparkle.",
+    "descriptionUk": "Приголомшлива каблучка повної вічності загальною вагою 5,1 карат із лабораторними діамантами круглого огранювання класу EF VVS-VS. Розкішна каблучка з білого золота 18K із суцільним покриттям діамантами для неперевершеного сяяння.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Full Eternity Diamond Band 5ct (P009)/luminore-lab-grown-diamond-eternity-ring-5-1ct-ef-vvs-vs-18k-white-gold-front.jpg",
@@ -310,8 +340,10 @@ export const products: Product[] = [
     "sku": "P010",
     "name": "Кольцо Eternity изумрудной огранки 10ct",
     "nameEn": "Emerald Cut Eternity Diamond Band 10ct",
+    "nameUk": "Каблучка Eternity смарагдового огранювання 10ct",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Eternity Ring",
     "metalType": "18K White Gold",
     "goldWeight": 5.5,
@@ -326,6 +358,7 @@ export const products: Product[] = [
     "priceUsd": 3200,
     "description": "Экстраординарное кольцо полной вечности с лабораторными бриллиантами изумрудной огранки общим весом около 10 карат класса EF VVS-VS. Изысканная оправа из белого золота 18K создает потрясающее воплощение роскоши и элегантности.",
     "descriptionEn": "Extraordinary full eternity ring showcasing approximately 10 carats of emerald cut lab-grown diamonds in EF VVS-VS grades. Sophisticated 18K white gold setting creates a stunning statement of luxury and elegance.",
+    "descriptionUk": "Надзвичайна каблучка повної вічності з лабораторними діамантами смарагдового огранювання загальною вагою близько 10 карат класу EF VVS-VS. Вишукана оправа з білого золота 18K створює вражаюче втілення розкоші та елегантності.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Emerald Cut Eternity Diamond Band 10ct (P010)/luminore-lab-grown-diamond-eternity-ring-10ct-ef-vvs-vs-18k-white-gold-front.jpg",
@@ -341,8 +374,10 @@ export const products: Product[] = [
     "sku": "P011",
     "name": "Кольцо три камня груша 4ct",
     "nameEn": "Three Stones Pear Diamond Ring 4ct",
+    "nameUk": "Каблучка три камені груша 4ct",
     "category": "Кольца",
     "categoryEn": "Rings",
+    "categoryUk": "Каблучки",
     "productType": "Three Stone Ring",
     "metalType": "18K White Gold",
     "goldWeight": 4.5,
@@ -357,6 +392,7 @@ export const products: Product[] = [
     "priceUsd": 3700,
     "description": "Потрясающее кольцо с тремя камнями с великолепным лабораторным бриллиантом грушевидной огранки 4.03 карат с сертификатом IGI E VS1, дополненное двумя боковыми камнями по 0.2 карат. Изысканная оправа из белого золота 18K для эффектного и элегантного образа.",
     "descriptionEn": "Stunning three stone ring featuring a magnificent 4.03 carat pear cut lab-grown diamond with IGI certificate E VS1, complemented by two 0.2 carat side stones. Exquisite 18K white gold setting for a dramatic, elegant look.",
+    "descriptionUk": "Приголомшлива каблучка з трьома каменями з чудовим лабораторним діамантом грушевидного огранювання 4,03 карати з сертифікатом IGI E VS1, доповнена двома бічними каменями по 0,2 карат. Вишукана оправа з білого золота 18K для ефектного та елегантного образу.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
       "/Products/Rings/Three Stones Pear Diamond Ring 4ct (P011)/luminore-lab-grown-diamond-three-stone-ring-4-43ct-e-vs1-18k-white-gold-front.jpg",
@@ -372,8 +408,10 @@ export const products: Product[] = [
     "sku": "P012",
     "name": "Подвеска с грушевидным бриллиантом 3ct",
     "nameEn": "Pear Diamond Pendant 3ct",
+    "nameUk": "Підвіска з грушевидним діамантом 3ct",
     "category": "Подвески",
     "categoryEn": "Pendants",
+    "categoryUk": "Підвіски",
     "productType": "Solitaire Pendant",
     "metalType": "18K White Gold",
     "goldWeight": 3.5,
@@ -388,6 +426,7 @@ export const products: Product[] = [
     "priceUsd": 1950,
     "description": "Классическая подвеска с потрясающим лабораторным бриллиантом грушевидной огранки 3 карат с сертификатом IGI F VS1. В комплекте цепочка из белого золота 18K для элегантного украшения зоны декольте.",
     "descriptionEn": "Classic pendant featuring a stunning 3 carat pear cut lab-grown diamond with IGI certificate F VS1. Includes 18K white gold chain for elegant neckline enhancement.",
+    "descriptionUk": "Класична підвіска з вражаючим лабораторним діамантом грушевидного огранювання 3 карати з сертифікатом IGI F VS1. У комплекті ланцюжок із білого золота 18K для елегантного оздоблення зони декольте.",
     "careInstructions": "Store flat or hanging. Clean gently with soft cloth.",
     "images": [
       "/Products/Pendants/Pear Diamond Pendant 3ct (P012)/luminore-lab-grown-diamond-solitaire-pendant-3ct-f-vs1-18k-white-gold-front.jpg",
@@ -403,8 +442,10 @@ export const products: Product[] = [
     "sku": "P013",
     "name": "Крестик с бриллиантами 3ct",
     "nameEn": "Diamond Cross Pendant 3ct",
+    "nameUk": "Хрестик з діамантами 3ct",
     "category": "Подвески",
     "categoryEn": "Pendants",
+    "categoryUk": "Підвіски",
     "productType": "Cross Pendant",
     "metalType": "18K White Gold",
     "goldWeight": 5,
@@ -419,6 +460,7 @@ export const products: Product[] = [
     "priceUsd": 2300,
     "description": "Элегантный крестик, украшенный лабораторными бриллиантами общим весом 3.3 карат класса EF VVS-VS. Выполнен из белого золота 18K — значимое и сияющее украшение, вдохновленное верой.",
     "descriptionEn": "Elegant cross pendant adorned with 3.3 carats total weight of lab-grown diamonds in EF VVS-VS grades. Crafted in 18K white gold for a meaningful and radiant piece of faith-inspired jewelry.",
+    "descriptionUk": "Елегантний хрестик, прикрашений лабораторними діамантами загальною вагою 3,3 карати класу EF VVS-VS. Виготовлений із білого золота 18K — значуща і сяюча прикраса, натхненна вірою.",
     "careInstructions": "Store flat or hanging. Clean gently with soft cloth.",
     "images": [
       "/Products/Pendants/Diamond Cross Pendant 3ct (P013)/luminore-lab-grown-diamond-cross-pendant-3-3ct-ef-vvs-vs-18k-white-gold-front.jpg",
@@ -434,8 +476,10 @@ export const products: Product[] = [
     "sku": "P014",
     "name": "Крестик с бриллиантами 4ct",
     "nameEn": "Diamond Cross Pendant 4ct",
+    "nameUk": "Хрестик з діамантами 4ct",
     "category": "Подвески",
     "categoryEn": "Pendants",
+    "categoryUk": "Підвіски",
     "productType": "Cross Pendant",
     "metalType": "18K White Gold",
     "goldWeight": 5.1,
@@ -450,6 +494,7 @@ export const products: Product[] = [
     "priceUsd": 2800,
     "description": "Потрясающая подвеска-крестик с лабораторными бриллиантами общим весом 3.6 карат. Массивная конструкция из белого золота 18K создает яркое воплощение веры и роскоши.",
     "descriptionEn": "Stunning cross pendant featuring 3.6 carats total weight of lab-grown diamonds. Substantial 18K white gold construction creates a bold statement of faith and luxury.",
+    "descriptionUk": "Вражаюча підвіска-хрестик із лабораторними діамантами загальною вагою 3,6 карати. Масивна конструкція з білого золота 18K створює яскраве втілення віри та розкоші.",
     "careInstructions": "Store flat or hanging. Clean gently with soft cloth.",
     "images": [
       "/Products/Pendants/Diamond Cross Pendant 4ct (P014)/luminore-lab-grown-diamond-cross-pendant-3-6ct-18k-white-gold-front.jpg",
@@ -465,8 +510,10 @@ export const products: Product[] = [
     "sku": "P015",
     "name": "Подвеска Halo 2ct",
     "nameEn": "Halo Diamond Pendant 2ct",
+    "nameUk": "Підвіска Halo 2ct",
     "category": "Подвески",
     "categoryEn": "Pendants",
+    "categoryUk": "Підвіски",
     "productType": "Halo Pendant",
     "metalType": "18K White Gold",
     "goldWeight": 4.5,
@@ -481,6 +528,7 @@ export const products: Product[] = [
     "priceUsd": 1900,
     "description": "Элегантная подвеска в стиле гало с центральным лабораторным бриллиантом круглой огранки 1.5 карат F VVS2, окруженным сверкающим ореолом. Оправа из белого золота 18K для усиленного блеска и вневременной красоты.",
     "descriptionEn": "Elegant halo style pendant with 1.5 carat round cut lab-grown diamond center stone F VVS2, surrounded by a brilliant halo. Set in 18K white gold for enhanced sparkle and timeless beauty.",
+    "descriptionUk": "Елегантна підвіска в стилі гало з центральним лабораторним діамантом круглого огранювання 1,5 карати F VVS2, оточеним сяючим ореолом. Оправа з білого золота 18K для посиленого блиску та вічної краси.",
     "careInstructions": "Store flat or hanging. Clean gently with soft cloth.",
     "images": [
       "/Products/Pendants/Halo Diamond Pendant 2ct (P015)/luminore-lab-grown-diamond-halo-pendant-1-5ct-f-vvs2-18k-white-gold-front.jpg",
@@ -496,8 +544,10 @@ export const products: Product[] = [
     "sku": "P016",
     "name": "Браслет Tennis 9ct",
     "nameEn": "Diamond Tennis Bracelet 9ct",
+    "nameUk": "Браслет Tennis 9ct",
     "category": "Браслеты",
     "categoryEn": "Bracelets",
+    "categoryUk": "Браслети",
     "productType": "Tennis Bracelet",
     "metalType": "18K White Gold",
     "goldWeight": 15,
@@ -512,6 +562,7 @@ export const products: Product[] = [
     "priceUsd": 5250,
     "description": "Классический теннисный браслет с лабораторными бриллиантами общим весом 9 карат, расположенными в непрерывную линию. Выполнен из белого золота 18K с надежной застежкой для элегантного украшения запястья.",
     "descriptionEn": "Classic tennis bracelet featuring 9 carats total weight of lab-grown diamonds in a continuous line. Crafted in 18K white gold with secure clasp for elegant wrist adornment.",
+    "descriptionUk": "Класичний тенісний браслет із лабораторними діамантами загальною вагою 9 карат, розташованими в безперервну лінію. Виготовлений із білого золота 18K із надійною застібкою для елегантного прикраси зап'ястя.",
     "careInstructions": "Fasten securely before wearing. Store flat. Avoid contact with chemicals.",
     "images": [
       "/Products/Bracelets/Diamond Tennis Bracelet 9ct (P016)/luminore-lab-grown-diamond-tennis-bracelet-9ct-18k-white-gold-front.jpg",
@@ -527,8 +578,10 @@ export const products: Product[] = [
     "sku": "P017",
     "name": "Браслет Tennis 12ct",
     "nameEn": "Diamond Tennis Bracelet 12ct",
+    "nameUk": "Браслет Tennis 12ct",
     "category": "Браслеты",
     "categoryEn": "Bracelets",
+    "categoryUk": "Браслети",
     "productType": "Tennis Bracelet",
     "metalType": "18K White Gold",
     "goldWeight": 17,
@@ -543,6 +596,7 @@ export const products: Product[] = [
     "priceUsd": 12000,
     "description": "Роскошный теннисный браслет с лабораторными бриллиантами по 0.5 карат каждый (приблизительно 24 камня). Массивная конструкция из белого золота 18K создает впечатляющее украшение исключительного блеска.",
     "descriptionEn": "Luxurious tennis bracelet with 0.5 carat each lab-grown diamonds (approximately 24 stones). Substantial 18K white gold construction creates an impressive statement piece of exceptional brilliance.",
+    "descriptionUk": "Розкішний тенісний браслет із лабораторними діамантами по 0,5 карат кожен (приблизно 24 камені). Масивна конструкція з білого золота 18K створює вражаючу прикрасу виняткового блиску.",
     "careInstructions": "Fasten securely before wearing. Store flat. Avoid contact with chemicals.",
     "images": [
       "/Products/Bracelets/Diamond Tennis Bracelet 12ct (P017)/luminore-lab-grown-diamond-tennis-bracelet-12ct-18k-white-gold-front.jpg",
@@ -558,8 +612,10 @@ export const products: Product[] = [
     "sku": "P018",
     "name": "Пусеты в розовом золоте 4ct",
     "nameEn": "Rose Gold Diamond Stud Earrings 4ct",
+    "nameUk": "Пусети з рожевого золота 4ct",
     "category": "Серьги",
     "categoryEn": "Earrings",
+    "categoryUk": "Сережки",
     "productType": "Stud Earrings",
     "metalType": "18K Rose Gold",
     "goldWeight": 3.5,
@@ -574,6 +630,7 @@ export const products: Product[] = [
     "priceUsd": 2400,
     "description": "Классические пусеты с лабораторными бриллиантами по 1.75 карат каждый класса F VS1, общим весом 3.5 карат. Оправа из роскошного розового золота 18K для теплой, романтичной элегантности.",
     "descriptionEn": "Classic stud earrings featuring 1.75 carat each lab-grown diamonds with F VS1 grade, totaling 3.5 carats. Set in luxurious 18K rose gold for a warm, romantic elegance.",
+    "descriptionUk": "Класичні пусети з лабораторними діамантами по 1,75 карати кожен класу F VS1, загальною вагою 3,5 карати. Оправа з розкішного рожевого золота 18K для теплої, романтичної елегантності.",
     "careInstructions": "Clean with mild soap and warm water. Store separately to prevent scratching.",
     "images": [
       "/Products/earrings/Diamond Stud Earrings 3.5ct Rose Gold (P0018)/luminore-stud-earrings-3-5ct-18k-rose-gold-front.jpg",

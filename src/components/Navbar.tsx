@@ -10,7 +10,7 @@ export function Navbar() {
   const location = useLocation();
   const isProductPage = location.pathname.startsWith('/product');
   const isHomePage = location.pathname === '/';
-  const { t, language, toggleLanguage } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
 
   // Mobile nav visibility — hidden until logo scrolls behind navbar
   const [mobileNavVisible, setMobileNavVisible] = useState(!isHomePage);
@@ -147,15 +147,21 @@ export function Navbar() {
             {/* Right Side: Language Switcher + CTA */}
             <div className="hidden md:flex items-center gap-6">
               {/* Language Switcher */}
-              <button
-                onClick={toggleLanguage}
-                className="flex items-center gap-2 px-3 py-2 text-[#C5C9C6]/80 hover:text-[#D1642E] transition-colors duration-300"
-                aria-label="Switch language"
-              >
-                <span className={`font-cinzel text-sm ${language === 'ru' ? 'text-[#D1642E]' : ''}`}>RU</span>
-                <span className="text-[#C5C9C6]/40">|</span>
-                <span className={`font-cinzel text-sm ${language === 'en' ? 'text-[#D1642E]' : ''}`}>EN</span>
-              </button>
+              <div className="flex items-center gap-1.5" aria-label="Select language">
+                {(['en', 'uk', 'ru'] as const).map((lang, i) => (
+                  <span key={lang} className="flex items-center gap-1.5">
+                    {i > 0 && <span className="text-[#C5C9C6]/30 text-xs">|</span>}
+                    <button
+                      onClick={() => setLanguage(lang)}
+                      className={`font-cinzel text-xs tracking-[0.12em] px-1 py-1 transition-colors duration-300 ${language === lang ? 'text-[#D1642E]' : 'text-[#C5C9C6]/60 hover:text-[#C5C9C6]'}`}
+                      aria-label={`Switch to ${lang === 'en' ? 'English' : lang === 'uk' ? 'Ukrainian' : 'Russian'}`}
+                      aria-pressed={language === lang}
+                    >
+                      {lang === 'en' ? 'EN' : lang === 'uk' ? 'UA' : 'RU'}
+                    </button>
+                  </span>
+                ))}
+              </div>
 
               {/* CTA Button */}
               <button 
@@ -207,7 +213,7 @@ export function Navbar() {
       >
         <div className="flex flex-col items-center justify-center h-full gap-8 pt-24 pb-20">
           {/* Mobile Language Switcher */}
-          <div 
+          <div
             className="flex items-center gap-4 mb-4"
             style={{
               opacity: isMenuOpen ? 1 : 0,
@@ -215,19 +221,18 @@ export function Navbar() {
               transition: 'all 0.4s ease'
             }}
           >
-            <button
-              onClick={() => { setIsMenuOpen(false); if (language !== 'ru') toggleLanguage(); }}
-              className={`font-cinzel text-xl ${language === 'ru' ? 'text-[#D1642E]' : 'text-[#C5C9C6]'}`}
-            >
-              RU
-            </button>
-            <span className="text-[#C5C9C6]/40">|</span>
-            <button
-              onClick={() => { setIsMenuOpen(false); if (language !== 'en') toggleLanguage(); }}
-              className={`font-cinzel text-xl ${language === 'en' ? 'text-[#D1642E]' : 'text-[#C5C9C6]'}`}
-            >
-              EN
-            </button>
+            {(['en', 'uk', 'ru'] as const).map((lang, i) => (
+              <span key={lang} className="flex items-center gap-4">
+                {i > 0 && <span className="text-[#C5C9C6]/30">|</span>}
+                <button
+                  onClick={() => { setLanguage(lang); setIsMenuOpen(false); }}
+                  className={`font-cinzel text-xl ${language === lang ? 'text-[#D1642E]' : 'text-[#C5C9C6]'}`}
+                  aria-pressed={language === lang}
+                >
+                  {lang === 'en' ? 'EN' : lang === 'uk' ? 'UA' : 'RU'}
+                </button>
+              </span>
+            ))}
           </div>
 
           {navLinks.map((link, index) => (

@@ -16,7 +16,9 @@ interface LanguageProviderProps {
   defaultLanguage?: Language;
 }
 
-export function LanguageProvider({ children, defaultLanguage = 'ru' }: LanguageProviderProps) {
+const LANGUAGE_CYCLE: Language[] = ['en', 'uk', 'ru'];
+
+export function LanguageProvider({ children, defaultLanguage = 'en' }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(defaultLanguage);
 
   const setLanguage = useCallback((lang: Language) => {
@@ -28,14 +30,16 @@ export function LanguageProvider({ children, defaultLanguage = 'ru' }: LanguageP
   }, []);
 
   const toggleLanguage = useCallback(() => {
-    setLanguage(language === 'ru' ? 'en' : 'ru');
+    const currentIndex = LANGUAGE_CYCLE.indexOf(language);
+    const nextIndex = (currentIndex + 1) % LANGUAGE_CYCLE.length;
+    setLanguage(LANGUAGE_CYCLE[nextIndex]);
   }, [language, setLanguage]);
 
   // Load saved preference on mount and sync HTML lang attribute
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('luminore-language') as Language | null;
-      if (saved && (saved === 'ru' || saved === 'en')) {
+      if (saved && (saved === 'en' || saved === 'uk' || saved === 'ru')) {
         setLanguageState(saved);
         document.documentElement.lang = saved;
       } else {

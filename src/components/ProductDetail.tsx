@@ -70,13 +70,15 @@ export function ProductDetail() {
   const message = useMemo(() => {
     if (!product) return '';
     const typeSuffix = isNatural
-      ? (language === 'ru' ? ' (натуральный бриллиант)' : ' (natural diamond)')
+      ? (language === 'ru' ? ' (натуральный бриллиант)' : language === 'uk' ? ' (природний діамант)' : ' (natural diamond)')
       : '';
     const priceStr = isNatural
-      ? (language === 'ru' ? 'цена по запросу' : 'price on enquiry')
+      ? (language === 'ru' ? 'цена по запросу' : language === 'uk' ? 'ціна за запитом' : 'price on enquiry')
       : formatUsd(product.priceUsd);
     const msg = language === 'ru'
       ? `Здравствуйте! Интересует ${product.name}${typeSuffix} (${priceStr}). Хотел(а) бы узнать подробнее о наличии и условиях покупки.`
+      : language === 'uk'
+      ? `Добрий день! Мене цікавить ${product.nameUk}${typeSuffix} (${priceStr}). Хотів(-ла) б дізнатися більше про наявність та умови покупки.`
       : `Hello! I'm interested in ${product.nameEn}${typeSuffix} (${priceStr}). I would like to know more about availability and purchase conditions.`;
     return encodeURIComponent(msg);
   }, [product, language, isNatural]);
@@ -119,7 +121,7 @@ export function ProductDetail() {
     { label: t.product.material, value: product.metalType },
     { label: t.product.stones, value: `${displayGemstoneType}${product.totalCarat ? `, ${product.totalCarat}ct` : ''}${product.diamondColor && product.diamondColor !== 'Not Specified' ? `, ${product.diamondColor}` : ''}${product.diamondClarity && product.diamondClarity !== 'Not Specified' ? ` ${product.diamondClarity}` : ''}` },
     { label: t.product.weight, value: product.goldWeight ? `${product.goldWeight}g` : '-' },
-    { label: t.product.size, value: product.certificateType && product.certificateType !== 'None' ? `${product.certificateType} ${language === 'ru' ? 'сертификат' : 'Certified'}` : '-' },
+    { label: t.product.size, value: product.certificateType && product.certificateType !== 'None' ? `${product.certificateType} ${language === 'ru' ? 'сертификат' : language === 'uk' ? 'сертифікат' : 'Certified'}` : '-' },
   ];
 
   // Filter related products by category
@@ -127,9 +129,9 @@ export function ProductDetail() {
     .filter(p => p.categoryEn === product.categoryEn && p.id !== product.id)
     .slice(0, 3);
 
-  const displayName = language === 'ru' ? product.name : product.nameEn;
-  const displayDescription = language === 'ru' ? product.description : product.descriptionEn;
-  const displayCategory = language === 'ru' ? product.category : product.categoryEn;
+  const displayName = language === 'ru' ? product.name : language === 'uk' ? product.nameUk : product.nameEn;
+  const displayDescription = language === 'ru' ? product.description : language === 'uk' ? product.descriptionUk : product.descriptionEn;
+  const displayCategory = language === 'ru' ? product.category : language === 'uk' ? product.categoryUk : product.categoryEn;
 
   return (
     <div className="min-h-screen bg-[#1B0D14]">
@@ -337,6 +339,8 @@ export function ProductDetail() {
                   <p className="font-body text-sm text-[#C5C9C6]/50 mt-2">
                     {language === 'ru'
                       ? 'Свяжитесь с нами для уточнения стоимости'
+                      : language === 'uk'
+                      ? 'Зв\'яжіться з нами для уточнення вартості'
                       : 'Contact us for pricing details'}
                   </p>
                 </div>
@@ -434,7 +438,7 @@ export function ProductDetail() {
                     {relatedProduct.images && relatedProduct.images.length > 0 ? (
                       <img 
                         src={relatedProduct.images[0]} 
-                        alt={language === 'ru' ? relatedProduct.name : relatedProduct.nameEn}
+                        alt={language === 'ru' ? relatedProduct.name : language === 'uk' ? relatedProduct.nameUk : relatedProduct.nameEn}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 z-10"
                       />
                     ) : (
@@ -452,7 +456,7 @@ export function ProductDetail() {
                       className="font-cinzel text-[10px] md:text-sm text-white group-hover:text-[#D1642E] transition-colors"
                       style={{ letterSpacing: '0.03em' }}
                     >
-                      {language === 'ru' ? relatedProduct.name : relatedProduct.nameEn}
+                      {language === 'ru' ? relatedProduct.name : language === 'uk' ? relatedProduct.nameUk : relatedProduct.nameEn}
                     </h3>
                     <p className="font-cinzel text-[10px] md:text-sm text-[#D1642E] mt-1 md:mt-2">{formatUsd(relatedProduct.priceUsd)}</p>
                   </div>

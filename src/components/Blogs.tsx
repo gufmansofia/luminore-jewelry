@@ -139,11 +139,11 @@ export function Blogs() {
                     className="font-cinzel text-xs text-[#D1642E]"
                     style={{ letterSpacing: '0.1em' }}
                   >
-                    {language === 'ru' ? article.category : article.categoryEn}
+                    {language === 'ru' ? article.category : language === 'uk' ? article.categoryUk : article.categoryEn}
                   </span>
                   <span className="w-1 h-1 bg-[#C5C9C6]/40 rounded-full"></span>
                   <span className="font-body text-sm text-[#C5C9C6]/70">
-                    {language === 'ru' ? article.date : article.dateEn}
+                    {language === 'ru' ? article.date : language === 'uk' ? article.dateUk : article.dateEn}
                   </span>
                 </div>
                 
@@ -151,16 +151,16 @@ export function Blogs() {
                   className="font-cinzel text-lg text-white mb-3 group-hover:text-[#D1642E] transition-colors leading-snug"
                   style={{ letterSpacing: '0.03em' }}
                 >
-                  {language === 'ru' ? article.title : article.titleEn}
+                  {language === 'ru' ? article.title : language === 'uk' ? article.titleUk : article.titleEn}
                 </h3>
                 
                 <p className="font-body text-[#C5C9C6]/80 text-sm leading-relaxed mb-4 line-clamp-2">
-                  {language === 'ru' ? article.excerpt : article.excerptEn}
+                  {language === 'ru' ? article.excerpt : language === 'uk' ? article.excerptUk : article.excerptEn}
                 </p>
                 
                 <div className="flex items-center justify-between pt-4 border-t border-[#C5C9C6]/10">
                   <span className="font-body text-sm text-[#C5C9C6]/60">
-                    {language === 'ru' ? article.readTime : article.readTimeEn} {t.blog.readTime}
+                    {language === 'ru' ? article.readTime : language === 'uk' ? article.readTimeUk : article.readTimeEn} {t.blog.readTime}
                   </span>
                   <span 
                     className="font-cinzel text-xs text-white group-hover:text-[#D1642E] transition-colors"

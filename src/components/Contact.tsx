@@ -50,10 +50,10 @@ export function Contact() {
     const errors: { email?: string; consent?: string } = {};
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(formData.email)) {
-      errors.email = language === 'ru' ? 'Пожалуйста, введите корректный email' : 'Please enter a valid email address';
+      errors.email = t.contact.emailError;
     }
     if (!formData.consent) {
-      errors.consent = language === 'ru' ? 'Пожалуйста, дайте согласие на обработку персональных данных' : 'Please consent to the processing of personal data';
+      errors.consent = t.contact.consentError;
     }
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -344,7 +344,7 @@ export function Contact() {
                       className="font-body text-sm text-[#564C5B] leading-relaxed cursor-pointer"
                     >
                       {t.contact.consent}{' '}
-                      <a href="/privacy-policy" aria-label={language === 'ru' ? 'Читать политику конфиденциальности' : 'Read our privacy policy'} className="text-[#D1642E] hover:underline">{t.contact.privacyPolicy}</a>
+                      <a href="/privacy-policy" aria-label={t.contact.privacyAriaLabel} className="text-[#D1642E] hover:underline">{t.contact.privacyPolicy}</a>
                     </label>
                   </div>
                   {formErrors.consent && (

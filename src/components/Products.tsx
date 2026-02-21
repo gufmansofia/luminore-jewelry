@@ -392,7 +392,7 @@ export function Products() {
                 {product.images && product.images.length > 0 ? (
                   <img
                     src={getMainImage(product.images)}
-                    alt={language === 'ru' ? product.name : product.nameEn}
+                    alt={language === 'ru' ? product.name : language === 'uk' ? product.nameUk : product.nameEn}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10"
                   />
                 ) : (
@@ -438,10 +438,10 @@ export function Products() {
                   className="font-cinzel text-xs md:text-lg text-white mb-1 md:mb-2 group-hover:text-[#D1642E] transition-colors leading-snug line-clamp-2"
                   style={{ letterSpacing: '0.03em' }}
                 >
-                  {language === 'ru' ? product.name : product.nameEn}
+                  {language === 'ru' ? product.name : language === 'uk' ? product.nameUk : product.nameEn}
                 </h3>
                 <p className="hidden md:block font-body text-sm text-[#C5C9C6]/70 mb-4 line-clamp-2">
-                  {language === 'ru' ? product.description : product.descriptionEn}
+                  {language === 'ru' ? product.description : language === 'uk' ? product.descriptionUk : product.descriptionEn}
                 </p>
                 <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-[#C5C9C6]/10 mt-auto">
                   <span
@@ -521,7 +521,7 @@ export function Products() {
                   {quickViewProduct.images && quickViewProduct.images.length > 0 ? (
                     <img
                       src={quickViewProduct.images[qvImageIndex]}
-                      alt={language === 'ru' ? quickViewProduct.name : quickViewProduct.nameEn}
+                      alt={language === 'ru' ? quickViewProduct.name : language === 'uk' ? quickViewProduct.nameUk : quickViewProduct.nameEn}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -549,16 +549,16 @@ export function Products() {
               {/* Info */}
               <div className="p-8 flex flex-col justify-center">
                 <p className="font-cinzel text-xs text-[#C5C9C6]/50 mb-3" style={{ letterSpacing: '0.2em' }}>
-                  {language === 'ru' ? quickViewProduct.category : quickViewProduct.categoryEn}
+                  {language === 'ru' ? quickViewProduct.category : language === 'uk' ? quickViewProduct.categoryUk : quickViewProduct.categoryEn}
                 </p>
                 <h3 className="font-cinzel text-2xl text-white mb-4" style={{ letterSpacing: '0.03em' }}>
-                  {language === 'ru' ? quickViewProduct.name : quickViewProduct.nameEn}
+                  {language === 'ru' ? quickViewProduct.name : language === 'uk' ? quickViewProduct.nameUk : quickViewProduct.nameEn}
                 </h3>
                 <p className="font-cinzel text-2xl text-[#D1642E] mb-6" style={{ letterSpacing: '0.03em' }}>
                   {formatUsd(quickViewProduct.priceUsd)}
                 </p>
                 <p className="font-body text-[#C5C9C6]/70 text-sm leading-relaxed mb-8">
-                  {language === 'ru' ? quickViewProduct.description : quickViewProduct.descriptionEn}
+                  {language === 'ru' ? quickViewProduct.description : language === 'uk' ? quickViewProduct.descriptionUk : quickViewProduct.descriptionEn}
                 </p>
 
                 {/* Quick specs */}
@@ -578,7 +578,7 @@ export function Products() {
                   className="w-full px-8 py-4 bg-[#D1642E] text-white font-cinzel text-sm hover:bg-[#B85420] transition-all duration-300"
                   style={{ letterSpacing: '0.1em' }}
                 >
-                  {language === 'ru' ? 'Смотреть подробнее' : 'View Full Details'}
+                  {language === 'ru' ? 'Смотреть подробнее' : language === 'uk' ? 'Переглянути деталі' : 'View Full Details'}
                 </button>
               </div>
             </div>
