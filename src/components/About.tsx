@@ -195,14 +195,7 @@ export function About() {
             </div>
 
             {/* Bespoke statement */}
-            <div className="mt-7">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex-1 h-px bg-[#D1642E]/30" />
-                <svg className="w-3 h-3 text-[#D1642E] flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                  <polygon points="12,3 21,9.5 12,21 3,9.5" />
-                </svg>
-                <div className="flex-1 h-px bg-[#D1642E]/30" />
-              </div>
+            <div className="mt-4">
               <p className="font-cinzel text-xs text-[#1B0D14] text-center tracking-widest">
                 {t.about.bespokeStatement}
               </p>
@@ -212,7 +205,7 @@ export function About() {
         {/* Animated Counters */}
         <div
           ref={countersRef}
-          className={`mt-20 pt-16 border-t border-[#1B0D14]/10 transition-all duration-1000 ${
+          className={`mt-10 pt-8 border-t border-[#1B0D14]/10 transition-all duration-1000 ${
             countersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
