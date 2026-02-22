@@ -21,27 +21,19 @@ interface AccordionFilterProps {
 
 function AccordionFilter({ label, value, options, onChange, isOpen, onToggle }: AccordionFilterProps) {
   const selectedOption = options.find(opt => opt.key === value);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState(0);
-
-  useEffect(() => {
-    if (contentRef.current) {
-      setContentHeight(contentRef.current.scrollHeight);
-    }
-  }, [options]);
 
   return (
     <div className="border border-[#C5C9C6]/20 bg-[#564C5B]/10 overflow-hidden">
       {/* Accordion Header */}
       <button
         onClick={onToggle}
-        className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-300 ${
+        className={`w-full flex items-center justify-between px-4 py-3 ${
           isOpen ? 'bg-[#564C5B]/30' : 'hover:bg-[#564C5B]/20'
         }`}
         aria-expanded={isOpen}
       >
         <div className="flex flex-col items-start">
-          <span 
+          <span
             className="font-cinzel text-[10px] text-[#C5C9C6]/50 uppercase mb-1"
             style={{ letterSpacing: '0.15em' }}
           >
@@ -51,22 +43,22 @@ function AccordionFilter({ label, value, options, onChange, isOpen, onToggle }: 
             {selectedOption?.label}
           </span>
         </div>
-        <svg 
-          className={`w-5 h-5 text-[#D1642E] transition-transform duration-300 flex-shrink-0 ml-2 ${isOpen ? 'rotate-180' : ''}`} 
-          fill="none" 
-          stroke="currentColor" 
+        <svg
+          className={`w-5 h-5 text-[#D1642E] transition-transform duration-150 flex-shrink-0 ml-2 ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
           viewBox="0 0 24 24"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
-      {/* Accordion Content */}
-      <div 
-        className="overflow-hidden transition-all duration-300 ease-out"
-        style={{ height: isOpen ? contentHeight : 0 }}
+      {/* Accordion Content — grid-template-rows transition is GPU-accelerated, no JS measurement needed */}
+      <div
+        className="grid transition-[grid-template-rows] duration-150 ease-out"
+        style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
       >
-        <div ref={contentRef} className="border-t border-[#C5C9C6]/10">
+        <div className="min-h-0 overflow-hidden border-t border-[#C5C9C6]/10">
           {options.map((option) => (
             <button
               key={option.key}
