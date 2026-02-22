@@ -142,55 +142,55 @@ export function About() {
             </h2>
 
             {/* Diamond source cards */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
 
               {/* Natural diamonds */}
-              <div className="bg-[#1B0D14]/6 border border-[#1B0D14]/12 hover:border-[#D1642E]/40 transition-all duration-300 p-5 flex flex-col">
-                <h3 className="font-cinzel text-[10px] font-bold text-[#1B0D14] mb-3" style={{ letterSpacing: '0.18em' }}>
+              <div className="bg-[#1B0D14]/6 border border-[#1B0D14]/12 hover:border-[#D1642E]/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
+                <h3 className="font-cinzel text-xs md:text-sm font-bold text-[#1B0D14] mb-4" style={{ letterSpacing: '0.18em' }}>
                   {t.about.naturalLabel}
                 </h3>
-                <div className="flex-1">
-                  <p className="font-body text-xs text-[#564C5B] leading-relaxed mb-3">
+                <div className="flex-1 w-full">
+                  <p className="font-body text-sm md:text-base text-[#564C5B] leading-relaxed mb-4">
                     {t.about.naturalDesc}
                   </p>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1 h-1 bg-[#D1642E] rounded-full flex-shrink-0" />
-                      <span className="font-body text-[10px] text-[#564C5B]">{t.about.naturalBullet1}</span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
+                      <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.naturalBullet1}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-1 h-1 bg-[#D1642E] rounded-full flex-shrink-0" />
-                      <span className="font-body text-[10px] text-[#564C5B]">{t.about.naturalBullet2}</span>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
+                      <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.naturalBullet2}</span>
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 flex justify-center">
-                  <img src="/favicon.svg" alt="" className="w-10 h-10" />
+                <div className="mt-6">
+                  <img src="/favicon.svg" alt="" className="w-14 h-14 md:w-16 md:h-16" />
                 </div>
               </div>
 
               {/* Laboratory diamonds */}
-              <div className="bg-[#1B0D14]/6 border border-[#1B0D14]/12 hover:border-[#D1642E]/40 transition-all duration-300 p-5 flex flex-col">
-                <h3 className="font-cinzel text-[10px] font-bold text-[#1B0D14] mb-3" style={{ letterSpacing: '0.18em' }}>
+              <div className="bg-[#1B0D14]/6 border border-[#1B0D14]/12 hover:border-[#D1642E]/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
+                <h3 className="font-cinzel text-xs md:text-sm font-bold text-[#1B0D14] mb-4" style={{ letterSpacing: '0.18em' }}>
                   {t.about.labLabel}
                 </h3>
-                <div className="flex-1">
-                  <p className="font-body text-xs text-[#564C5B] leading-relaxed mb-3">
+                <div className="flex-1 w-full">
+                  <p className="font-body text-sm md:text-base text-[#564C5B] leading-relaxed mb-4">
                     {t.about.labDesc}
                   </p>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1 h-1 bg-[#D1642E] rounded-full flex-shrink-0" />
-                      <span className="font-body text-[10px] text-[#564C5B]">{t.about.labBullet1}</span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
+                      <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.labBullet1}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-1 h-1 bg-[#D1642E] rounded-full flex-shrink-0" />
-                      <span className="font-body text-[10px] text-[#564C5B]">{t.about.labBullet2}</span>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
+                      <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.labBullet2}</span>
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 flex justify-center">
-                  <img src="/favicon.svg" alt="" className="w-10 h-10" />
+                <div className="mt-6">
+                  <img src="/favicon.svg" alt="" className="w-14 h-14 md:w-16 md:h-16" />
                 </div>
               </div>
 
