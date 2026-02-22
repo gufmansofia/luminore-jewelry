@@ -16,15 +16,6 @@ function LangSync() {
   return null;
 }
 
-function SectionDivider() {
-  return (
-    <div className="flex items-center justify-center py-1 bg-[#1B0D14]">
-      <div className="w-16 h-px bg-[#C5C9C6]/10"></div>
-      <div className="mx-4 w-2 h-2 border border-[#D1642E]/30 rotate-45"></div>
-      <div className="w-16 h-px bg-[#C5C9C6]/10"></div>
-    </div>
-  );
-}
 
 function HomePage() {
   const location = useLocation();
@@ -55,7 +46,6 @@ function HomePage() {
         <About />
         <Products />
         <CTA />
-        <SectionDivider />
         <Testimonials />
         <Blogs />
         <Contact />
