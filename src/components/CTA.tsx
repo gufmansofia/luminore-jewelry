@@ -80,7 +80,7 @@ export function CTA() {
     <section
       ref={sectionRef}
       id="custom-order"
-      className="relative py-24 lg:py-32 bg-[#C5C9C6] overflow-hidden"
+      className="relative pt-12 pb-24 lg:pt-16 lg:pb-32 bg-[#C5C9C6] overflow-hidden"
     >
       <style>{`
         #custom-order input::placeholder,
