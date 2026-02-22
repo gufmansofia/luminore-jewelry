@@ -88,14 +88,18 @@ export function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <div className="flex items-center justify-between h-24">
-            {/* Logo */}
-            <Link 
+            {/* Logo — only visible when dark navbar background is active */}
+            <Link
               to="/"
-              className="relative z-50 transition-opacity duration-300 hover:opacity-100 opacity-90"
+              className={`relative z-50 transition-opacity duration-500 hover:opacity-100 ${
+                isScrolled || isProductPage || !isHomePage
+                  ? 'opacity-90'
+                  : 'opacity-0 pointer-events-none'
+              }`}
             >
-              <img 
-                src={logoFullUrl} 
-                alt="Luminore Jewelry" 
+              <img
+                src={logoFullUrl}
+                alt="Luminore Jewelry"
                 className="h-10 w-auto brightness-0 invert"
               />
             </Link>
