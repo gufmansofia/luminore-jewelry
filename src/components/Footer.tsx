@@ -286,6 +286,7 @@ export function Footer() {
                   src={logoFullUrl}
                   alt="Luminore Jewelry"
                   className="h-12 w-auto brightness-0 invert"
+                  loading="lazy"
                 />
               </button>
               <p className="font-body text-[#C5C9C6]/70 text-sm leading-relaxed">

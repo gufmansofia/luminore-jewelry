@@ -260,6 +260,7 @@ export function ProductDetail() {
                         src={img}
                         alt={`${displayName} - view ${index + 1}`}
                         className="w-full h-full object-cover"
+                        loading="lazy"
                       />
                     </button>
                   ))}
@@ -436,10 +437,11 @@ export function ProductDetail() {
                   <div className="relative aspect-square bg-[#1B0D14] overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#564C5B]/30 via-[#1B0D14]/60 to-[#1B0D14]/80"></div>
                     {relatedProduct.images && relatedProduct.images.length > 0 ? (
-                      <img 
-                        src={relatedProduct.images[0]} 
+                      <img
+                        src={relatedProduct.images[0]}
                         alt={language === 'ru' ? relatedProduct.name : language === 'uk' ? relatedProduct.nameUk : relatedProduct.nameEn}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 z-10"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center z-10">

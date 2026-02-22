@@ -94,6 +94,7 @@ export function Blogs() {
                     src={article.image}
                     alt={article.imageAlt || ''}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
                   />
                 ) : (
                   <>
