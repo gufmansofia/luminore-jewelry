@@ -38,7 +38,7 @@ export function BlogPost() {
             {t.blog.notFound}
           </p>
           <button
-            onClick={() => navigate('/#blog')}
+            onClick={() => navigate('/', { state: { scrollTo: 'blog' } })}
             className="px-6 py-3 bg-[#D1642E] text-white font-cinzel text-sm"
             style={{ letterSpacing: '0.1em' }}
           >
@@ -144,7 +144,7 @@ export function BlogPost() {
               />
             </button>
             <button 
-              onClick={() => navigate('/#blog')}
+              onClick={() => navigate('/', { state: { scrollTo: 'blog' } })}
               className="font-cinzel text-sm text-[#C5C9C6]/70 hover:text-[#D1642E] transition-colors"
               style={{ letterSpacing: '0.03em' }}
             >
