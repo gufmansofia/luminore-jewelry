@@ -33,7 +33,7 @@ export function HeroMobile() {
     <section className="relative overflow-hidden md:hidden">
 
       {/* Crop a small slice from the top so the logo is centred in the visible frame */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden" style={{ backgroundColor: '#1B0D14' }}>
         <video
           ref={videoRef}
           className="w-full h-auto block"
@@ -42,22 +42,20 @@ export function HeroMobile() {
           muted
           playsInline
           preload="metadata"
-          poster="/hero-bg.png"
           onLoadedMetadata={handleLoadedMetadata}
           onPlay={handlePlay}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
 
-        {/* Dark overlay — fades in when video starts (800 ms) */}
+        {/* Dark overlay — always visible from load so no raw video frame flashes */}
         <div
           className="absolute inset-0 bg-[#1B0D14]/55 pointer-events-none"
-          style={{ opacity: overlayVisible ? 1 : 0, transition: 'opacity 1400ms ease-in' }}
         />
 
         {/* Logo + CTAs in a single centered column — no spacer needed */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          {/* Logo — fades in first (1400 ms) */}
+          {/* Logo — fades in when video starts (1400 ms) */}
           <div
             className="w-[62%] pointer-events-none"
             style={{ opacity: overlayVisible ? 1 : 0, transition: 'opacity 1400ms ease-in' }}
