@@ -344,7 +344,12 @@ export function Contact() {
                       className="font-body text-sm text-[#564C5B] leading-relaxed cursor-pointer"
                     >
                       {t.contact.consent}{' '}
-                      <a href="/privacy-policy" aria-label={t.contact.privacyAriaLabel} className="text-[#D1642E] hover:underline">{t.contact.privacyPolicy}</a>
+                      <button
+                        type="button"
+                        aria-label={t.contact.privacyAriaLabel}
+                        onClick={() => window.dispatchEvent(new CustomEvent('luminore:open-info', { detail: 'privacy' }))}
+                        className="text-[#D1642E] hover:underline cursor-pointer"
+                      >{t.contact.privacyPolicy}</button>
                     </label>
                   </div>
                   {formErrors.consent && (

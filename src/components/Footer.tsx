@@ -22,6 +22,23 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
   }, [onClose]);
 
   const allContent: Record<string, { ru: { title: string; text: string; cta: string }; uk: { title: string; text: string; cta: string }; en: { title: string; text: string; cta: string } }> = {
+    terms: {
+      ru: {
+        title: 'Пользовательское соглашение',
+        text: 'Используя сайт luminore.eu, вы соглашаетесь с настоящим соглашением. Все материалы сайта, включая тексты, изображения и логотипы, являются интеллектуальной собственностью Luminore Jewelry. Цены и наличие товаров могут быть изменены без предварительного уведомления. Luminore оставляет за собой право отказать в обслуживании по своему усмотрению. Для получения дополнительной информации свяжитесь с нами.',
+        cta: 'Напишите нам',
+      },
+      uk: {
+        title: 'Умови використання',
+        text: 'Використовуючи сайт luminore.eu, ви погоджуєтесь з цими умовами. Усі матеріали сайту, включаючи тексти, зображення та логотипи, є інтелектуальною власністю Luminore Jewelry. Ціни та наявність товарів можуть змінюватися без попереднього повідомлення. Luminore залишає за собою право відмовити в обслуговуванні на власний розсуд. Для отримання додаткової інформації зв\'яжіться з нами.',
+        cta: 'Напишіть нам',
+      },
+      en: {
+        title: 'Terms of Service',
+        text: 'By using luminore.eu you agree to these terms. All content on this site, including text, images, and logos, is the intellectual property of Luminore Jewelry. Prices and product availability are subject to change without notice. Luminore reserves the right to refuse service at its discretion. For further information, please contact us.',
+        cta: 'Message us',
+      },
+    },
     delivery: {
       ru: {
         title: 'Доставка и оплата',
@@ -182,6 +199,15 @@ export function Footer() {
   const [isVisible, setIsVisible] = useState(false);
   const [showInfoPopup, setShowInfoPopup] = useState<string | null>(null);
   const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const key = (e as CustomEvent<string>).detail;
+      setShowInfoPopup(key);
+    };
+    window.addEventListener('luminore:open-info', handler);
+    return () => window.removeEventListener('luminore:open-info', handler);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -357,7 +383,7 @@ export function Footer() {
             </p>
             <div className="flex gap-6">
               <button
-                onClick={() => setShowInfoPopup('delivery')}
+                onClick={() => setShowInfoPopup('terms')}
                 className="font-body text-[#C5C9C6]/50 hover:text-[#D1642E] transition-colors text-sm"
               >
                 {t.footer.terms}

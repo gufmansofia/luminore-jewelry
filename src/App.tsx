@@ -1,12 +1,20 @@
 import './index.css';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { LanguageProvider } from './i18n';
+import { LanguageProvider, useLanguage } from './i18n';
 import { Navbar, Hero, HeroMobile, About, Products, Blogs, CTA, Contact, Footer } from './components';
 import { ProductDetail } from './components/ProductDetail';
 import { BlogPost } from './components/BlogPost';
 import { BackToTop } from './components/BackToTop';
 import { Testimonials } from './components/Testimonials';
+
+function LangSync() {
+  const { language } = useLanguage();
+  useEffect(() => {
+    document.documentElement.lang = language === 'uk' ? 'uk' : language === 'ru' ? 'ru' : 'en';
+  }, [language]);
+  return null;
+}
 
 function SectionDivider() {
   return (
@@ -61,6 +69,7 @@ function HomePage() {
 export function App() {
   return (
     <LanguageProvider>
+      <LangSync />
       <BrowserRouter>
         <div className="animate-page-enter">
           <Routes>

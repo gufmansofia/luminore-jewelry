@@ -61,7 +61,7 @@ export const products: Product[] = [
       "/Products/earrings/Round Diamond Stud Earrings 1ct (P001)/luminore-stud-earrings-1ct-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Classic Stud Earrings featuring 1 carat lab-grown diamond in 18K White Gold",
-    "seoTags": "earrings, stud earrings, stud earrings earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 1 carat, 1 carat diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "earrings, stud earrings, diamond stud earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 1 carat, 1 carat diamond, luxury earrings, bridal earrings, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 2,
@@ -95,7 +95,7 @@ export const products: Product[] = [
       "/Products/earrings/Diamond Transformer Stud Earrings (P002)/luminore-stud-earrings-transformers-2ct-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Classic Stud Earrings Transformers featuring 2 carat E VS1 lab-grown diamonds in 18K White Gold",
-    "seoTags": "earrings, stud earrings, stud earrings earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 2 carat, 1 carat diamond, 2 carat diamond, E color diamond, colorless diamond, VS1 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "earrings, stud earrings, diamond stud earrings, convertible earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 2 carat, 1 carat diamond, 2 carat diamond, E color diamond, colorless diamond, VS1 clarity, high clarity diamond, luxury earrings, bridal earrings, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
   },
   {
     "id": 3,
@@ -129,7 +129,7 @@ export const products: Product[] = [
       "/Products/earrings/Diamond Stud Earrings 2ct (P003)/luminore-stud-earrings-2ct-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Classic Stud Earrings featuring 2 carat F VS1 lab-grown diamonds in 18K White Gold",
-    "seoTags": "earrings, stud earrings, stud earrings earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 2 carat, 1 carat diamond, 2 carat diamond, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "earrings, stud earrings, diamond stud earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 2 carat, 1 carat diamond, 2 carat diamond, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, luxury earrings, bridal earrings, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
   },
   {
     "id": 4,
@@ -163,7 +163,7 @@ export const products: Product[] = [
       "/Products/Rings/Half Eternity Diamond Ring  (P004)/luminore-lab-grown-diamond-half-eternity-ring-0-6ct-18k-white-gold-side.jpg"
     ],
     "altText": "Luminore Jewelry Classic Half Diamond Ring featuring 0.6 carat lab-grown diamond in 18K White Gold",
-    "seoTags": "rings, half eternity ring, half eternity ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 0.6 carat, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, half eternity ring, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 0.6 carat, engagement ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 5,
@@ -197,7 +197,7 @@ export const products: Product[] = [
       "/Products/Rings/Solitaire Diamond Ring (P005)/luminore-lab-grown-diamond-solitaire-ring-0-5ct-f-vvs2-18k-white-gold-top.png"
     ],
     "altText": "Luminore Jewelry Classic Ring Solitaire featuring 0.5 carat F VVS2 lab-grown diamond in 18K White Gold",
-    "seoTags": "rings, solitaire ring, solitaire ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 0.5 carat, F color diamond, colorless diamond, VVS2 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, solitaire ring, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 0.5 carat, F color diamond, colorless diamond, VVS2 clarity, high clarity diamond, engagement ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 6,
@@ -231,7 +231,7 @@ export const products: Product[] = [
       "/Products/Rings/Vivid Pink Diamond Ring 3ct (P006)/luminore-lab-grown-diamond-statement-ring-3-4ct-fancy-vivid-pink-vs1-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Lab Grown Diamond Ring Fancy Vivid Pink featuring 3.4 carat Fancy Vivid Pink VS1 lab-grown diamonds in 18K White Gold",
-    "seoTags": "rings, statement ring, statement ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 3.4 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, Fancy Vivid Pink color diamond, VS1 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, statement ring, pink diamond ring, diamond ring, lab grown diamond, lab created diamond, fancy vivid pink diamond, colored diamond, 18k white gold, white gold jewelry, 3 carat, 3.4 carat, VS1 clarity, high clarity diamond, engagement ring, luxury ring, bridal jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
   },
   {
     "id": 7,
@@ -265,7 +265,7 @@ export const products: Product[] = [
       "/Products/Rings/Oval Solitaire Diamond Ring 2ct(P007)/luminore-lab-grown-diamond-solitaire-ring-2ct-f-vvs2-18k-white-gold-top.png"
     ],
     "altText": "Luminore Jewelry Stunning Oval Diamond Solitaire Ring featuring 2 carat F VVS2 lab-grown diamonds in 18K White Gold",
-    "seoTags": "rings, solitaire ring, solitaire ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 2 carat, 1 carat diamond, 2 carat diamond, F color diamond, colorless diamond, VVS2 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, oval solitaire ring, oval diamond ring, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 2 carat, F color diamond, colorless diamond, VVS2 clarity, high clarity diamond, engagement ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
   },
   {
     "id": 8,
@@ -299,7 +299,7 @@ export const products: Product[] = [
       "/Products/Rings/Halo Diamond Engagement Ring (P008)/luminore-lab-grown-diamond-halo-ring-1-2ct-f-vs1-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Lab Grown Diamond Ring Halo Style featuring 1.2 carat F VS1 lab-grown diamond in 18K White Gold",
-    "seoTags": "rings, halo ring, halo ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 1.2 carat, 1 carat diamond, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, halo engagement ring, halo diamond ring, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 1.2 carat, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, engagement ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 9,
@@ -333,7 +333,7 @@ export const products: Product[] = [
       "/Products/Rings/Full Eternity Diamond Band 5ct (P009)/luminore-lab-grown-diamond-eternity-ring-5-1ct-ef-vvs-vs-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Stunning Round Lab Grown Diamond Ring featuring 5.1 carat EF VVS-VS lab-grown diamonds in 18K White Gold",
-    "seoTags": "rings, eternity ring, eternity ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 5.1 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, EF color diamond, VVS-VS clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, full eternity ring, eternity band, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 5 carat, 5.1 carat, EF color diamond, VVS-VS clarity, high clarity diamond, wedding band, luxury ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 10,
@@ -367,7 +367,7 @@ export const products: Product[] = [
       "/Products/Rings/Emerald Cut Eternity Diamond Band 10ct (P010)/luminore-lab-grown-diamond-eternity-ring-10ct-ef-vvs-vs-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Emerald Cut Diamond Ring Full Diamond featuring 10 carat EF VVS-VS lab-grown diamonds in 18K White Gold",
-    "seoTags": "rings, eternity ring, eternity ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 10 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, EF color diamond, VVS-VS clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, emerald cut eternity ring, full eternity band, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 10 carat, emerald cut diamond, EF color diamond, VVS-VS clarity, high clarity diamond, luxury ring, wedding band, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 11,
@@ -401,7 +401,7 @@ export const products: Product[] = [
       "/Products/Rings/Three Stones Pear Diamond Ring 4ct (P011)/luminore-lab-grown-diamond-three-stone-ring-4-43ct-e-vs1-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Stunning Three Stones Solitaire Diamond Ring featuring 4.43 carat E VS1 lab-grown diamonds in 18K White Gold",
-    "seoTags": "rings, three stone ring, three stone ring rings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 4.43 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, E color diamond, colorless diamond, VS1 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "rings, three stone ring, pear diamond ring, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 4 carat, 4.43 carat, pear cut diamond, E color diamond, colorless diamond, VS1 clarity, high clarity diamond, engagement ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
   },
   {
     "id": 12,
@@ -435,7 +435,7 @@ export const products: Product[] = [
       "/Products/Pendants/Pear Diamond Pendant 3ct (P012)/luminore-lab-grown-diamond-solitaire-pendant-3ct-f-vs1-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Classic Pendant Pear Cut Diamond featuring 3 carat F VS1 lab-grown diamonds in 18K White Gold",
-    "seoTags": "pendants, solitaire pendant, solitaire pendant pendants, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 3 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, diamond pendant, diamond necklace, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "pendants, solitaire pendant, pear diamond pendant, diamond necklace, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 3 carat, pear cut diamond, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, diamond pendant, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
   },
   {
     "id": 13,
@@ -469,7 +469,7 @@ export const products: Product[] = [
       "/Products/Pendants/Diamond Cross Pendant 3ct (P013)/luminore-lab-grown-diamond-cross-pendant-3-3ct-ef-vvs-vs-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Cross Pendant with Lab Grown Diamond featuring 3.3 carat EF VVS-VS lab-grown diamonds in 18K White Gold",
-    "seoTags": "pendants, cross pendant, cross pendant pendants, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 3.3 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, EF color diamond, VVS-VS clarity, high clarity diamond, diamond pendant, diamond necklace, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "pendants, cross pendant, diamond cross necklace, diamond necklace, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 3.3 carat, EF color diamond, VVS-VS clarity, high clarity diamond, diamond pendant, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 14,
@@ -503,14 +503,14 @@ export const products: Product[] = [
       "/Products/Pendants/Diamond Cross Pendant 4ct (P014)/luminore-lab-grown-diamond-cross-pendant-3-6ct-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Lab Grown Cross Pendant featuring 3.6 carat lab-grown diamonds in 18K White Gold",
-    "seoTags": "pendants, cross pendant, cross pendant pendants, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 3.6 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, diamond pendant, diamond necklace, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "pendants, cross pendant, diamond cross necklace, diamond necklace, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 3.6 carat, diamond pendant, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 15,
     "sku": "P015",
-    "name": "Подвеска Halo 2ct",
-    "nameEn": "Halo Diamond Pendant 2ct",
-    "nameUk": "Підвіска Halo 2ct",
+    "name": "Подвеска Halo 1.5ct",
+    "nameEn": "Halo Diamond Pendant 1.5ct",
+    "nameUk": "Підвіска Halo 1.5ct",
     "category": "Подвески",
     "categoryEn": "Pendants",
     "categoryUk": "Підвіски",
@@ -537,7 +537,7 @@ export const products: Product[] = [
       "/Products/Pendants/Halo Diamond Pendant 2ct (P015)/luminore-lab-grown-diamond-halo-pendant-1-5ct-f-vvs2-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Pendant with Round Cut Diamond Halo Style featuring 1.5 carat F VVS2 lab-grown diamond in 18K White Gold",
-    "seoTags": "pendants, halo pendant, halo pendant pendants, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 1.5 carat, 1 carat diamond, F color diamond, colorless diamond, VVS2 clarity, high clarity diamond, diamond pendant, diamond necklace, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "pendants, halo pendant, diamond halo necklace, diamond necklace, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 1.5 carat, F color diamond, colorless diamond, VVS2 clarity, high clarity diamond, diamond pendant, luxury necklace, pendant jewelry, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 16,
@@ -571,7 +571,7 @@ export const products: Product[] = [
       "/Products/Bracelets/Diamond Tennis Bracelet 9ct (P016)/luminore-lab-grown-diamond-tennis-bracelet-9ct-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Classic Tennis Bracelet featuring 9 carat lab-grown diamonds in 18K White Gold",
-    "seoTags": "bracelets, tennis bracelet, tennis bracelet bracelets, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 9 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, diamond bracelet, luxury bracelet, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "bracelets, tennis bracelet, diamond tennis bracelet, diamond bracelet, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 9 carat, luxury bracelet, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 17,
@@ -605,7 +605,7 @@ export const products: Product[] = [
       "/Products/Bracelets/Diamond Tennis Bracelet 12ct (P017)/luminore-lab-grown-diamond-tennis-bracelet-12ct-18k-white-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Classic Tennis Bracelet featuring 12 carat lab-grown diamonds in 18K White Gold",
-    "seoTags": "bracelets, tennis bracelet, tennis bracelet bracelets, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 12 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, diamond bracelet, luxury bracelet, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "bracelets, tennis bracelet, diamond tennis bracelet, diamond bracelet, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 12 carat, luxury bracelet, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   },
   {
     "id": 18,
@@ -639,7 +639,7 @@ export const products: Product[] = [
       "/Products/earrings/Diamond Stud Earrings 3.5ct Rose Gold (P0018)/luminore-stud-earrings-3-5ct-18k-rose-gold-top.jpg"
     ],
     "altText": "Luminore Jewelry Classic Stud Earrings featuring 3.5 carat F VS1 lab-grown diamonds in 18K Rose Gold",
-    "seoTags": "earrings, stud earrings, stud earrings earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k rose gold, rose gold jewelry, 3.5 carat, 1 carat diamond, 2 carat diamond, 3 carat diamond, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, engagement ring, diamond ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
+    "seoTags": "earrings, stud earrings, diamond stud earrings, rose gold earrings, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k rose gold, rose gold jewelry, 3.5 carat, F color diamond, colorless diamond, VS1 clarity, high clarity diamond, luxury earrings, bridal earrings, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, conflict-free diamond"
   }
 ];
 
