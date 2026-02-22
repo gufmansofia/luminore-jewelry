@@ -91,7 +91,7 @@ export function About() {
     <section 
       ref={sectionRef}
       id="about" 
-      className="relative py-24 lg:py-32 bg-[#C5C9C6] overflow-hidden"
+      className="relative pt-24 pb-12 lg:pt-32 lg:pb-16 bg-[#C5C9C6] overflow-hidden"
     >
       {/* Concrete Silver background with subtle texture */}
       <div className="absolute inset-0">
