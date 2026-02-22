@@ -255,7 +255,7 @@ export function Products() {
     <section 
       ref={sectionRef}
       id="products" 
-      className="relative py-24 lg:py-32 bg-[#1B0D14] overflow-hidden"
+      className="relative pt-10 pb-24 lg:pt-14 lg:pb-32 bg-[#1B0D14] overflow-hidden"
     >
       {/* Black Cherry background with subtle texture */}
       <div className="absolute inset-0">
