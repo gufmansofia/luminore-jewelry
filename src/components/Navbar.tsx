@@ -12,8 +12,8 @@ export function Navbar() {
   const isHomePage = location.pathname === '/';
   const { t, language, setLanguage } = useLanguage();
 
-  // Mobile nav visibility — hidden until logo scrolls behind navbar
-  const [mobileNavVisible, setMobileNavVisible] = useState(!isHomePage);
+  // Mobile nav always visible — hamburger accessible from page load
+  const [mobileNavVisible] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,32 +22,6 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Watch the sentinel placed at the logo's vertical center in HeroMobile.
-  // When it scrolls past the navbar bottom (96px), reveal the navbar on mobile.
-  useEffect(() => {
-    if (!isHomePage) {
-      setMobileNavVisible(true);
-      return;
-    }
-    setMobileNavVisible(false);
-
-    const sentinel = document.getElementById('hero-logo-sentinel');
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // rootMargin shrinks the root by 96px from the top (= navbar height).
-        // isIntersecting flips to false the moment the sentinel enters that zone,
-        // which is exactly when the navbar would start overlapping the logo.
-        setMobileNavVisible(!entry.isIntersecting);
-      },
-      { rootMargin: '-96px 0px 0px 0px' }
-    );
-
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [isHomePage]);
 
   // Track active section on scroll
   useEffect(() => {
