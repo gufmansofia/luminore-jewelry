@@ -20,6 +20,9 @@
     <meta name="twitter:description" content="Exquisite lab-grown diamond jewelry. Certified, sustainable, conflict-free." />
     <meta name="twitter:image" content="/hero.jpg" />
 
+    <!-- Critical: hide desktop hero on mobile before bundled CSS loads -->
+    <style>@media (max-width: 767px) { #hero { display: none !important; } }</style>
+
     <link rel="icon" type="image/svg+xml" href="../public/favicon.svg" />
     <link rel="icon" type="image/png" href="../public/logo.png" />
     <link rel="preload" as="image" href="../public/hero-bg.png" />
