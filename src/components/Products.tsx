@@ -435,7 +435,7 @@ export function Products() {
               {/* Product Info */}
               <div className="p-3 md:p-6 flex flex-col flex-1">
                 <h3
-                  className="font-cinzel text-xs md:text-lg text-white mb-1 md:mb-2 group-hover:text-[#D1642E] transition-colors leading-snug line-clamp-2"
+                  className="font-cinzel text-xs sm:text-sm md:text-base lg:text-lg text-white mb-1 md:mb-2 group-hover:text-[#D1642E] transition-colors leading-snug line-clamp-2"
                   style={{ letterSpacing: '0.03em' }}
                 >
                   {language === 'ru' ? product.name : language === 'uk' ? product.nameUk : product.nameEn}
@@ -445,7 +445,7 @@ export function Products() {
                 </p>
                 <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-[#C5C9C6]/10 mt-auto">
                   <span
-                    className="font-cinzel text-sm md:text-xl text-white"
+                    className="font-cinzel text-sm md:text-lg lg:text-xl text-white"
                     style={{ letterSpacing: '0.03em' }}
                   >
                     {formatUsd(product.priceUsd)}
