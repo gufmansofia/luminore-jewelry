@@ -1,5 +1,5 @@
 {
-  "name": "bun-react-template",
+  "name": "luminore-jewelry",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -8,22 +8,21 @@
   "scripts": {
     "dev": "bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun src/index.tsx",
-    "build": "bun run build.ts"
+    "build": "bun run build.ts",
+    "check:assets": "bun run scripts/check-assets.ts"
   },
   "dependencies": {
     "bun-plugin-tailwind": "^0.0.14",
     "react": "^19",
     "react-dom": "^19",
     "react-router-dom": "^7.13.0",
-    "rhino3dm": "^8.17.0",
-    "tailwindcss": "^4.0.6",
-    "three": "^0.182.0"
+    "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.182.0",
-    "playwright": "^1.58.2"
-  }
+    "playwright": "1.58.2"
+  },
+  "packageManager": "bun@1.3.9"
 }

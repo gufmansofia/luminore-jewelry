@@ -1,5 +1,2 @@
 [tools]
-bun = "latest"
-node = "latest"
-claude = "latest"
-gemini-cli = "latest"
+bun = "1.3.9"

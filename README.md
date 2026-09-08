@@ -1,21 +1,44 @@
-# bun-react-tailwind-template
+# Luminore Jewelry
 
-To install dependencies:
+React and Tailwind website served and built with Bun 1.3.9.
 
-```bash
-bun install
+```sh
+bun install --frozen-lockfile
+bun run dev
 ```
 
-To start a development server:
+Development runs at http://localhost:3000. Use `PORT=3001 bun run dev` for another port.
 
-```bash
-bun dev
+```sh
+bun run check:assets
+bun run build
+bun run start
 ```
 
-To run for production:
+`start` runs the Bun server in production mode. Vercel uses the static `dist/` build and the routing rules in `vercel.json`.
 
-```bash
-bun start
+## Project layout
+
+- `src/components/`: site components and page views.
+- `src/data/`: curated product and blog content.
+- `src/i18n/`: language state and translations.
+- `public/`: deployable website assets only. Existing product and blog URLs are preserved.
+- `docs/`: brand documentation.
+- `scripts/`: asset validation and the legacy inventory importer.
+- `source-materials/`: local, ignored originals, inventory documents, design drafts, and unused assets. Back these up separately; they are not included in Git or deployment.
+
+Use Bun exclusively and commit `bun.lock` whenever dependencies change. Generated output, dependencies, credentials, and personal tool settings are ignored.
+
+## Asset changes
+
+Keep all product gallery images, including secondary views. Match paths and filename casing exactly. Run `bun run check:assets` and `bun run build` after asset edits. The build rejects unexpected public file types and hidden files, preventing source documents from being published.
+
+Before committing, inspect `git diff --check`, `git diff --stat`, and `git status --short`. Verify desktop and mobile homepages, product galleries, blog pages, language switching, direct page navigation, and mobile video playback.
+
+## Inventory importer
+
+`src/data/products.ts` is the curated source of truth. The legacy Python importer requires `openpyxl` and the original spreadsheet schema. It produces a draft for manual comparison; it must not overwrite curated content directly.
+
+```sh
+python3 scripts/convert_excel_to_ts.py source-materials/inventory/Jewelry_Inventory_Final11.xlsx /tmp/products-draft.ts
 ```
-
-This project was created using `bun init` in bun v1.2.9. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

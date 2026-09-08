@@ -50,3 +50,22 @@ output.mp4
 /Blog/
 /Luminire Logo files/
 /Matrix-3D-main/
+
+# Local originals and personal tool settings
+/source-materials/
+/.claude/
+
+# Bun is the only package manager
+/package-lock.json
+/yarn.lock
+/pnpm-lock.yaml
+
+# Browser test output
+/playwright-report/
+/test-results/
+
+# Local credentials
+.env.*
+!.env.example
+*.pem
+*.key

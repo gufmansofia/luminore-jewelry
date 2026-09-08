@@ -168,7 +168,11 @@ const publicDir = path.join(process.cwd(), "public");
 if (existsSync(publicDir)) {
   console.log("📁 Copying public assets...");
   const publicFiles = [...new Bun.Glob("**/*").scanSync(publicDir)];
+  const allowedExtensions = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".ico", ".mp4", ".webm", ".woff", ".woff2", ".txt", ".xml"]);
   for (const file of publicFiles) {
+    if (file.split(path.sep).some(part => part.startsWith(".")) || !allowedExtensions.has(path.extname(file).toLowerCase())) {
+      throw new Error(`Unexpected public asset: ${file}. Move source materials outside public/.`);
+    }
     const srcPath = path.join(publicDir, file);
     const destPath = path.join(outdir, file);
     await cp(srcPath, destPath);

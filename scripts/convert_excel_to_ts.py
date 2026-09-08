@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from pathlib import Path
+import argparse
 import openpyxl
 import json
 import re
@@ -50,7 +52,13 @@ def convert_price_to_rubles(usd_price):
         return '0 ₽'
 
 def main():
-    wb = openpyxl.load_workbook('public/Products/Jewelry_Inventory_Final11.xlsx')
+    parser = argparse.ArgumentParser(description='Legacy inventory importer; writes a draft for review.')
+    parser.add_argument('input', type=Path)
+    parser.add_argument('output', type=Path, help='Draft TypeScript output; do not overwrite curated products.ts')
+    args = parser.parse_args()
+    if args.output.resolve() == (Path(__file__).resolve().parents[1] / 'src/data/products.ts'):
+        parser.error('Write to a draft file and review before replacing curated product data.')
+    wb = openpyxl.load_workbook(args.input)
     sheet = wb.active
     
     products = []
@@ -141,7 +149,7 @@ export const products: Product[] = '''
     ts_content += ';\n\nexport const categories = [\'Все\', \'Кольца\', \'Серьги\', \'Подвески\', \'Браслеты\'];\n'
     ts_content += "\nexport const categoriesEn = ['All', 'Rings', 'Earrings', 'Pendants', 'Bracelets'];\n"
     
-    with open('src/data/products.ts', 'w', encoding='utf-8') as f:
+    with open(args.output, 'w', encoding='utf-8') as f:
         f.write(ts_content)
     
     print(f'✅ Converted {len(products)} products to TypeScript')

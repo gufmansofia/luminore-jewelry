@@ -67,13 +67,6 @@ const server = serve({
       return response || new Response("Not found", { status: 404 });
     },
 
-    // Serve 3D model files
-    "/models/*": async (req) => {
-      const pathname = new URL(req.url).pathname;
-      const response = await serveStatic(pathname);
-      return response || new Response("Not found", { status: 404 });
-    },
-
     // Serve blog images from public/blog-images/ folder
     "/blog-images/*": async (req) => {
       const pathname = new URL(req.url).pathname;
@@ -83,7 +76,6 @@ const server = serve({
 
     // Serve root-level static assets (exact paths)
     "/hero-bg.png": async () => await serveStatic("/hero-bg.png") || new Response("Not found", { status: 404 }),
-    "/hero-mobile.png": async () => await serveStatic("/hero-mobile.png") || new Response("Not found", { status: 404 }),
     "/logo-hero.svg": async () => await serveStatic("/logo-hero.svg") || new Response("Not found", { status: 404 }),
 
     // Video: must support HTTP range requests for browser streaming
@@ -121,7 +113,6 @@ const server = serve({
       });
     },
     "/hero.jpg": async () => await serveStatic("/hero.jpg") || new Response("Not found", { status: 404 }),
-    "/Hero2.jpg": async () => await serveStatic("/Hero2.jpg") || new Response("Not found", { status: 404 }),
     "/logo-full.png": async () => await serveStatic("/logo-full.png") || new Response("Not found", { status: 404 }),
     "/logo.png": async () => await serveStatic("/logo.png") || new Response("Not found", { status: 404 }),
     "/favicon.svg": async () => await serveStatic("/favicon.svg") || new Response("Not found", { status: 404 }),
