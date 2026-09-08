@@ -74,6 +74,8 @@ const server = serve({
       return response || new Response("Not found", { status: 404 });
     },
 
+    "/atelier-hero.png": async () => await serveStatic("/atelier-hero.png") || new Response("Not found", { status: 404 }),
+
     // Serve root-level static assets (exact paths)
     "/hero-bg.png": async () => await serveStatic("/hero-bg.png") || new Response("Not found", { status: 404 }),
     "/logo-hero.svg": async () => await serveStatic("/logo-hero.svg") || new Response("Not found", { status: 404 }),

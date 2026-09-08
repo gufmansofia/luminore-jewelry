@@ -1,5 +1,6 @@
 import './index.css';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
+const Atelier = lazy(() => import('./previews/Atelier'));
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider, useLanguage } from './i18n';
 import { Navbar, Hero, HeroMobile, About, Products, Blogs, CTA, Contact, Footer } from './components';
@@ -64,6 +65,7 @@ export function App() {
         <div className="animate-page-enter">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/preview/atelier" element={<Suspense fallback={null}><Atelier /></Suspense>} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
           </Routes>
