@@ -54,7 +54,7 @@ export function Blogs() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-8 h-px bg-action"></div>
             <span
-              className="font-cinzel text-xs text-graphite"
+              className="font-display text-xs text-graphite"
               style={{ letterSpacing: '0.2em' }}
             >
               {t.blog.eyebrow}
@@ -64,7 +64,7 @@ export function Blogs() {
 
           {/* Headline - Cinzel with 3% tracking */}
           <h2
-            className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-6"
+            className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-6"
             style={{ letterSpacing: '0.03em' }}
           >
             {t.blog.headline1}<br />
@@ -121,7 +121,7 @@ export function Blogs() {
 
                 {/* Featured badge */}
                 {article.image && (
-                  <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-action text-white font-cinzel text-[10px]" style={{ letterSpacing: '0.1em' }}>
+                  <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-action text-white font-display text-[10px]" style={{ letterSpacing: '0.1em' }}>
                     {t.blog.featured}
                   </div>
                 )}
@@ -137,7 +137,7 @@ export function Blogs() {
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <span
-                    className="font-cinzel text-xs text-accent"
+                    className="font-display text-xs text-accent"
                     style={{ letterSpacing: '0.1em' }}
                   >
                     {language === 'ru' ? article.category : language === 'uk' ? article.categoryUk : article.categoryEn}
@@ -149,7 +149,7 @@ export function Blogs() {
                 </div>
 
                 <h3
-                  className="font-cinzel text-lg text-white mb-3 group-hover:text-accent transition-colors leading-snug"
+                  className="font-display text-lg text-white mb-3 group-hover:text-accent transition-colors leading-snug"
                   style={{ letterSpacing: '0.03em' }}
                 >
                   {language === 'ru' ? article.title : language === 'uk' ? article.titleUk : article.titleEn}
@@ -164,7 +164,7 @@ export function Blogs() {
                     {language === 'ru' ? article.readTime : language === 'uk' ? article.readTimeUk : article.readTimeEn} {t.blog.readTime}
                   </span>
                   <span
-                    className="font-cinzel text-xs text-white group-hover:text-accent transition-colors"
+                    className="font-display text-xs text-white group-hover:text-accent transition-colors"
                     style={{ letterSpacing: '0.08em' }}
                   >
                     {t.blog.read}

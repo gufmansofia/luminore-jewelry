@@ -74,14 +74,14 @@ export function HeroMobile() {
           >
             <button
               onClick={() => scrollToSection('products')}
-              className="w-full py-1.5 bg-action text-white font-cinzel text-xs transition-all duration-300 hover:bg-action-hover"
+              className="w-full py-1.5 bg-action text-white font-display text-xs transition-all duration-300 hover:bg-action-hover"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaPrimary}
             </button>
             <button
               onClick={() => scrollToSection('custom-order')}
-              className="w-full py-1.5 border border-white/55 text-white font-cinzel text-xs hover:border-accent hover:text-accent transition-all duration-300"
+              className="w-full py-1.5 border border-white/55 text-white font-display text-xs hover:border-accent hover:text-accent transition-all duration-300"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaSecondary}

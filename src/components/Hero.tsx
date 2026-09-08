@@ -47,7 +47,7 @@ export function Hero() {
           <div className="flex items-center gap-4">
             <div className="w-12 h-px bg-action"></div>
             <span
-              className="font-cinzel text-xs text-white/70"
+              className="font-display text-xs text-white/70"
               style={{ letterSpacing: '0.2em' }}
             >
               {t.hero.eyebrow}
@@ -56,7 +56,7 @@ export function Hero() {
 
           {/* Headline */}
           <h1
-            className="font-cinzel text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white leading-[1.2]"
+            className="font-display text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white leading-[1.2]"
             style={{ letterSpacing: '0.03em' }}
           >
             {t.hero.headline1}<br />
@@ -79,14 +79,14 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => scrollToSection('products')}
-              className="px-8 py-4 bg-action text-white font-cinzel text-sm transition-all duration-300 hover:bg-action-hover hover:shadow-lg hover:shadow-accent/30"
+              className="px-8 py-4 bg-action text-white font-display text-sm transition-all duration-300 hover:bg-action-hover hover:shadow-lg hover:shadow-accent/30"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaPrimary}
             </button>
             <button
               onClick={() => scrollToSection('custom-order')}
-              className="px-8 py-4 border border-white/35 text-white font-cinzel text-sm hover:border-accent hover:text-accent transition-all duration-300"
+              className="px-8 py-4 border border-white/35 text-white font-display text-sm hover:border-accent hover:text-accent transition-all duration-300"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaSecondary}
@@ -98,7 +98,7 @@ export function Hero() {
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <span
-          className="font-cinzel text-[10px] text-white/40"
+          className="font-display text-[10px] text-white/40"
           style={{ letterSpacing: '0.2em' }}
         >
           {t.hero.scroll}

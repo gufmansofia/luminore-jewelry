@@ -24,7 +24,7 @@ function AnimatedCounter({ end, suffix, label, duration = 2000, isVisible }: {
 
   return (
     <div className="text-center">
-      <div className="font-cinzel text-4xl md:text-5xl text-accent mb-2" style={{ letterSpacing: '0.03em' }}>
+      <div className="font-display text-4xl md:text-5xl text-accent mb-2" style={{ letterSpacing: '0.03em' }}>
         {count}{suffix}
       </div>
       <div className="font-body text-sm text-graphite" style={{ letterSpacing: '0.05em' }}>
@@ -125,7 +125,7 @@ export function About() {
             <div className="flex items-center gap-4 mb-8">
               <div className="w-12 h-px bg-action"></div>
               <span
-                className="font-cinzel text-xs text-graphite"
+                className="font-display text-xs text-graphite"
                 style={{ letterSpacing: '0.2em' }}
               >
                 {t.about.eyebrow}
@@ -134,7 +134,7 @@ export function About() {
 
             {/* Headline - dark text on light background */}
             <h2
-              className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-8"
+              className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-8"
               style={{ letterSpacing: '0.03em' }}
             >
               {t.about.headline1}<br />
@@ -147,7 +147,7 @@ export function About() {
               {/* Natural diamonds */}
               <div className="bg-ink/6 border border-ink/12 hover:border-accent/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
                 <div className="w-fit mx-auto mb-4">
-                  <h3 className="font-cinzel text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
+                  <h3 className="font-display text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
                     {t.about.naturalLabel.split(' ').slice(0, -1).join(' ')}<br />
                     {t.about.naturalLabel.split(' ').slice(-1)[0]}
                   </h3>
@@ -171,7 +171,7 @@ export function About() {
               {/* Laboratory diamonds */}
               <div className="bg-ink/6 border border-ink/12 hover:border-accent/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
                 <div className="w-fit mx-auto mb-4">
-                  <h3 className="font-cinzel text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
+                  <h3 className="font-display text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
                     {t.about.labLabel.split(' ').slice(0, -1).join(' ')}<br />
                     {t.about.labLabel.split(' ').slice(-1)[0]}
                   </h3>
@@ -196,7 +196,7 @@ export function About() {
 
             {/* Bespoke statement */}
             <div className="mt-4">
-              <p className="font-cinzel text-xs text-ink text-center tracking-widest">
+              <p className="font-display text-xs text-ink text-center tracking-widest">
                 {t.about.bespokeStatement}
               </p>
             </div>

@@ -98,10 +98,10 @@ export function ProductDetail() {
     return (
       <div className="min-h-screen bg-ink flex items-center justify-center">
         <div className="text-center">
-          <p className="font-cinzel text-white text-xl mb-4">{t.product.notFound}</p>
+          <p className="font-display text-white text-xl mb-4">{t.product.notFound}</p>
           <button
             onClick={goBackToCatalog}
-            className="px-6 py-3 bg-action text-white font-cinzel text-sm"
+            className="px-6 py-3 bg-action text-white font-display text-sm"
             style={{ letterSpacing: '0.1em' }}
           >
             {t.product.backToCatalog}
@@ -151,7 +151,7 @@ export function ProductDetail() {
             </button>
             <button
               onClick={goBackToCatalog}
-              className="font-cinzel text-sm text-silver/70 hover:text-accent transition-colors"
+              className="font-display text-sm text-silver/70 hover:text-accent transition-colors"
               style={{ letterSpacing: '0.03em' }}
             >
               {t.product.backToCatalog}
@@ -198,7 +198,7 @@ export function ProductDetail() {
                         </svg>
                       </div>
                       <p
-                        className="font-cinzel text-silver/30 text-xs"
+                        className="font-display text-silver/30 text-xs"
                         style={{ letterSpacing: '0.3em' }}
                       >
                         Luminore Jewelry
@@ -238,7 +238,7 @@ export function ProductDetail() {
                 {/* Image Counter */}
                 {productImages.length > 1 && (
                   <div className="absolute top-4 right-4 z-30 px-3 py-1 bg-ink/80 border border-silver/20">
-                    <span className="font-cinzel text-xs text-silver">
+                    <span className="font-display text-xs text-silver">
                       {currentImageIndex + 1} / {productImages.length}
                     </span>
                   </div>
@@ -272,7 +272,7 @@ export function ProductDetail() {
             <div className="flex flex-col justify-center">
               {/* Category */}
               <p
-                className="font-cinzel text-xs text-silver/60 mb-4"
+                className="font-display text-xs text-silver/60 mb-4"
                 style={{ letterSpacing: '0.2em' }}
               >
                 {displayCategory}
@@ -280,7 +280,7 @@ export function ProductDetail() {
 
               {/* Product Name */}
               <h1
-                className="font-cinzel text-3xl md:text-4xl lg:text-5xl text-white leading-tight mb-6"
+                className="font-display text-3xl md:text-4xl lg:text-5xl text-white leading-tight mb-6"
                 style={{ letterSpacing: '0.03em' }}
               >
                 {displayName}
@@ -289,7 +289,7 @@ export function ProductDetail() {
               {/* Diamond Type Toggle */}
               <div className="mb-6">
                 <p
-                  className="font-cinzel text-[10px] text-silver/50 mb-3 uppercase"
+                  className="font-display text-[10px] text-silver/50 mb-3 uppercase"
                   style={{ letterSpacing: '0.15em' }}
                 >
                   {t.product.stones}
@@ -297,7 +297,7 @@ export function ProductDetail() {
                 <div className="inline-flex border border-silver/20">
                   <button
                     onClick={() => setDiamondType('lab')}
-                    className={`px-5 py-3 font-cinzel text-xs transition-all duration-300 ${
+                    className={`px-5 py-3 font-display text-xs transition-all duration-300 ${
                       diamondType === 'lab'
                         ? 'bg-action text-white'
                         : 'bg-transparent text-silver/70 hover:text-white hover:bg-graphite/30'
@@ -308,7 +308,7 @@ export function ProductDetail() {
                   </button>
                   <button
                     onClick={() => setDiamondType('natural')}
-                    className={`flex flex-col items-center justify-center px-5 py-3 font-cinzel text-xs transition-all duration-300 border-l border-silver/20 ${
+                    className={`flex flex-col items-center justify-center px-5 py-3 font-display text-xs transition-all duration-300 border-l border-silver/20 ${
                       diamondType === 'natural'
                         ? 'bg-action text-white'
                         : 'bg-transparent text-silver/70 hover:text-white hover:bg-graphite/30'
@@ -332,7 +332,7 @@ export function ProductDetail() {
               {isNatural ? (
                 <div className="mb-8">
                   <p
-                    className="font-cinzel text-3xl text-accent"
+                    className="font-display text-3xl text-accent"
                     style={{ letterSpacing: '0.03em' }}
                   >
                     {t.product.priceOnEnquiry}
@@ -347,7 +347,7 @@ export function ProductDetail() {
                 </div>
               ) : (
                 <p
-                  className="font-cinzel text-3xl text-accent mb-8"
+                  className="font-display text-3xl text-accent mb-8"
                   style={{ letterSpacing: '0.03em' }}
                 >
                   {formatUsd(displayPrice)}
@@ -362,7 +362,7 @@ export function ProductDetail() {
               {/* Specifications */}
               <div className="border-t border-silver/10 pt-8 mb-8">
                 <h3
-                  className="font-cinzel text-sm text-white mb-6"
+                  className="font-display text-sm text-white mb-6"
                   style={{ letterSpacing: '0.1em' }}
                 >
                   {t.product.specifications}
@@ -388,7 +388,7 @@ export function ProductDetail() {
                   <svg className="w-5 h-5 text-silver/70 group-hover:text-accent transition-colors" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                   </svg>
-                  <span className="font-cinzel text-sm text-silver/80 group-hover:text-white transition-colors" style={{ letterSpacing: '0.05em' }}>
+                  <span className="font-display text-sm text-silver/80 group-hover:text-white transition-colors" style={{ letterSpacing: '0.05em' }}>
                     {t.product.telegram}
                   </span>
                 </a>
@@ -401,7 +401,7 @@ export function ProductDetail() {
                   <svg className="w-5 h-5 text-silver/70 group-hover:text-accent transition-colors" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                   </svg>
-                  <span className="font-cinzel text-sm text-silver/80 group-hover:text-white transition-colors" style={{ letterSpacing: '0.05em' }}>
+                  <span className="font-display text-sm text-silver/80 group-hover:text-white transition-colors" style={{ letterSpacing: '0.05em' }}>
                     {t.product.whatsapp}
                   </span>
                 </a>
@@ -421,7 +421,7 @@ export function ProductDetail() {
         <section className="py-20 border-t border-silver/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <h2
-              className="font-cinzel text-2xl text-white mb-12 text-center"
+              className="font-display text-2xl text-white mb-12 text-center"
               style={{ letterSpacing: '0.03em' }}
             >
               {t.product.related} <span className="text-accent">{t.product.relatedSuffix}</span>
@@ -455,12 +455,12 @@ export function ProductDetail() {
                   </div>
                   <div className="p-2 md:p-4">
                     <h3
-                      className="font-cinzel text-[10px] md:text-sm text-white group-hover:text-accent transition-colors"
+                      className="font-display text-[10px] md:text-sm text-white group-hover:text-accent transition-colors"
                       style={{ letterSpacing: '0.03em' }}
                     >
                       {language === 'ru' ? relatedProduct.name : language === 'uk' ? relatedProduct.nameUk : relatedProduct.nameEn}
                     </h3>
-                    <p className="font-cinzel text-[10px] md:text-sm text-accent mt-1 md:mt-2">{formatUsd(relatedProduct.priceUsd)}</p>
+                    <p className="font-display text-[10px] md:text-sm text-accent mt-1 md:mt-2">{formatUsd(relatedProduct.priceUsd)}</p>
                   </div>
                 </Link>
               ))}
@@ -488,7 +488,7 @@ export function ProductDetail() {
           {/* Image counter */}
           {productImages.length > 1 && (
             <div className="absolute top-6 left-6 z-[110] px-4 py-2 bg-ink/80 border border-silver/20">
-              <span className="font-cinzel text-sm text-silver">
+              <span className="font-display text-sm text-silver">
                 {currentImageIndex + 1} / {productImages.length}
               </span>
             </div>

@@ -93,7 +93,7 @@ export function Contact() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-8 h-px bg-action"></div>
             <span
-              className="font-cinzel text-xs text-graphite"
+              className="font-display text-xs text-graphite"
               style={{ letterSpacing: '0.2em' }}
             >
               {t.contact.eyebrow}
@@ -103,7 +103,7 @@ export function Contact() {
 
           {/* Headline - Cinzel with 3% tracking */}
           <h2
-            className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-6"
+            className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-6"
             style={{ letterSpacing: '0.03em' }}
           >
             {t.contact.headline1}<br />
@@ -131,7 +131,7 @@ export function Contact() {
               </div>
               <div>
                 <h3
-                  className="font-cinzel text-sm text-ink mb-1"
+                  className="font-display text-sm text-ink mb-1"
                   style={{ letterSpacing: '0.05em' }}
                 >
                   {t.contact.phone}
@@ -152,7 +152,7 @@ export function Contact() {
               </div>
               <div>
                 <h3
-                  className="font-cinzel text-sm text-ink mb-1"
+                  className="font-display text-sm text-ink mb-1"
                   style={{ letterSpacing: '0.05em' }}
                 >
                   {t.contact.email}
@@ -167,7 +167,7 @@ export function Contact() {
             {/* Social Links */}
             <div className="pt-6 border-t border-ink/10">
               <h3
-                className="font-cinzel text-sm text-ink mb-4"
+                className="font-display text-sm text-ink mb-4"
                 style={{ letterSpacing: '0.05em' }}
               >
                 {t.contact.social}
@@ -220,7 +220,7 @@ export function Contact() {
                   </svg>
                 </div>
                 <h3
-                  className="font-cinzel text-2xl text-ink mb-2"
+                  className="font-display text-2xl text-ink mb-2"
                   style={{ letterSpacing: '0.03em' }}
                 >
                   {t.contact.successTitle}
@@ -230,7 +230,7 @@ export function Contact() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <h3
-                  className="font-cinzel text-xl text-ink mb-6"
+                  className="font-display text-xl text-ink mb-6"
                   style={{ letterSpacing: '0.03em' }}
                 >
                   {t.contact.formTitle}
@@ -240,7 +240,7 @@ export function Contact() {
                 <div>
                   <label
                     htmlFor="name"
-                    className="font-cinzel text-xs text-ink block mb-2"
+                    className="font-display text-xs text-ink block mb-2"
                     style={{ letterSpacing: '0.05em' }}
                   >
                     {t.contact.name}
@@ -261,7 +261,7 @@ export function Contact() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="font-cinzel text-xs text-ink block mb-2"
+                    className="font-display text-xs text-ink block mb-2"
                     style={{ letterSpacing: '0.05em' }}
                   >
                     {t.contact.emailLabel}
@@ -289,7 +289,7 @@ export function Contact() {
                 <div>
                   <label
                     htmlFor="phone"
-                    className="font-cinzel text-xs text-ink block mb-2"
+                    className="font-display text-xs text-ink block mb-2"
                     style={{ letterSpacing: '0.05em' }}
                   >
                     {t.contact.phoneLabel}
@@ -309,7 +309,7 @@ export function Contact() {
                 <div>
                   <label
                     htmlFor="message"
-                    className="font-cinzel text-xs text-ink block mb-2"
+                    className="font-display text-xs text-ink block mb-2"
                     style={{ letterSpacing: '0.05em' }}
                   >
                     {t.contact.message}
@@ -363,7 +363,7 @@ export function Contact() {
                 <button
                   type="submit"
                   disabled={!formData.consent}
-                  className={`w-full py-4 font-cinzel text-sm transition-all duration-300 ${
+                  className={`w-full py-4 font-display text-sm transition-all duration-300 ${
                     formData.consent
                       ? 'bg-action text-white hover:bg-action-hover'
                       : 'bg-silver text-graphite cursor-not-allowed'

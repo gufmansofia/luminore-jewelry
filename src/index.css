@@ -1,41 +1,25 @@
 @import "tailwindcss";
 
-/* Luminore Brand Guidelines Typography */
+/* Satoshi is loaded through Fontshare; system fonts cover missing glyphs. */
+:root {
+  --font-site: 'Satoshi', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
 
-/* Cinzel - Primary brand font for headlines, logos, UI elements */
-/* Cormorant Garamond - Secondary font for body text */
-
-/* Font face definitions with proper fallbacks */
-/* Playfair Display provides Cyrillic support as fallback for Cinzel (Latin-only) */
-.font-cinzel {
-  font-family: 'Cinzel', 'Playfair Display', serif;
+.font-display, .font-body {
+  font-family: var(--font-site);
   font-weight: 400;
 }
-
-.font-cinzel-medium {
-  font-family: 'Cinzel', 'Playfair Display', serif;
+.font-display-medium, .font-body-medium {
+  font-family: var(--font-site);
   font-weight: 500;
 }
-
-.font-cinzel-semibold {
-  font-family: 'Cinzel', 'Playfair Display', serif;
+.font-display-semibold {
+  font-family: var(--font-site);
   font-weight: 600;
 }
-
-.font-cinzel-bold {
-  font-family: 'Cinzel', 'Playfair Display', serif;
+.font-display-bold {
+  font-family: var(--font-site);
   font-weight: 700;
-}
-
-/* Body text font — Georgia provides Cyrillic fallback */
-.font-body {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-weight: 400;
-}
-
-.font-body-medium {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-weight: 500;
 }
 
 /* Graphite theme: surfaces are fixed; accents adapt to their section. */
@@ -86,7 +70,7 @@ html {
 body {
   background: var(--color-ink);
   color: var(--color-silver);
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-site);
 }
 
 /* Selection color */

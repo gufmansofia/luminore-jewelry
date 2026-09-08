@@ -223,13 +223,13 @@ export function Testimonials() {
         }`}>
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-8 h-px bg-action"></div>
-            <span className="font-cinzel text-xs text-silver/70" style={{ letterSpacing: '0.2em' }}>
+            <span className="font-display text-xs text-silver/70" style={{ letterSpacing: '0.2em' }}>
               {t.testimonials.eyebrow}
             </span>
             <div className="w-8 h-px bg-action"></div>
           </div>
           <h2
-            className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-[1.15]"
+            className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-[1.15]"
             style={{ letterSpacing: '0.03em' }}
           >
             {t.testimonials.headline1}
@@ -263,7 +263,7 @@ export function Testimonials() {
             onTouchEnd={handleTouchEnd}
           >
             {/* Quote mark */}
-            <div className="absolute top-6 left-8 font-cinzel text-4xl md:text-6xl text-accent/20 leading-none">"</div>
+            <div className="absolute top-6 left-8 font-display text-4xl md:text-6xl text-accent/20 leading-none">"</div>
 
             {/* Content with fade transition */}
             <div aria-live="polite" className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
@@ -283,7 +283,7 @@ export function Testimonials() {
 
               {/* Author */}
               <div className="text-center">
-                <p className="font-cinzel text-white text-sm mb-1" style={{ letterSpacing: '0.1em' }}>
+                <p className="font-display text-white text-sm mb-1" style={{ letterSpacing: '0.1em' }}>
                   {language === 'ru' ? current.name : language === 'uk' ? current.nameUk : current.nameEn}
                 </p>
                 <p className="font-body text-accent text-sm">

@@ -34,12 +34,12 @@ export function BlogPost() {
     return (
       <div className="min-h-screen bg-ink flex items-center justify-center">
         <div className="text-center">
-          <p className="font-cinzel text-white text-xl mb-4">
+          <p className="font-display text-white text-xl mb-4">
             {t.blog.notFound}
           </p>
           <button
             onClick={() => navigate('/', { state: { scrollTo: 'blog' } })}
-            className="px-6 py-3 bg-action text-white font-cinzel text-sm"
+            className="px-6 py-3 bg-action text-white font-display text-sm"
             style={{ letterSpacing: '0.1em' }}
           >
             {t.blog.backToBlog}
@@ -67,7 +67,7 @@ export function BlogPost() {
     if (text.startsWith('## ')) {
       return (
         <h2
-          className="font-cinzel text-2xl md:text-3xl text-white mt-12 mb-6"
+          className="font-display text-2xl md:text-3xl text-white mt-12 mb-6"
           style={{ letterSpacing: '0.03em' }}
         >
           {text.replace('## ', '')}
@@ -78,7 +78,7 @@ export function BlogPost() {
     if (text.startsWith('### ')) {
       return (
         <h3
-          className="font-cinzel text-xl text-accent mt-8 mb-4"
+          className="font-display text-xl text-accent mt-8 mb-4"
           style={{ letterSpacing: '0.03em' }}
         >
           {text.replace('### ', '')}
@@ -145,7 +145,7 @@ export function BlogPost() {
             </button>
             <button
               onClick={() => navigate('/', { state: { scrollTo: 'blog' } })}
-              className="font-cinzel text-sm text-silver/70 hover:text-accent transition-colors"
+              className="font-display text-sm text-silver/70 hover:text-accent transition-colors"
               style={{ letterSpacing: '0.03em' }}
             >
               {t.blog.backToBlog}
@@ -184,7 +184,7 @@ export function BlogPost() {
             {/* Category & Meta */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <span
-                className="font-cinzel text-sm text-accent"
+                className="font-display text-sm text-accent"
                 style={{ letterSpacing: '0.15em' }}
               >
                 {category}
@@ -199,7 +199,7 @@ export function BlogPost() {
 
             {/* Title */}
             <h1
-              className="font-cinzel text-3xl md:text-4xl lg:text-5xl text-white text-center leading-tight mb-8"
+              className="font-display text-3xl md:text-4xl lg:text-5xl text-white text-center leading-tight mb-8"
               style={{ letterSpacing: '0.03em' }}
             >
               {title}
@@ -252,7 +252,7 @@ export function BlogPost() {
                                     <th
                                       key={cellIndex}
                                       className={`py-3 px-4 font-body text-silver ${
-                                        cellIndex === 0 ? 'text-left font-cinzel text-white' : 'text-right'
+                                        cellIndex === 0 ? 'text-left font-display text-white' : 'text-right'
                                       }`}
                                     >
                                       {cell.replace(/\*\*/g, '')}
@@ -271,7 +271,7 @@ export function BlogPost() {
                                     <td
                                       key={cellIndex}
                                       className={`py-3 px-4 font-body text-silver ${
-                                        cellIndex === 0 ? 'text-left font-cinzel text-white' : 'text-right'
+                                        cellIndex === 0 ? 'text-left font-display text-white' : 'text-right'
                                       }`}
                                     >
                                       {cell.replace(/\*\*/g, '')}
@@ -321,7 +321,7 @@ export function BlogPost() {
 
           {/* Share Section */}
           <div className="mt-16 pt-8 border-t border-silver/10">
-            <p className="font-cinzel text-sm text-silver/60 mb-4 text-center" style={{ letterSpacing: '0.1em' }}>
+            <p className="font-display text-sm text-silver/60 mb-4 text-center" style={{ letterSpacing: '0.1em' }}>
               {t.blog.shareArticle}
             </p>
             <div className="flex items-center justify-center gap-4">
@@ -359,7 +359,7 @@ export function BlogPost() {
         <section className="py-20 border-t border-silver/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <h2
-              className="font-cinzel text-2xl text-white mb-12 text-center"
+              className="font-display text-2xl text-white mb-12 text-center"
               style={{ letterSpacing: '0.03em' }}
             >
               {language === 'ru' ? 'Похожие ' : language === 'uk' ? 'Схожі ' : 'Related '}
@@ -377,7 +377,7 @@ export function BlogPost() {
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <span
-                      className="font-cinzel text-xs text-accent"
+                      className="font-display text-xs text-accent"
                       style={{ letterSpacing: '0.1em' }}
                     >
                       {language === 'ru' ? relatedPost.category : language === 'uk' ? relatedPost.categoryUk : relatedPost.categoryEn}
@@ -388,7 +388,7 @@ export function BlogPost() {
                     </span>
                   </div>
                   <h3
-                    className="font-cinzel text-lg text-white group-hover:text-accent transition-colors leading-snug"
+                    className="font-display text-lg text-white group-hover:text-accent transition-colors leading-snug"
                     style={{ letterSpacing: '0.03em' }}
                   >
                     {language === 'ru' ? relatedPost.title : language === 'uk' ? relatedPost.titleUk : relatedPost.titleEn}

@@ -34,7 +34,7 @@ function AccordionFilter({ label, value, options, onChange, isOpen, onToggle }: 
       >
         <div className="flex flex-col items-start">
           <span
-            className="font-cinzel text-[10px] text-silver/50 uppercase mb-1"
+            className="font-display text-[10px] text-silver/50 uppercase mb-1"
             style={{ letterSpacing: '0.15em' }}
           >
             {label}
@@ -275,7 +275,7 @@ export function Products() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-8 h-px bg-action"></div>
             <span
-              className="font-cinzel text-xs text-silver/70"
+              className="font-display text-xs text-silver/70"
               style={{ letterSpacing: '0.2em' }}
             >
               {t.products.eyebrow}
@@ -285,7 +285,7 @@ export function Products() {
 
           {/* Headline - Cinzel with 3% tracking */}
           <h2
-            className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-[1.15] mb-6"
+            className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-[1.15] mb-6"
             style={{ letterSpacing: '0.03em' }}
           >
             {t.products.headline1}<br />
@@ -399,7 +399,7 @@ export function Products() {
                         </svg>
                       </div>
                       <p
-                        className="font-cinzel text-silver/40 text-xs"
+                        className="font-display text-silver/40 text-xs"
                         style={{ letterSpacing: '0.15em' }}
                       >
                         {product.category}
@@ -418,7 +418,7 @@ export function Products() {
                 <button
                   onClick={(e) => openQuickView(e, product)}
                   aria-label={t.products.quickView}
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 px-5 py-2 bg-ink/90 border border-silver/30 text-silver font-cinzel text-xs opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-action hover:text-white hover:border-accent"
+                  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 px-5 py-2 bg-ink/90 border border-silver/30 text-silver font-display text-xs opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-action hover:text-white hover:border-accent"
                   style={{ letterSpacing: '0.1em' }}
                 >
                   {t.products.quickView}
@@ -428,7 +428,7 @@ export function Products() {
               {/* Product Info */}
               <div className="p-3 md:p-6 flex flex-col flex-1">
                 <h3
-                  className="font-cinzel text-xs sm:text-sm md:text-base lg:text-lg text-white mb-1 md:mb-2 group-hover:text-accent transition-colors leading-snug line-clamp-2"
+                  className="font-display text-xs sm:text-sm md:text-base lg:text-lg text-white mb-1 md:mb-2 group-hover:text-accent transition-colors leading-snug line-clamp-2"
                   style={{ letterSpacing: '0.03em' }}
                 >
                   {language === 'ru' ? product.name : language === 'uk' ? product.nameUk : product.nameEn}
@@ -438,13 +438,13 @@ export function Products() {
                 </p>
                 <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-silver/10 mt-auto">
                   <span
-                    className="font-cinzel text-sm md:text-lg lg:text-xl text-white"
+                    className="font-display text-sm md:text-lg lg:text-xl text-white"
                     style={{ letterSpacing: '0.03em' }}
                   >
                     {formatUsd(product.priceUsd)}
                   </span>
                   <span
-                    className="px-2 py-1 md:px-4 md:py-2 font-cinzel text-[10px] md:text-xs text-silver border border-silver/30 group-hover:bg-action group-hover:text-white group-hover:border-accent transition-all duration-300"
+                    className="px-2 py-1 md:px-4 md:py-2 font-display text-[10px] md:text-xs text-silver border border-silver/30 group-hover:bg-action group-hover:text-white group-hover:border-accent transition-all duration-300"
                     style={{ letterSpacing: '0.05em' }}
                   >
                     {t.products.details}
@@ -464,7 +464,7 @@ export function Products() {
           >
             <button
               onClick={toggleShowAll}
-              className="group px-10 py-4 bg-transparent border border-accent text-accent font-cinzel text-sm hover:bg-action hover:text-white transition-all duration-300 flex items-center gap-3 mx-auto"
+              className="group px-10 py-4 bg-transparent border border-accent text-accent font-display text-sm hover:bg-action hover:text-white transition-all duration-300 flex items-center gap-3 mx-auto"
               style={{ letterSpacing: '0.1em' }}
             >
               {showAll ? (
@@ -541,13 +541,13 @@ export function Products() {
 
               {/* Info */}
               <div className="p-8 flex flex-col justify-center">
-                <p className="font-cinzel text-xs text-silver/50 mb-3" style={{ letterSpacing: '0.2em' }}>
+                <p className="font-display text-xs text-silver/50 mb-3" style={{ letterSpacing: '0.2em' }}>
                   {language === 'ru' ? quickViewProduct.category : language === 'uk' ? quickViewProduct.categoryUk : quickViewProduct.categoryEn}
                 </p>
-                <h3 className="font-cinzel text-2xl text-white mb-4" style={{ letterSpacing: '0.03em' }}>
+                <h3 className="font-display text-2xl text-white mb-4" style={{ letterSpacing: '0.03em' }}>
                   {language === 'ru' ? quickViewProduct.name : language === 'uk' ? quickViewProduct.nameUk : quickViewProduct.nameEn}
                 </h3>
-                <p className="font-cinzel text-2xl text-accent mb-6" style={{ letterSpacing: '0.03em' }}>
+                <p className="font-display text-2xl text-accent mb-6" style={{ letterSpacing: '0.03em' }}>
                   {formatUsd(quickViewProduct.priceUsd)}
                 </p>
                 <p className="font-body text-silver/70 text-sm leading-relaxed mb-8">
@@ -568,7 +568,7 @@ export function Products() {
 
                 <button
                   onClick={() => { closeQuickView(); navigate(`/product/${quickViewProduct.id}`); }}
-                  className="w-full px-8 py-4 bg-action text-white font-cinzel text-sm hover:bg-action-hover transition-all duration-300"
+                  className="w-full px-8 py-4 bg-action text-white font-display text-sm hover:bg-action-hover transition-all duration-300"
                   style={{ letterSpacing: '0.1em' }}
                 >
                   {language === 'ru' ? 'Смотреть подробнее' : language === 'uk' ? 'Переглянути деталі' : 'View Full Details'}
