@@ -24,10 +24,10 @@ function AnimatedCounter({ end, suffix, label, duration = 2000, isVisible }: {
 
   return (
     <div className="text-center">
-      <div className="font-cinzel text-4xl md:text-5xl text-[#D1642E] mb-2" style={{ letterSpacing: '0.03em' }}>
+      <div className="font-cinzel text-4xl md:text-5xl text-accent mb-2" style={{ letterSpacing: '0.03em' }}>
         {count}{suffix}
       </div>
-      <div className="font-body text-sm text-[#564C5B]" style={{ letterSpacing: '0.05em' }}>
+      <div className="font-body text-sm text-graphite" style={{ letterSpacing: '0.05em' }}>
         {label}
       </div>
     </div>
@@ -88,14 +88,14 @@ export function About() {
   ];
 
   return (
-    <section 
+    <section data-theme="light"
       ref={sectionRef}
-      id="about" 
-      className="relative pt-24 pb-12 lg:pt-32 lg:pb-16 bg-[#C5C9C6] overflow-hidden"
+      id="about"
+      className="relative pt-24 pb-12 lg:pt-32 lg:pb-16 bg-silver overflow-hidden"
     >
       {/* Concrete Silver background with subtle texture */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[#C5C9C6]"></div>
+        <div className="absolute inset-0 bg-silver"></div>
         <div className="absolute inset-0 opacity-[0.05]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}></div>
@@ -107,11 +107,11 @@ export function About() {
       }}></div>
 
       {/* Shadows for depth */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#1B0D14]/10 to-transparent"></div>
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-ink/10 to-transparent"></div>
 
       {/* Luminore Rust warm accents - Fire in Ice with parallax */}
       <div
-        className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-[#D1642E]/15 rounded-full blur-[120px] transition-none"
+        className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-[120px] transition-none"
         style={{ transform: `translateY(${scrollY * -0.05}px)` }}
       ></div>
 
@@ -123,9 +123,9 @@ export function About() {
           >
             {/* Eyebrow */}
             <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-px bg-[#D1642E]"></div>
+              <div className="w-12 h-px bg-action"></div>
               <span
-                className="font-cinzel text-xs text-[#564C5B]"
+                className="font-cinzel text-xs text-graphite"
                 style={{ letterSpacing: '0.2em' }}
               >
                 {t.about.eyebrow}
@@ -134,60 +134,60 @@ export function About() {
 
             {/* Headline - dark text on light background */}
             <h2
-              className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-[#1B0D14] leading-[1.15] mb-8"
+              className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-8"
               style={{ letterSpacing: '0.03em' }}
             >
               {t.about.headline1}<br />
-              <span className="text-[#D1642E]">{t.about.headline2}</span>
+              <span className="text-accent">{t.about.headline2}</span>
             </h2>
 
             {/* Diamond source cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               {/* Natural diamonds */}
-              <div className="bg-[#1B0D14]/6 border border-[#1B0D14]/12 hover:border-[#D1642E]/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
+              <div className="bg-ink/6 border border-ink/12 hover:border-accent/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
                 <div className="w-fit mx-auto mb-4">
-                  <h3 className="font-cinzel text-sm font-bold text-[#1B0D14] mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
+                  <h3 className="font-cinzel text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
                     {t.about.naturalLabel.split(' ').slice(0, -1).join(' ')}<br />
                     {t.about.naturalLabel.split(' ').slice(-1)[0]}
                   </h3>
-                  <div className="h-px bg-[#D1642E]" />
+                  <div className="h-px bg-action" />
                 </div>
-                <p className="font-body text-sm md:text-base text-[#564C5B] leading-relaxed mb-4">
+                <p className="font-body text-sm md:text-base text-graphite leading-relaxed mb-4">
                   {t.about.naturalDesc}
                 </p>
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.naturalBullet1}</span>
+                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
+                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.naturalBullet1}</span>
                   </div>
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.naturalBullet2}</span>
+                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
+                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.naturalBullet2}</span>
                   </div>
                 </div>
               </div>
 
               {/* Laboratory diamonds */}
-              <div className="bg-[#1B0D14]/6 border border-[#1B0D14]/12 hover:border-[#D1642E]/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
+              <div className="bg-ink/6 border border-ink/12 hover:border-accent/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
                 <div className="w-fit mx-auto mb-4">
-                  <h3 className="font-cinzel text-sm font-bold text-[#1B0D14] mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
+                  <h3 className="font-cinzel text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
                     {t.about.labLabel.split(' ').slice(0, -1).join(' ')}<br />
                     {t.about.labLabel.split(' ').slice(-1)[0]}
                   </h3>
-                  <div className="h-px bg-[#D1642E]" />
+                  <div className="h-px bg-action" />
                 </div>
-                <p className="font-body text-sm md:text-base text-[#564C5B] leading-relaxed mb-4">
+                <p className="font-body text-sm md:text-base text-graphite leading-relaxed mb-4">
                   {t.about.labDesc}
                 </p>
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.labBullet1}</span>
+                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
+                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.labBullet1}</span>
                   </div>
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-[#564C5B]">{t.about.labBullet2}</span>
+                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
+                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.labBullet2}</span>
                   </div>
                 </div>
               </div>
@@ -196,7 +196,7 @@ export function About() {
 
             {/* Bespoke statement */}
             <div className="mt-4">
-              <p className="font-cinzel text-xs text-[#1B0D14] text-center tracking-widest">
+              <p className="font-cinzel text-xs text-ink text-center tracking-widest">
                 {t.about.bespokeStatement}
               </p>
             </div>
@@ -205,7 +205,7 @@ export function About() {
         {/* Animated Counters */}
         <div
           ref={countersRef}
-          className={`mt-10 pt-8 border-t border-[#1B0D14]/10 transition-all duration-1000 ${
+          className={`mt-10 pt-8 border-t border-ink/10 transition-all duration-1000 ${
             countersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >

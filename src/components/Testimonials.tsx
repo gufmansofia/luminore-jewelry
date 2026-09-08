@@ -203,18 +203,18 @@ export function Testimonials() {
       ref={sectionRef}
       tabIndex={0}
       aria-label={language === 'ru' ? 'Отзывы клиентов' : language === 'uk' ? 'Відгуки клієнтів' : 'Client testimonials'}
-      className="relative py-24 lg:py-32 bg-[#1B0D14] overflow-hidden outline-none"
+      className="relative py-24 lg:py-32 bg-ink overflow-hidden outline-none"
     >
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[#1B0D14]"></div>
+        <div className="absolute inset-0 bg-ink"></div>
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}></div>
       </div>
 
       {/* Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D1642E]/8 rounded-full blur-[180px]"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/8 rounded-full blur-[180px]"></div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
@@ -222,18 +222,18 @@ export function Testimonials() {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-8 h-px bg-[#D1642E]"></div>
-            <span className="font-cinzel text-xs text-[#C5C9C6]/70" style={{ letterSpacing: '0.2em' }}>
+            <div className="w-8 h-px bg-action"></div>
+            <span className="font-cinzel text-xs text-silver/70" style={{ letterSpacing: '0.2em' }}>
               {t.testimonials.eyebrow}
             </span>
-            <div className="w-8 h-px bg-[#D1642E]"></div>
+            <div className="w-8 h-px bg-action"></div>
           </div>
           <h2
             className="font-cinzel text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-[1.15]"
             style={{ letterSpacing: '0.03em' }}
           >
             {t.testimonials.headline1}
-            <span className="text-[#D1642E]">{t.testimonials.headline2}</span>
+            <span className="text-accent">{t.testimonials.headline2}</span>
           </h2>
         </div>
 
@@ -247,7 +247,7 @@ export function Testimonials() {
             <button
               onClick={goPrev}
               aria-label={language === 'ru' ? 'Предыдущий отзыв' : language === 'uk' ? 'Попередній відгук' : 'Previous testimonial'}
-              className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-[#C5C9C6]/20 text-[#C5C9C6]/50 hover:border-[#D1642E] hover:text-[#D1642E] transition-all duration-300 flex-shrink-0 -ml-14 absolute left-0"
+              className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-silver/20 text-silver/50 hover:border-accent hover:text-accent transition-all duration-300 flex-shrink-0 -ml-14 absolute left-0"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6" />
@@ -256,28 +256,28 @@ export function Testimonials() {
 
           <div className="w-full">
           <div
-            className="relative bg-[#564C5B]/10 border border-[#C5C9C6]/10 p-6 md:p-12"
+            className="relative bg-graphite/10 border border-silver/10 p-6 md:p-12"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
             {/* Quote mark */}
-            <div className="absolute top-6 left-8 font-cinzel text-4xl md:text-6xl text-[#D1642E]/20 leading-none">"</div>
+            <div className="absolute top-6 left-8 font-cinzel text-4xl md:text-6xl text-accent/20 leading-none">"</div>
 
             {/* Content with fade transition */}
             <div aria-live="polite" className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
               {/* Stars */}
               <div className="flex gap-1 mb-6 justify-center">
                 {Array.from({ length: current.rating }).map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-[#D1642E]" fill="currentColor" viewBox="0 0 24 24">
+                  <svg key={i} className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 ))}
               </div>
 
               {/* Quote text */}
-              <blockquote className="font-body text-xl md:text-2xl text-[#C5C9C6]/90 leading-relaxed text-center mb-8 italic">
+              <blockquote className="font-body text-xl md:text-2xl text-silver/90 leading-relaxed text-center mb-8 italic">
                 {language === 'ru' ? current.text : language === 'uk' ? current.textUk : current.textEn}
               </blockquote>
 
@@ -286,7 +286,7 @@ export function Testimonials() {
                 <p className="font-cinzel text-white text-sm mb-1" style={{ letterSpacing: '0.1em' }}>
                   {language === 'ru' ? current.name : language === 'uk' ? current.nameUk : current.nameEn}
                 </p>
-                <p className="font-body text-[#D1642E] text-sm">
+                <p className="font-body text-accent text-sm">
                   {language === 'ru' ? current.role : language === 'uk' ? current.roleUk : current.roleEn}
                 </p>
               </div>
@@ -302,8 +302,8 @@ export function Testimonials() {
                   onClick={() => goTo(i)}
                   className={`transition-all duration-300 rounded-full ${
                     i === activeIndex
-                      ? 'w-8 h-2 bg-[#D1642E]'
-                      : 'w-2 h-2 bg-[#C5C9C6]/30 hover:bg-[#C5C9C6]/50'
+                      ? 'w-8 h-2 bg-action'
+                      : 'w-2 h-2 bg-silver/30 hover:bg-silver/50'
                   }`}
                   aria-label={`${language === 'ru' ? 'Показать отзыв от' : language === 'uk' ? 'Показати відгук від' : 'Show testimonial from'} ${language === 'ru' ? t.name : language === 'uk' ? t.nameUk : t.nameEn}`}
                 />
@@ -316,7 +316,7 @@ export function Testimonials() {
             <button
               onClick={goNext}
               aria-label={language === 'ru' ? 'Следующий отзыв' : language === 'uk' ? 'Наступний відгук' : 'Next testimonial'}
-              className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-[#C5C9C6]/20 text-[#C5C9C6]/50 hover:border-[#D1642E] hover:text-[#D1642E] transition-all duration-300 flex-shrink-0 -mr-14 absolute right-0"
+              className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-silver/20 text-silver/50 hover:border-accent hover:text-accent transition-all duration-300 flex-shrink-0 -mr-14 absolute right-0"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9 18 15 12 9 6" />
@@ -332,13 +332,13 @@ export function Testimonials() {
           {trustSignals.map((signal, i) => (
             <div
               key={i}
-              className="text-center py-6 border border-[#C5C9C6]/10 hover:border-[#D1642E]/30 transition-all duration-500 group"
+              className="text-center py-6 border border-silver/10 hover:border-accent/30 transition-all duration-500 group"
               style={{ transitionDelay: `${i * 100}ms` }}
             >
-              <div className="flex items-center justify-center text-[#D1642E] mb-3 group-hover:scale-110 transition-transform duration-300">
+              <div className="flex items-center justify-center text-accent mb-3 group-hover:scale-110 transition-transform duration-300">
                 <TrustIcon type={signal.icon} />
               </div>
-              <div className="font-body text-sm text-[#C5C9C6]/70" style={{ letterSpacing: '0.03em' }}>
+              <div className="font-body text-sm text-silver/70" style={{ letterSpacing: '0.03em' }}>
                 {language === 'ru' ? signal.labelRu : language === 'uk' ? signal.labelUk : signal.labelEn}
               </div>
             </div>

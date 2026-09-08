@@ -78,7 +78,7 @@ export function Navbar() {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled || isProductPage
-            ? 'bg-[#1B0D14]/95 backdrop-blur-[20px]'
+            ? 'bg-ink/95 backdrop-blur-[20px]'
             : 'bg-transparent'
         } ${
           isHomePage && !mobileNavVisible && !isMenuOpen
@@ -111,11 +111,11 @@ export function Navbar() {
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
                   className={`relative font-cinzel text-sm transition-colors duration-300 tracking-[0.15em] group ${
-                    activeSection === link.id ? 'text-[#D1642E]' : 'text-[#C5C9C6]/80 hover:text-[#D1642E]'
+                    activeSection === link.id ? 'text-accent' : 'text-silver/80 hover:text-accent'
                   }`}
                 >
                   {link.label}
-                  <span className={`absolute bottom-[-4px] left-0 h-px bg-[#D1642E] transition-all duration-300 ${
+                  <span className={`absolute bottom-[-4px] left-0 h-px bg-action transition-all duration-300 ${
                     activeSection === link.id ? 'w-full' : 'w-0 group-hover:w-full'
                   }`}></span>
                 </button>
@@ -128,10 +128,10 @@ export function Navbar() {
               <div className="flex items-center gap-1.5" aria-label="Select language">
                 {(['en', 'uk', 'ru'] as const).map((lang, i) => (
                   <span key={lang} className="flex items-center gap-1.5">
-                    {i > 0 && <span className="text-[#C5C9C6]/30 text-xs">|</span>}
+                    {i > 0 && <span className="text-silver/30 text-xs">|</span>}
                     <button
                       onClick={() => setLanguage(lang)}
-                      className={`font-cinzel text-xs tracking-[0.12em] px-1 py-1 transition-colors duration-300 ${language === lang ? 'text-[#D1642E]' : 'text-[#C5C9C6]/60 hover:text-[#C5C9C6]'}`}
+                      className={`font-cinzel text-xs tracking-[0.12em] px-1 py-1 transition-colors duration-300 ${language === lang ? 'text-accent' : 'text-silver/60 hover:text-silver'}`}
                       aria-label={`Switch to ${lang === 'en' ? 'English' : lang === 'uk' ? 'Ukrainian' : 'Russian'}`}
                       aria-pressed={language === lang}
                     >
@@ -142,37 +142,37 @@ export function Navbar() {
               </div>
 
               {/* CTA Button */}
-              <button 
+              <button
                 onClick={() => scrollToSection('custom-order')}
-                className="px-6 py-3 border border-[#D1642E] text-[#D1642E] font-cinzel text-xs tracking-[0.15em] uppercase transition-all duration-300 hover:bg-[#D1642E] hover:text-white"
+                className="px-6 py-3 border border-accent text-accent font-cinzel text-xs tracking-[0.15em] uppercase transition-all duration-300 hover:bg-action hover:text-white"
               >
                 {t.nav.consultation}
               </button>
             </div>
 
             {/* Mobile Menu Button - HIGHER z-index */}
-            <button 
+            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden relative z-50 p-2 text-[#C5C9C6]"
+              className="md:hidden relative z-50 p-2 text-silver"
               aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             >
               <div className="w-6 flex flex-col gap-1.5">
-                <span 
+                <span
                   className={`block h-px bg-current transition-all duration-300 ${
                     isMenuOpen ? 'rotate-45 translate-y-[7px]' : ''
-                  }`} 
+                  }`}
                   style={{ width: '24px' }}
                 ></span>
-                <span 
+                <span
                   className={`block h-px bg-current transition-all duration-300 ${
                     isMenuOpen ? 'opacity-0' : ''
-                  }`} 
+                  }`}
                   style={{ width: '18px' }}
                 ></span>
-                <span 
+                <span
                   className={`block h-px bg-current transition-all duration-300 ${
                     isMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''
-                  }`} 
+                  }`}
                   style={{ width: isMenuOpen ? '24px' : '14px' }}
                 ></span>
               </div>
@@ -182,10 +182,10 @@ export function Navbar() {
       </nav>
 
       {/* Mobile Menu - SEPARATE from navbar, full screen overlay */}
-      <div 
-        className={`md:hidden fixed inset-0 z-40 bg-[#1B0D14] transition-all duration-500 ${
-          isMenuOpen 
-            ? 'opacity-100 visible pointer-events-auto' 
+      <div
+        className={`md:hidden fixed inset-0 z-40 bg-ink transition-all duration-500 ${
+          isMenuOpen
+            ? 'opacity-100 visible pointer-events-auto'
             : 'opacity-0 invisible pointer-events-none'
         }`}
       >
@@ -201,10 +201,10 @@ export function Navbar() {
           >
             {(['en', 'uk', 'ru'] as const).map((lang, i) => (
               <span key={lang} className="flex items-center gap-4">
-                {i > 0 && <span className="text-[#C5C9C6]/30">|</span>}
+                {i > 0 && <span className="text-silver/30">|</span>}
                 <button
                   onClick={() => { setLanguage(lang); setIsMenuOpen(false); }}
-                  className={`font-cinzel text-xl ${language === lang ? 'text-[#D1642E]' : 'text-[#C5C9C6]'}`}
+                  className={`font-cinzel text-xl ${language === lang ? 'text-accent' : 'text-silver'}`}
                   aria-pressed={language === lang}
                 >
                   {lang === 'en' ? 'EN' : lang === 'uk' ? 'UA' : 'RU'}
@@ -217,7 +217,7 @@ export function Navbar() {
             <button
               key={link.id}
               onClick={() => scrollToSection(link.id)}
-              className="font-cinzel text-2xl text-[#C5C9C6] hover:text-[#D1642E] transition-colors tracking-[0.1em]"
+              className="font-cinzel text-2xl text-silver hover:text-accent transition-colors tracking-[0.1em]"
               style={{
                 opacity: isMenuOpen ? 1 : 0,
                 transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',
@@ -227,9 +227,9 @@ export function Navbar() {
               {link.label}
             </button>
           ))}
-          <button 
+          <button
             onClick={() => scrollToSection('custom-order')}
-            className="mt-8 px-8 py-4 bg-[#D1642E] text-white font-cinzel text-sm tracking-[0.15em]"
+            className="mt-8 px-8 py-4 bg-action text-white font-cinzel text-sm tracking-[0.15em]"
             style={{
               opacity: isMenuOpen ? 1 : 0,
               transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',

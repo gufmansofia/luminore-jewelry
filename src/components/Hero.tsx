@@ -26,14 +26,14 @@ export function Hero() {
         <img
           src={heroBg}
           alt=""
-          className="w-full h-full object-cover object-left md:object-center"
+          className="w-full h-full grayscale object-cover object-left md:object-center"
         />
         {/* Mobile: uniform dark overlay so cream bg doesn't bleed through */}
-        <div className="absolute inset-0 bg-[#1B0D14]/88 md:hidden" />
+        <div className="absolute inset-0 bg-ink/88 md:hidden" />
         {/* Desktop: directional fade — dark left (text), transparent right (jewelry) */}
-        <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-[#1B0D14]/92 via-[#1B0D14]/72 to-[#1B0D14]/20" />
+        <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-ink/92 via-ink/72 to-ink/20" />
         {/* Top & bottom fade — always */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1B0D14]/50 via-transparent to-[#1B0D14]/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/50 via-transparent to-ink/60" />
       </div>
 
       {/* Content */}
@@ -45,7 +45,7 @@ export function Hero() {
         >
           {/* Eyebrow */}
           <div className="flex items-center gap-4">
-            <div className="w-12 h-px bg-[#D1642E]"></div>
+            <div className="w-12 h-px bg-action"></div>
             <span
               className="font-cinzel text-xs text-white/70"
               style={{ letterSpacing: '0.2em' }}
@@ -60,17 +60,17 @@ export function Hero() {
             style={{ letterSpacing: '0.03em' }}
           >
             {t.hero.headline1}<br />
-            <span className="text-[#D1642E]">{t.hero.headline2}</span>
+            <span className="text-accent">{t.hero.headline2}</span>
           </h1>
 
           {/* Trust signals */}
           <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 sm:gap-8">
             <div className="flex items-center gap-2.5">
-              <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0"></div>
+              <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0"></div>
               <span className="font-body text-sm text-white/80">{t.hero.certified}</span>
             </div>
             <div className="flex items-center gap-2.5">
-              <div className="w-1.5 h-1.5 bg-[#D1642E] rounded-full flex-shrink-0"></div>
+              <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0"></div>
               <span className="font-body text-sm text-white/80">{t.hero.personalApproach}</span>
             </div>
           </div>
@@ -79,14 +79,14 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => scrollToSection('products')}
-              className="px-8 py-4 bg-[#D1642E] text-white font-cinzel text-sm transition-all duration-300 hover:bg-[#B85420] hover:shadow-lg hover:shadow-[#D1642E]/30"
+              className="px-8 py-4 bg-action text-white font-cinzel text-sm transition-all duration-300 hover:bg-action-hover hover:shadow-lg hover:shadow-accent/30"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaPrimary}
             </button>
             <button
               onClick={() => scrollToSection('custom-order')}
-              className="px-8 py-4 border border-white/35 text-white font-cinzel text-sm hover:border-[#D1642E] hover:text-[#D1642E] transition-all duration-300"
+              className="px-8 py-4 border border-white/35 text-white font-cinzel text-sm hover:border-accent hover:text-accent transition-all duration-300"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaSecondary}
@@ -104,7 +104,7 @@ export function Hero() {
           {t.hero.scroll}
         </span>
         <svg
-          className="w-5 h-5 text-[#D1642E]/60"
+          className="w-5 h-5 text-accent/60"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
