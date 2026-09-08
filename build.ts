@@ -147,6 +147,7 @@ const result = await build({
   plugins: [plugin],
   minify: true,
   target: "browser",
+  publicPath: "/", // SPA routes must load bundles from the site root.
   sourcemap: "linked",
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),

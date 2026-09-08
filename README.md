@@ -42,3 +42,7 @@ Before committing, inspect `git diff --check`, `git diff --stat`, and `git statu
 ```sh
 python3 scripts/convert_excel_to_ts.py source-materials/inventory/Jewelry_Inventory_Final11.xlsx /tmp/products-draft.ts
 ```
+
+## Current limitation
+
+The contact form validates input and displays a success state locally, but does not send or store inquiries. Connect a submission service before relying on it for customer messages. Existing email and messenger links are separate contact options.
