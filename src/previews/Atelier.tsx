@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../i18n';
 import './atelier.css';
+import AtelierSections from './AtelierSections';
 
 const copy = {
   en: { about: 'About', collection: 'Collection', journal: 'Journal', contact: 'Contact', eyebrow: 'THE LUMINORE ATELIER', line1: 'A piece of you.', line2: 'For ', emphasis: 'a lifetime.', description: 'Fine diamonds, thoughtfully chosen.', description2: 'Jewelry made personal.', discover: 'Discover the collection', create: 'Create your own', closing: 'Made to become ', yours: 'yours' },
@@ -26,21 +27,21 @@ export default function Atelier() {
       <header className="atelier-header">
         <details className="atelier-mobile-menu">
           <summary aria-label={language === 'en' ? 'Menu' : 'Меню'}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg></summary>
-          <nav aria-label="Mobile navigation">
-            <Link to="/" state={{ scrollTo: 'about' }}>{t.about}</Link>
-            <Link to="/" state={{ scrollTo: 'products' }}>{t.collection}</Link>
-            <Link to="/" state={{ scrollTo: 'blog' }}>{t.journal}</Link>
-            <Link to="/" state={{ scrollTo: 'contact' }}>{t.contact}</Link>
+          <nav aria-label="Mobile navigation" onClick={e => { const menu = e.currentTarget.closest('details'); if (menu) menu.open = false; }}>
+            <a href="#atelier-about">{t.about}</a>
+            <a href="#atelier-collection">{t.collection}</a>
+            <a href="#atelier-journal">{t.journal}</a>
+            <a href="#atelier-contact">{t.contact}</a>
           </nav>
         </details>
         <nav className="atelier-nav atelier-nav-left" aria-label="Collection navigation">
-          <Link to="/" state={{ scrollTo: 'about' }}>{t.about}</Link>
-          <Link to="/" state={{ scrollTo: 'products' }}>{t.collection}</Link>
+          <a href="#atelier-about">{t.about}</a>
+          <a href="#atelier-collection">{t.collection}</a>
         </nav>
         <Link className="atelier-wordmark" to="/preview/atelier" aria-label="Luminore atelier home">LUMINORE</Link>
         <nav className="atelier-nav atelier-nav-right" aria-label="Information navigation">
-          <Link to="/" state={{ scrollTo: 'blog' }}>{t.journal}</Link>
-          <Link to="/" state={{ scrollTo: 'contact' }}>{t.contact}</Link>
+          <a href="#atelier-journal">{t.journal}</a>
+          <a href="#atelier-contact">{t.contact}</a>
           <select aria-label="Language" value={language} onChange={e => setLanguage(e.target.value as 'en' | 'uk' | 'ru')}>
             <option value="en">EN</option><option value="uk">UA</option><option value="ru">RU</option>
           </select>
@@ -53,11 +54,12 @@ export default function Atelier() {
             <p className="atelier-eyebrow">{t.eyebrow}</p>
             <h1 id="atelier-title">{t.line1}<br />{t.line2}<em>{t.emphasis}</em></h1>
             <p className="atelier-description">{t.description}<br />{t.description2}</p>
-            <Link className="atelier-primary" to="/" state={{ scrollTo: 'products' }}>{t.discover}</Link>
-            <Link className="atelier-bespoke" to="/" state={{ scrollTo: 'custom-order' }}>{t.create}</Link>
+            <a className="atelier-primary" href="#atelier-collection">{t.discover}</a>
+            <a className="atelier-bespoke" href="#atelier-bespoke">{t.create}</a>
           </div>
         </section>
         <div className="atelier-closing"><h2>{t.closing}<em>{t.yours}</em></h2></div>
+        <AtelierSections />
       </main>
     </div>
   );
