@@ -25,7 +25,7 @@ export default function Atelier() {
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Manrope:wght@400;500&display=swap" />
       <header className="atelier-header">
         <details className="atelier-mobile-menu">
-          <summary>{language === 'en' ? 'Menu' : 'Меню'}</summary>
+          <summary aria-label={language === 'en' ? 'Menu' : 'Меню'}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg></summary>
           <nav aria-label="Mobile navigation">
             <Link to="/" state={{ scrollTo: 'about' }}>{t.about}</Link>
             <Link to="/" state={{ scrollTo: 'products' }}>{t.collection}</Link>
