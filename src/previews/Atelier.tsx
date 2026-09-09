@@ -24,6 +24,15 @@ export default function Atelier() {
     <div className="atelier" data-theme="light">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Manrope:wght@400;500&display=swap" />
       <header className="atelier-header">
+        <details className="atelier-mobile-menu">
+          <summary>{language === 'en' ? 'Menu' : 'Меню'}</summary>
+          <nav aria-label="Mobile navigation">
+            <Link to="/" state={{ scrollTo: 'about' }}>{t.about}</Link>
+            <Link to="/" state={{ scrollTo: 'products' }}>{t.collection}</Link>
+            <Link to="/" state={{ scrollTo: 'blog' }}>{t.journal}</Link>
+            <Link to="/" state={{ scrollTo: 'contact' }}>{t.contact}</Link>
+          </nav>
+        </details>
         <nav className="atelier-nav atelier-nav-left" aria-label="Collection navigation">
           <Link to="/" state={{ scrollTo: 'about' }}>{t.about}</Link>
           <Link to="/" state={{ scrollTo: 'products' }}>{t.collection}</Link>

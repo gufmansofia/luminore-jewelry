@@ -37,3 +37,6 @@ First desktop pass showed no blocking drift. Mobile viewport capture replaced a 
 ## Follow-up polish
 - Optional: add the small directional icon from the reference to the collection button.
 - Optional: refine photograph angle and the 15–20px CTA offset after feedback.
+
+## Mobile refinement — 2026-09-09
+User authorized a more luxurious mobile treatment after reviewing the original mobile screenshots. Updated only the mobile layout: one-row masthead with native disclosure menu, inset shorter image, centered serif headline, restrained full-width collection action, and finer rules. Desktop remains unchanged. Reviewed the new 390 × 844 viewport capture at `atelier-refined-mobile.png` in the session visualization directory against the earlier mobile capture. Headline and both actions now fit in the initial viewport. Native menu opens and closes and exposes all four navigation links. No horizontal overflow or browser errors. Intentional mobile departures from the desktop source are user-directed; no remaining P0/P1/P2 findings.
