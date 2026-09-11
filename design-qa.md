@@ -49,3 +49,6 @@ Reviewed desktop screenshots at 1200 × 900 and mobile collection/bespoke screen
 Verified Earrings filtering and expand/collapse (18 total products), local anchor navigation, and rendered product/article destinations. Browser error log empty. Production build, 86 local asset references, and diff whitespace check pass. Product and article detail pages retain their existing design. Changes remain isolated to the preview pending user approval.
 
 final result: passed
+
+## Restored graphite sections — 2026-09-11
+User selected the latest atelier hero with the original graphite homepage sections. Reused the existing About, Products, CTA, Testimonials, Blogs, Contact, Footer, and BackToTop components outside the atelier CSS scope. Removed the rejected replacement sections and their unused CSS. Hero and menu appearance preserved. Browser verification found all anchor destinations and no horizontal overflow at 652px; hero screenshot reviewed. Production build and asset validation pass. Earlier extended-section QA is historical and no longer describes the current preview.
