@@ -221,7 +221,13 @@ export function Products() {
 
   useEffect(() => {
     if (location.state?.returnToCatalog) {
-      sectionRef.current?.scrollIntoView({ block: 'start' });
+      // Allow the homepage layout to settle before positioning the catalog.
+      const timer = window.setTimeout(() => {
+        if (!sectionRef.current) return;
+        const top = sectionRef.current.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: top - (location.pathname === '/' ? 80 : 0), behavior: 'instant' });
+      }, 150);
+      return () => window.clearTimeout(timer);
     }
   }, [location.key]);
 
