@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useEffect, useState, useMemo } from 'react';
 const logoFullUrl = '/logo-full.png';
 import { products } from '../data/products';
@@ -17,6 +17,9 @@ const formatUsd = (amount: number | null): string => {
 export function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const catalogPath = location.state?.catalogPath === '/preview/atelier' ? '/preview/atelier' : '/';
+  const catalogState = { catalogPath, catalog: location.state?.catalog };
   const { t, language } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -28,7 +31,7 @@ export function ProductDetail() {
   const productImages = product?.images || [];
 
   const goBackToCatalog = () => {
-    navigate('/', { state: { scrollTo: 'products' } });
+    navigate(`${catalogPath}#products`, { state: { catalog: catalogState.catalog, returnToCatalog: true } });
   };
 
   useEffect(() => {
@@ -432,6 +435,7 @@ export function ProductDetail() {
                 <Link
                   key={relatedProduct.id}
                   to={`/product/${relatedProduct.id}`}
+                  state={catalogState}
                   className="group bg-graphite/20 border border-silver/10 hover:border-accent/30 transition-all block"
                 >
                   <div className="relative aspect-square bg-ink overflow-hidden">

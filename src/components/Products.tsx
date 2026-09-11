@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { products, type Product } from '../data/products';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { products } from '../data/products';
 import { useLanguage } from '../i18n';
 
 // Accordion Filter Component
@@ -100,13 +100,12 @@ const formatUsd = (amount: number | null): string => {
 
 export function Products() {
   const { t, language } = useLanguage();
-  const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [priceSort, setPriceSort] = useState('all');
+  const location = useLocation();
+  const savedCatalog = location.state?.catalog;
+  const [activeCategory, setActiveCategory] = useState(savedCatalog?.activeCategory ?? 'all');
+  const [priceSort, setPriceSort] = useState(savedCatalog?.priceSort ?? 'all');
   const [isVisible, setIsVisible] = useState(false);
-  const [showAll, setShowAll] = useState(false);
-  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const [qvImageIndex, setQvImageIndex] = useState(0);
+  const [showAll, setShowAll] = useState(savedCatalog?.showAll ?? false);
   const sectionRef = useRef<HTMLElement>(null);
 
   // Accordion state - only one open at a time
@@ -220,28 +219,11 @@ export function Products() {
     setOpenAccordion(openAccordion === name ? null : name);
   };
 
-  const openQuickView = useCallback((e: React.MouseEvent, product: Product) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setQuickViewProduct(product);
-    setQvImageIndex(0);
-    document.body.style.overflow = 'hidden';
-  }, []);
-
-  const closeQuickView = useCallback(() => {
-    setQuickViewProduct(null);
-    setQvImageIndex(0);
-    document.body.style.overflow = '';
-  }, []);
-
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (!quickViewProduct) return;
-      if (e.key === 'Escape') closeQuickView();
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [quickViewProduct, closeQuickView]);
+    if (location.state?.returnToCatalog) {
+      sectionRef.current?.scrollIntoView({ block: 'start' });
+    }
+  }, [location.key]);
 
   return (
     <section
@@ -365,6 +347,7 @@ export function Products() {
             <Link
               key={product.id}
               to={`/product/${product.id}`}
+              state={{ catalogPath: location.pathname, catalog: { activeCategory, priceSort, showAll } }}
               className={`group bg-graphite/20 border border-silver/10 transition-all duration-700 hover:border-accent/30 hover:-translate-y-2 hover:shadow-xl hover:shadow-accent/10 flex flex-col ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
@@ -414,15 +397,6 @@ export function Products() {
                 {/* Warm accent on hover */}
                 <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/10 transition-all duration-500 z-30"></div>
 
-                {/* Quick View button overlay */}
-                <button
-                  onClick={(e) => openQuickView(e, product)}
-                  aria-label={t.products.quickView}
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 px-5 py-2 bg-ink/90 border border-silver/30 text-silver font-display text-xs opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-action hover:text-white hover:border-accent"
-                  style={{ letterSpacing: '0.1em' }}
-                >
-                  {t.products.quickView}
-                </button>
               </div>
 
               {/* Product Info */}
@@ -487,97 +461,6 @@ export function Products() {
         )}
       </div>
 
-      {/* Quick View Modal */}
-      {quickViewProduct && (
-        <div
-          className="fixed inset-0 z-[100] bg-ink/90 backdrop-blur-md flex items-center justify-center p-4"
-          onClick={closeQuickView}
-        >
-          <div
-            className="relative bg-ink border border-silver/15 max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-[fadeInUp_0.3s_ease-out]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close */}
-            <button
-              onClick={closeQuickView}
-              className="absolute top-4 right-4 z-10 w-10 h-10 border border-silver/30 hover:border-accent hover:bg-accent/10 transition-all flex items-center justify-center"
-            >
-              <svg className="w-5 h-5 text-silver" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <div className="grid md:grid-cols-2">
-              {/* Image */}
-              <div className="relative">
-                <div className="aspect-square bg-ink overflow-hidden">
-                  {quickViewProduct.images && quickViewProduct.images.length > 0 ? (
-                    <img
-                      src={quickViewProduct.images[qvImageIndex]}
-                      alt={language === 'ru' ? quickViewProduct.name : language === 'uk' ? quickViewProduct.nameUk : quickViewProduct.nameEn}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-graphite/20 flex items-center justify-center">
-                      <svg className="w-16 h-16 text-accent/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 3l9 7-9 11-9-11 9-7z" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                {/* Image nav dots — outside overflow-hidden so they're never clipped */}
-                {quickViewProduct.images && quickViewProduct.images.length > 1 && (
-                  <div className="flex justify-center gap-2 mt-3">
-                    {quickViewProduct.images.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setQvImageIndex(i)}
-                        className={`w-2.5 h-2.5 rounded-full transition-all ${i === qvImageIndex ? 'bg-action scale-125' : 'bg-silver/40 hover:bg-silver/60'}`}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Info */}
-              <div className="p-8 flex flex-col justify-center">
-                <p className="font-display text-xs text-silver/50 mb-3" style={{ letterSpacing: '0.2em' }}>
-                  {language === 'ru' ? quickViewProduct.category : language === 'uk' ? quickViewProduct.categoryUk : quickViewProduct.categoryEn}
-                </p>
-                <h3 className="font-display text-2xl text-white mb-4" style={{ letterSpacing: '0.03em' }}>
-                  {language === 'ru' ? quickViewProduct.name : language === 'uk' ? quickViewProduct.nameUk : quickViewProduct.nameEn}
-                </h3>
-                <p className="font-display text-2xl text-accent mb-6" style={{ letterSpacing: '0.03em' }}>
-                  {formatUsd(quickViewProduct.priceUsd)}
-                </p>
-                <p className="font-body text-silver/70 text-sm leading-relaxed mb-8">
-                  {language === 'ru' ? quickViewProduct.description : language === 'uk' ? quickViewProduct.descriptionUk : quickViewProduct.descriptionEn}
-                </p>
-
-                {/* Quick specs */}
-                <div className="space-y-3 mb-8 border-t border-silver/10 pt-6">
-                  <div className="flex justify-between">
-                    <span className="font-body text-sm text-silver/50">{t.product.material}</span>
-                    <span className="font-body text-sm text-white">{quickViewProduct.metalType}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-body text-sm text-silver/50">{t.product.stones}</span>
-                    <span className="font-body text-sm text-white">{quickViewProduct.gemstoneType}{quickViewProduct.totalCarat ? `, ${quickViewProduct.totalCarat}ct` : ''}</span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => { closeQuickView(); navigate(`/product/${quickViewProduct.id}`); }}
-                  className="w-full px-8 py-4 bg-action text-white font-display text-sm hover:bg-action-hover transition-all duration-300"
-                  style={{ letterSpacing: '0.1em' }}
-                >
-                  {language === 'ru' ? 'Смотреть подробнее' : language === 'uk' ? 'Переглянути деталі' : 'View Full Details'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
