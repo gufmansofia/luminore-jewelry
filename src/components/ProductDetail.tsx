@@ -5,7 +5,6 @@ import {useLanguage} from '../i18n';
 import {Footer} from './Footer';
 import {DetailHeader} from './DetailHeader';
 import {ProductImage} from './ProductImage';
-import {useDialog} from '../hooks/useDialog';
 import {choose,catalogueWeight,productName,productTitle,productDescription,productSpecGroups,requestDetail} from '../lib/product-copy';
 import {formatCarat} from '../lib/carat';
 import {NotFound} from './NotFound';
@@ -21,21 +20,20 @@ export function ProductDetail(){
  const {id}=useParams();const location=useLocation();const {language:l,t}=useLanguage();
  const p=products.find(p=>p.id===Number(id));
  const restoredScroll=useRestoredScroll();
- const [index,setIndex]=useState(0);const [natural,setNatural]=useState(false);const [open,setOpen]=useState(false);const [zoom,setZoom]=useState(false);
+ const [index,setIndex]=useState(0);const [natural,setNatural]=useState(false);
  const [galleryZoom,setGalleryZoom]=useState(false);
  const [showSticky,setShowSticky]=useState(false);
  const actionRef=useRef<HTMLAnchorElement>(null);
  useEffect(()=>{const target=actionRef.current;if(!target)return;const observer=new IntersectionObserver(([entry])=>setShowSticky(!entry.isIntersecting&&entry.boundingClientRect.top<0));observer.observe(target);return()=>observer.disconnect();},[id]);
  const touchStart=useRef<{x:number;y:number}|null>(null);const swiped=useRef(false);
- const modal=useDialog(open,()=>{setOpen(false);setZoom(false);});
  const images=p?.images??[];
  const previousPath=location.state?.catalogPath;
  const catPath=previousPath==='/preview/atelier'?previousPath:typeof previousPath==='string'&&collectionRoute(previousPath)?previousPath:collectionPath(p?.categoryEn??'all');
  const catState={catalogPath:catPath,catalog:location.state?.catalog};
  const back=useBackNavigation(`${catPath}#products`,{catalog:catState.catalog,returnToCatalog:true});
  const pick=(en:string,ru:string,uk:string)=>choose(l,en,ru,uk);
- const step=(delta:number)=>{setIndex(i=>(i+delta+images.length)%images.length);setZoom(false);setGalleryZoom(false);};
- useEffect(()=>{setIndex(0);setNatural(false);setOpen(false);setZoom(false);setGalleryZoom(false);if(restoredScroll===undefined)window.scrollTo(0,0);},[id]);
+ const step=(delta:number)=>{setIndex(i=>(i+delta+images.length)%images.length);setGalleryZoom(false);};
+ useEffect(()=>{setIndex(0);setNatural(false);setGalleryZoom(false);if(restoredScroll===undefined)window.scrollTo(0,0);},[id]);
  if(!p)return <NotFound/>;
  const name=productName(p,l),description=productDescription(p,l,natural,false),allSpecGroups=productSpecGroups(p,l,natural);
  const pendingSpecs=allSpecGroups.flatMap(group=>group.specs).filter(spec=>spec.value===requestDetail(l)).map(spec=>spec.label);
@@ -63,7 +61,7 @@ export function ProductDetail(){
  <ProductImage key={images[index]} src={images[index]} alt={name} sizes={galleryZoom?'100vw':'(max-width: 767px) 100vw, (max-width: 1023px) 680px, 55vw'} loading="eager" className="product-main-image"/>
  </button>{images.length>1&&<><button className="gallery-arrow gallery-arrow--previous" onClick={()=>step(-1)} aria-label={pick('Previous image','Предыдущее фото','Попереднє фото')}>‹</button><button className="gallery-arrow gallery-arrow--next" onClick={()=>step(1)} aria-label={pick('Next image','Следующее фото','Наступне фото')}>›</button><span className="sr-only" aria-live="polite">{index+1} / {images.length}</span></>}</>:<div className="product-image-empty"><span className="photo-unavailable">{pick("Photographs available on request","Фотографии — по запросу","Фотографії — за запитом")}</span><a className="text-button" href={`https://wa.me/421940600708?text=${encodeURIComponent(message+' '+pick('Please send photographs.','Пришлите, пожалуйста, фотографии.','Надішліть, будь ласка, фотографії.'))}`} target="_blank" rel="noopener noreferrer">{pick("Request photos","Запросить фото","Запитати фото")} ↗</a></div>}
  </div>
- {images.length>0&&<div className="product-photo-tools"><span>{imageLabel(index)}</span><button type="button" className="text-button" onClick={()=>{setOpen(true);setZoom(false);}}>{pick('Full-screen view','На весь экран','На весь екран')} <span aria-hidden="true">↗</span></button></div>}
+
  {images.length>1&&<div className="product-thumbnails" role="group" aria-label={pick('Product photographs','Фотографии изделия','Фотографії виробу')}>
  {images.map((src,i)=><button key={src} className={`product-thumbnail ${index===i?'is-selected':''}`} onClick={()=>{setIndex(i);setGalleryZoom(false);}} aria-label={imageLabel(i)} aria-pressed={index===i}><ProductImage src={src} alt="" sizes="(max-width: 767px) 84px, 132px" loading="lazy" className="w-full h-full object-contain"/></button>)}
  </div>}
@@ -92,11 +90,6 @@ export function ProductDetail(){
  </div></div>
  </main>
  <section className="product-related"><h2 >{t.product.related} {t.product.relatedSuffix}</h2><div className="product-related-grid">{related.map(other=><Link key={other.id} to={`/product/${other.id}`} state={catState} className="product-related-item" aria-labelledby={`related-name-${other.id}`}><div className="product-related-photo product-photo">{other.images.length?<ProductImage src={other.images[0]} alt="" loading="lazy" className="w-full h-full object-contain"/>:<span className="flex h-full items-center justify-center text-graphite text-sm tracking-widest">LUMINORE</span>}</div><h3 id={`related-name-${other.id}`}>{productName(other,l)}</h3><p >{usd(other.priceUsd)}</p></Link>)}</div></section>
- {open&&images.length>0&&<div ref={modal} role="dialog" aria-modal="true" aria-label={pick('Product photographs','Фотографии изделия','Фотографії виробу')} tabIndex={-1} className="product-lightbox" onClick={()=>setOpen(false)} onKeyDown={e=>{if(e.key==='ArrowRight'){e.preventDefault();step(1);}if(e.key==='ArrowLeft'){e.preventDefault();step(-1);}}}>
- <button className="product-lightbox-close" aria-label={pick('Close','Закрыть','Закрити')} onClick={()=>setOpen(false)}>×</button>
- <button className="product-lightbox-image" aria-label={zoom?pick('Zoom out','Уменьшить','Зменшити'):pick('Zoom in','Увеличить','Збільшити')} aria-pressed={zoom} onClick={e=>{e.stopPropagation();setZoom(!zoom);}}><ProductImage src={images[index]} alt={name} sizes="90vw" className={`max-h-[75vh] object-contain ${zoom?'scale-150':'scale-100'}`}/></button>
- {images.length>1&&<><button className="gallery-arrow gallery-arrow--previous" aria-label={pick('Previous image','Предыдущее фото','Попереднє фото')} onClick={e=>{e.stopPropagation();step(-1);}}>‹</button><button className="gallery-arrow gallery-arrow--next" aria-label={pick('Next image','Следующее фото','Наступне фото')} onClick={e=>{e.stopPropagation();step(1);}}>›</button><p className="product-lightbox-counter" aria-live="polite">{imageLabel(index)}</p></>}
- </div>}
  {showSticky&&<div className="mobile-product-action"><span>{price}</span><a href="#product-enquiry" onClick={()=>requestAnimationFrame(()=>document.getElementById("product-enquiry")?.focus({preventScroll:true}))}>{pick("Enquire","Написать","Написати")} →</a></div>}
  <Footer theme="light"/>
  </div>;
