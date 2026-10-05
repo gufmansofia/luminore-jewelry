@@ -59,10 +59,11 @@ body:has(.atelier) section[id] { scroll-margin-top: 106px; }
  .atelier-mobile-menu[open] summary { text-decoration: underline; text-underline-offset: 6px; }
  .atelier-mobile-menu nav { position: absolute; top: 55px; left: 0; right: 0; z-index: 10; display: flex; flex-direction: column; padding: 18px 32px 24px; background: white; border-bottom: 1px solid #dedede; }
  .atelier-mobile-menu nav a { padding: 14px 0; font-size: 15px; }
- .atelier-hero { grid-template-areas: 'photo' 'story' 'actions'; grid-template-columns: minmax(0, 1fr); gap: 26px; max-width: 620px; margin-top: 24px; padding: 0 18px; }
+ .atelier-hero { grid-template-areas: 'photo' 'story' 'actions'; grid-template-columns: minmax(0, 1fr); gap: 26px; max-width: none; margin-top: 0; padding: 0; }
  .atelier-photo { width: 100%; }
  .atelier-hero { grid-template-rows: auto; }
- .atelier-story { padding: 0 8px; text-align: center; }
+ .atelier-story { padding: 0 26px; text-align: center; }
+ .atelier-actions { margin-inline:18px; }
  .atelier h1 { font-size: clamp(34px, 10.25vw, 60px); line-height: 1.06; letter-spacing: -.04em; }
  .atelier-description { margin: 18px 0 0; font-size: 15px; line-height: 1.5; color: #292929; }
  .atelier-action { font-size: clamp(26px, 7.4vw, 38px); min-height: 60px; padding: 12px 4px; gap: 12px; }
@@ -99,14 +100,20 @@ body:has(.atelier) section[id] { scroll-margin-top: 106px; }
   text-underline-offset: 6px;
 }
 
-/* Compact spacing on short phones keeps the first action visible. The media
-   aspect ratio, focal points and approved bottom crop are unchanged. */
-@media(max-width:800px) and (max-height:740px) and (orientation:portrait) {
- .atelier-hero { margin-top:8px; row-gap:8px; }
- .atelier-photo { max-width:calc((100svh - 310px) * .77778); }
- .atelier-story { padding-inline:0; }
- .atelier .atelier-description { margin-top:8px; line-height:1.4!important; }
- .atelier h1 { font-size:clamp(30px,9vw,44px); }
- .atelier-action { min-height:48px; padding-block:7px; }
- .atelier-action img { width:30px; height:30px; }
+/* Scale short-phone spacing continuously with the stable small viewport.
+   A height breakpoint made the whole page jump when browser chrome resized it.
+   The approved media aspect ratio and focal points remain unchanged. */
+@media(max-width:800px) and (orientation:portrait) {
+ .atelier-hero {
+  row-gap:clamp(8px,calc(8px + (100svh - 740px) * .18),26px);
+ }
+ .atelier .atelier-description { margin-top:clamp(8px,calc(8px + (100svh - 740px) * .1),18px); }
+ .atelier-action {
+  min-height:clamp(48px,calc(48px + (100svh - 740px) * .12),60px);
+  padding-block:clamp(7px,calc(7px + (100svh - 740px) * .05),12px);
+ }
+ .atelier-action img {
+  width:clamp(30px,calc(30px + (100svh - 740px) * .04),34px);
+  height:auto;
+ }
 }

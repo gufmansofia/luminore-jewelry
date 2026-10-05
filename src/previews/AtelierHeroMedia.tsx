@@ -74,7 +74,7 @@ export function AtelierHeroMedia({ alt, skipLabel }: { alt: string; skipLabel: s
         className="atelier-hero-still"
         src="/optimized/atelier-portrait-final-780.webp"
         srcSet="/optimized/atelier-portrait-final-480.webp 480w, /optimized/atelier-portrait-final-780.webp 780w, /optimized/atelier-portrait-final-1200.webp 1200w"
-        sizes="(max-width: 620px) calc(100vw - 36px), (max-width: 800px) 584px, (min-width: 1600px) 770px, 48vw"
+        sizes="(max-width: 800px) 100vw, (min-width: 1600px) 770px, 48vw"
         width={1200}
         height={1800}
         alt={alt}

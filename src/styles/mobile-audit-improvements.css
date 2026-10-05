@@ -140,3 +140,41 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
  .info-dialog-heading { padding:14px 16px 14px 20px; }
  .info-dialog-heading h3 { font-size:22px; }
 }
+/* Keep mobile content visible during swipes instead of hiding it until an
+   intersection callback starts a delayed reveal. Carousel and video playback
+   retain their own animations. */
+@media(max-width:800px) {
+ .atelier-content .motion-reveal,
+ .atelier-content .motion-reveal[data-reveal="waiting"],
+ .atelier-content .about-chapter .approach-intro[data-reveal] .approach-title-word,
+ .atelier-content .about-chapter .approach-intro[data-reveal] .approach-intro-copy,
+ .atelier-content .about-chapter .approach-end,
+ .atelier-content .about-chapter .approach-trust-item,
+ .atelier-content .testimonials-section .testimonial-content {
+  opacity:1;
+  transform:none;
+  transition:none;
+ }
+ .atelier-content .about-chapter .approach-diamond-stage[data-reveal] .approach-diamonds {
+  clip-path:none;
+  transition:none;
+ }
+ .atelier-content .about-chapter .approach-diamond-stage[data-reveal] .approach-stone::before,
+ .atelier-content .about-chapter .approach-trust-item::before {
+  transform:none;
+  transition:none;
+ }
+ .atelier .atelier-hero[data-reveal] .hero-line>*,
+ .atelier .atelier-hero[data-reveal] .atelier-description,
+ .atelier .atelier-hero[data-reveal] .atelier-actions {
+  opacity:1;
+  transform:none;
+  animation:none;
+ }
+ body:has(.atelier) .footer-grid {
+  opacity:1;
+  translate:none;
+  transform:none;
+  transition:none;
+ }
+}
