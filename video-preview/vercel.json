@@ -2,7 +2,7 @@
   "framework": null,
   "buildCommand": "",
   "installCommand": "",
-  "outputDirectory": "video-preview",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "rewrites": [
     {
