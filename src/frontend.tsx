@@ -5,12 +5,23 @@
  * It is included in `src/index.html`.
  */
 
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
+import {pathLanguage} from "./lib/locale-path";
 import { App } from "./App";
 
-function start() {
-  const root = createRoot(document.getElementById("root")!);
-  root.render(<App />);
+async function start() {
+  const element = document.getElementById("root")!;
+  const query = new URLSearchParams(window.location.search);
+  const legacyLanguage = query.get('lang');
+  if (legacyLanguage === 'ru' || legacyLanguage === 'uk' || legacyLanguage === 'en') {
+    query.delete('lang');
+    const { localePath } = await import('./lib/locale-path');
+    const search = query.toString();
+    window.location.replace(localePath(window.location.pathname, legacyLanguage) + (search ? '?' + search : '') + window.location.hash);
+    return;
+  }
+  if (element.dataset.prerendered === 'true' && document.documentElement.lang === pathLanguage(window.location.pathname)) hydrateRoot(element, <App />, {identifierPrefix:'luminore-'});
+  else createRoot(element, {identifierPrefix:'luminore-'}).render(<App />);
 }
 
 if (document.readyState === "loading") {

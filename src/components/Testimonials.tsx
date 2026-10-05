@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../i18n';
+import { choose } from '../lib/product-copy';
 
 interface Testimonial {
   name: string;
@@ -19,7 +20,7 @@ const testimonials: Testimonial[] = [
     name: 'Анна К.',
     nameEn: 'Anna K.',
     nameUk: 'Анна К.',
-    role: 'Обручальное кольцо',
+    role: 'Помолвочное кольцо',
     roleEn: 'Engagement Ring',
     roleUk: 'Заручинна каблучка',
     text: 'Кольцо превзошло все ожидания. Бриллиант играет невероятно, а качество исполнения безупречно. Luminore создали именно то, о чем я мечтала.',
@@ -44,7 +45,7 @@ const testimonials: Testimonial[] = [
     nameEn: 'Elena S.',
     nameUk: 'Олена С.',
     role: 'Коллекция украшений',
-    roleEn: 'Jewelry Collection',
+    roleEn: 'Jewellery collection',
     roleUk: 'Колекція прикрас',
     text: 'Уже третье украшение от Luminore. Каждый раз — идеальное сочетание дизайна и качества. Лабораторные бриллианты ничем не уступают натуральным.',
     textEn: 'This is my third piece from Luminore. Every time — a perfect blend of design and quality. Lab-grown diamonds are every bit as beautiful as natural ones.',
@@ -65,286 +66,120 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-function TrustIcon({ type }: { type: string }) {
-  const cls = "block w-7 h-7 flex-shrink-0";
-  switch (type) {
-    case 'certified':
-      return (
-        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      );
-    case 'sustainable':
-      return (
-        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      );
-    case 'warranty':
-      return (
-        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      );
-    case 'conflict-free':
-      return (
-        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l9 7-9 11-9-11 9-7z" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-}
-
-const trustSignals = [
-  { icon: 'certified', labelRu: 'Сертифицированные камни', labelUk: 'Сертифіковані камені', labelEn: 'Certified Stones' },
-  { icon: 'sustainable', labelRu: 'Устойчивая роскошь', labelUk: 'Стала розкіш', labelEn: 'Sustainable Luxury' },
-  { icon: 'warranty', labelRu: 'Пожизненная гарантия', labelUk: 'Довічна гарантія', labelEn: 'Lifetime Warranty' },
-  { icon: 'conflict-free', labelRu: 'Бесконфликтные бриллианты', labelUk: 'Безконфліктні діаманти', labelEn: 'Conflict-Free Diamonds' },
-];
+const FADE_OUT_MS = 220;
+const REVIEW_INTERVAL_MS = 2500;
 
 export function Testimonials() {
-  const { language, t } = useLanguage();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { language:l, t } = useLanguage();
+  const [paused,setPaused]=useState(false);
+  const pauseUntil=useRef(0);
+  const [readAll, setReadAll] = useState(false);
+  const [active, setActive] = useState(0);
+  const [leaving, setLeaving] = useState(false);
+  const [cycle, setCycle] = useState(0);
+  const [keyboardFocused, setKeyboardFocused] = useState(false);
+  const [touching, setTouching] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [announce, setAnnounce] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [pageVisible, setPageVisible] = useState(true);
+  const content = useRef<HTMLDivElement>(null);
+  const activeIndex = useRef(0);
+  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStart = useRef<{x:number;y:number} | null>(null);
+  const pick=(en:string,ru:string,uk:string)=>choose(l,en,ru,uk);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const select=useCallback((index:number,manual=false)=>{
+    const next=(index+testimonials.length)%testimonials.length;
+    if(manual)pauseUntil.current=Date.now()+8000;
+    setAnnounce(manual);
+    setCycle(value=>value+1);
+    if(next===activeIndex.current)return;
+    activeIndex.current=next;
+    if(transitionTimer.current!==null)clearTimeout(transitionTimer.current);
+    if(reducedMotion){setActive(next);setLeaving(false);return;}
+    setLeaving(true);
+    transitionTimer.current=setTimeout(()=>{
+      setActive(next);
+      setLeaving(false);
+      transitionTimer.current=null;
+    },FADE_OUT_MS);
+  },[reducedMotion]);
+  const move=useCallback((delta:number,manual=true)=>select(activeIndex.current+delta,manual),[select]);
 
-  const isPaused = useRef(false);
-
-  const startAutoRotate = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      if (isPaused.current) return;
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setActiveIndex(prev => (prev + 1) % testimonials.length);
-        setIsTransitioning(false);
-      }, 300);
-    }, 8000);
-  };
-
-  // Auto-rotate
-  useEffect(() => {
-    startAutoRotate();
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, []);
-
-  const goTo = (index: number) => {
-    if (index === activeIndex) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveIndex(index);
-      setIsTransitioning(false);
-    }, 300);
-    startAutoRotate();
-  };
-
-  const goNext = useCallback(() => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveIndex(prev => (prev + 1) % testimonials.length);
-      setIsTransitioning(false);
-    }, 300);
-    startAutoRotate();
-  }, []);
-
-  const goPrev = useCallback(() => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveIndex(prev => (prev - 1 + testimonials.length) % testimonials.length);
-      setIsTransitioning(false);
-    }, 300);
-    startAutoRotate();
-  }, []);
-
-  const handleMouseEnter = () => { isPaused.current = true; };
-  const handleMouseLeave = () => { isPaused.current = false; };
-  const handleTouchStart = () => { isPaused.current = true; };
-  const handleTouchEnd = () => { isPaused.current = false; };
-
-  // Keyboard navigation
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        goNext();
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        goPrev();
-      }
+  useEffect(()=>{
+    const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
+    const respectMotion=()=>setReducedMotion(motion.matches);
+    respectMotion();
+    motion.addEventListener('change',respectMotion);
+    const observer=new IntersectionObserver(([entry])=>{
+      const inView=entry.isIntersecting&&entry.intersectionRatio>=0.2;
+      setVisible(inView);
+      if(inView)setRevealed(true);
+    },{threshold:[0,0.2]});
+    // On mobile the section heading enters first; reveal when the review itself is visible.
+    if(content.current)observer.observe(content.current);
+    const visibility=()=>setPageVisible(!document.hidden);
+    visibility();
+    document.addEventListener('visibilitychange',visibility);
+    return ()=>{
+      observer.disconnect();
+      motion.removeEventListener('change',respectMotion);
+      document.removeEventListener('visibilitychange',visibility);
+      if(transitionTimer.current!==null)clearTimeout(transitionTimer.current);
     };
-    section.addEventListener('keydown', handleKeyDown);
-    return () => section.removeEventListener('keydown', handleKeyDown);
-  }, [goNext, goPrev]);
+  },[]);
 
-  const current = testimonials[activeIndex];
+  useEffect(()=>{
+    if(!reducedMotion)return;
+    if(transitionTimer.current!==null)clearTimeout(transitionTimer.current);
+    transitionTimer.current=null;
+    setActive(activeIndex.current);
+    setLeaving(false);
+  },[reducedMotion]);
 
-  return (
-    <section
-      ref={sectionRef}
-      tabIndex={0}
-      aria-label={language === 'ru' ? 'Отзывы клиентов' : language === 'uk' ? 'Відгуки клієнтів' : 'Client testimonials'}
-      className="relative py-24 lg:py-32 bg-ink overflow-hidden outline-none"
-    >
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-ink"></div>
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
+  const rotating=!paused&&!readAll&&!reducedMotion&&!keyboardFocused&&!touching&&visible&&pageVisible;
+  useEffect(()=>{
+    if(!rotating)return;
+    const timer=window.setTimeout(()=>move(1,false),Math.max(REVIEW_INTERVAL_MS,pauseUntil.current-Date.now()));
+    return ()=>window.clearTimeout(timer);
+  },[cycle,rotating,move]);
 
-      {/* Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/8 rounded-full blur-[180px]"></div>
-
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-8 h-px bg-action"></div>
-            <span className="font-display text-xs text-silver/70" style={{ letterSpacing: '0.2em' }}>
-              {t.testimonials.eyebrow}
-            </span>
-            <div className="w-8 h-px bg-action"></div>
-          </div>
-          <h2
-            className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-[1.15]"
-            style={{ letterSpacing: '0.03em' }}
-          >
-            {t.testimonials.headline1}
-            <span className="text-accent">{t.testimonials.headline2}</span>
-          </h2>
+  return <section id="testimonials" data-theme="light" className={`editorial-section testimonials-section${revealed?' is-revealed':''}`} aria-labelledby="testimonials-title" aria-roledescription={readAll?undefined:pick('carousel','карусель','карусель')}
+    onPointerDownCapture={()=>{setKeyboardFocused(false);pauseUntil.current=Date.now()+8000;setCycle(value=>value+1);}}
+    onFocusCapture={e=>{setRevealed(true);setKeyboardFocused((e.target as HTMLElement).matches(':focus-visible'));}}
+    onBlurCapture={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node | null))setKeyboardFocused(false);}}
+    onKeyDown={e=>{if(readAll)return;if(e.key==='ArrowRight'){e.preventDefault();setKeyboardFocused(true);move(1);}if(e.key==='ArrowLeft'){e.preventDefault();setKeyboardFocused(true);move(-1);}}}>
+    <div className="editorial-container testimonial-layout">
+      <header className="section-heading"><p className="section-eyebrow">{t.testimonials.eyebrow}</p><h2 id="testimonials-title">{t.testimonials.headline1}{t.testimonials.headline2}</h2></header>
+      <div className="testimonial-panel">
+        <button type="button" className="text-button reviews-mode" aria-expanded={readAll} onClick={()=>{setReadAll(!readAll);setRevealed(true);}}>{readAll?pick("Back to carousel","Вернуться к карусели","Повернутися до каруселі"):pick("Read all reviews","Читать все отзывы","Читати всі відгуки")}</button>
+        {readAll&&<div className="reviews-list">{testimonials.map(item=><figure key={item.nameEn}><blockquote><p>{pick("“","«","«")}{pick(item.textEn,item.text,item.textUk)}{pick("”","»","»")}</p></blockquote><figcaption>{pick(item.nameEn,item.name,item.nameUk)} · {pick(item.roleEn,item.role,item.roleUk)}</figcaption></figure>)}</div>}
+        <div hidden={readAll}>
+        <div ref={content} className="testimonial-content" aria-live={announce?'polite':'off'} aria-atomic="true"
+          onPointerDown={e=>{if(e.pointerType==='touch'){touchStart.current={x:e.clientX,y:e.clientY};setTouching(true);e.currentTarget.setPointerCapture(e.pointerId);}}}
+          onPointerCancel={()=>{touchStart.current=null;setTouching(false);}}
+          onLostPointerCapture={()=>{touchStart.current=null;setTouching(false);}}
+          onPointerUp={e=>{
+            const start=touchStart.current;touchStart.current=null;setTouching(false);
+            if(!start)return;
+            const dx=e.clientX-start.x,dy=e.clientY-start.y;
+            if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.25)move(dx<0?1:-1);
+          }}>
+          {testimonials.map((item,i)=><figure key={item.nameEn} className={`testimonial-slide ${active===i&&!leaving?'is-active':''}`} aria-hidden={active!==i||leaving} role="group" aria-roledescription={pick('slide','слайд','слайд')} aria-label={pick(`Review ${i+1} of ${testimonials.length}`,`Отзыв ${i+1} из ${testimonials.length}`,`Відгук ${i+1} із ${testimonials.length}`)}>
+            <blockquote><p>{pick('“','«','«')}{pick(item.textEn,item.text,item.textUk)}{pick('”','»','»')}</p></blockquote>
+            <figcaption><p className="testimonial-author">{pick(item.nameEn,item.name,item.nameUk)}</p><p className="testimonial-role">{pick(item.roleEn,item.role,item.roleUk)}</p></figcaption>
+          </figure>)}
         </div>
-
-        {/* Testimonial Card */}
-        <div className={`max-w-3xl mx-auto transition-all duration-1000 delay-200 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          {/* Prev/Next Arrows + Card wrapper */}
-          <div className="relative flex items-center">
-            {/* Previous arrow */}
-            <button
-              onClick={goPrev}
-              aria-label={language === 'ru' ? 'Предыдущий отзыв' : language === 'uk' ? 'Попередній відгук' : 'Previous testimonial'}
-              className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-silver/20 text-silver/50 hover:border-accent hover:text-accent transition-all duration-300 flex-shrink-0 -ml-14 absolute left-0"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-
-          <div className="w-full">
-          <div
-            className="relative bg-graphite/10 border border-silver/10 p-6 md:p-12"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            {/* Quote mark */}
-            <div className="absolute top-6 left-8 font-display text-4xl md:text-6xl text-accent/20 leading-none">"</div>
-
-            {/* Content with fade transition */}
-            <div aria-live="polite" className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
-              {/* Stars */}
-              <div className="flex gap-1 mb-6 justify-center">
-                {Array.from({ length: current.rating }).map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                ))}
-              </div>
-
-              {/* Quote text */}
-              <blockquote className="font-body text-xl md:text-2xl text-silver/90 leading-relaxed text-center mb-8 italic">
-                {language === 'ru' ? current.text : language === 'uk' ? current.textUk : current.textEn}
-              </blockquote>
-
-              {/* Author */}
-              <div className="text-center">
-                <p className="font-display text-white text-sm mb-1" style={{ letterSpacing: '0.1em' }}>
-                  {language === 'ru' ? current.name : language === 'uk' ? current.nameUk : current.nameEn}
-                </p>
-                <p className="font-body text-accent text-sm">
-                  {language === 'ru' ? current.role : language === 'uk' ? current.roleUk : current.roleEn}
-                </p>
-              </div>
-            </div>
-
-            {/* Navigation dots */}
-            <div className="flex justify-center gap-3 mt-8" role="tablist" aria-label={language === 'ru' ? 'Навигация по отзывам' : language === 'uk' ? 'Навігація по відгуках' : 'Testimonial navigation'}>
-              {testimonials.map((t, i) => (
-                <button
-                  key={i}
-                  role="tab"
-                  aria-selected={i === activeIndex}
-                  onClick={() => goTo(i)}
-                  className={`transition-all duration-300 rounded-full ${
-                    i === activeIndex
-                      ? 'w-8 h-2 bg-action'
-                      : 'w-2 h-2 bg-silver/30 hover:bg-silver/50'
-                  }`}
-                  aria-label={`${language === 'ru' ? 'Показать отзыв от' : language === 'uk' ? 'Показати відгук від' : 'Show testimonial from'} ${language === 'ru' ? t.name : language === 'uk' ? t.nameUk : t.nameEn}`}
-                />
-              ))}
-            </div>
-          </div>
-          </div>
-
-            {/* Next arrow */}
-            <button
-              onClick={goNext}
-              aria-label={language === 'ru' ? 'Следующий отзыв' : language === 'uk' ? 'Наступний відгук' : 'Next testimonial'}
-              className="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-silver/20 text-silver/50 hover:border-accent hover:text-accent transition-all duration-300 flex-shrink-0 -mr-14 absolute right-0"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
+        <button type="button" className="text-button testimonial-pause" aria-pressed={paused} onClick={()=>{pauseUntil.current=0;setPaused(value=>!value);setCycle(value=>value+1);}}>{paused?pick('Resume autoplay','Продолжить автопрокрутку','Продовжити автопрокрутку'):pick('Pause autoplay','Остановить автопрокрутку','Зупинити автопрокрутку')}</button>
+        <div className="testimonial-controls">
+          <button className="testimonial-arrow testimonial-previous" onClick={()=>move(-1)} aria-label={pick('Previous testimonial','Предыдущий отзыв','Попередній відгук')}><span aria-hidden="true">←</span></button>
+          <div className="testimonial-dots" role="group" aria-label={pick('Testimonial navigation','Навигация по отзывам','Навігація по відгуках')}>{testimonials.map((item,i)=><button key={i} aria-pressed={active===i} onClick={()=>select(i,true)} aria-label={pick('Show testimonial from ','Показать отзыв от ','Показати відгук від ')+pick(item.nameEn,item.name,item.nameUk)}><span aria-hidden="true" /></button>)}</div>
+          <button className="testimonial-arrow testimonial-next" onClick={()=>move(1)} aria-label={pick('Next testimonial','Следующий отзыв','Наступний відгук')}><span aria-hidden="true">→</span></button>
         </div>
-
-        {/* Trust Signals Row */}
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 transition-all duration-1000 delay-400 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          {trustSignals.map((signal, i) => (
-            <div
-              key={i}
-              className="text-center py-6 border border-silver/10 hover:border-accent/30 transition-all duration-500 group"
-              style={{ transitionDelay: `${i * 100}ms` }}
-            >
-              <div className="flex items-center justify-center text-accent mb-3 group-hover:scale-110 transition-transform duration-300">
-                <TrustIcon type={signal.icon} />
-              </div>
-              <div className="font-body text-sm text-silver/70" style={{ letterSpacing: '0.03em' }}>
-                {language === 'ru' ? signal.labelRu : language === 'uk' ? signal.labelUk : signal.labelEn}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
-    </section>
-  );
+    </div>
+  </section>;
 }

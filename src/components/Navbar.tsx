@@ -99,7 +99,7 @@ export function Navbar() {
             >
               <img
                 src={logoFullUrl}
-                alt="Luminore Jewelry"
+                alt="Luminore"
                 className="h-10 w-auto brightness-0 invert"
               />
             </Link>

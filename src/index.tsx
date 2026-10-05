@@ -1,6 +1,7 @@
 import { serve } from "bun";
 import index from "./index.html";
 import { join } from "path";
+import { videoResponse } from './lib/video-response';
 
 // MIME type lookup
 const mimeTypes: Record<string, string> = {
@@ -67,6 +68,16 @@ const server = serve({
       return response || new Response("Not found", { status: 404 });
     },
 
+    "/optimized/*": async (req) => {
+      const pathname = new URL(req.url).pathname;
+      if (/^\/optimized\/(?:atelier-intro-(?:720|1080)|bespoke-film-(?:mobile|desktop))\.mp4$/.test(pathname)) {
+        const file = Bun.file(join(process.cwd(), 'public', pathname));
+        return await file.exists() ? videoResponse(file, req) : new Response('Not found', { status: 404 });
+      }
+      return await serveStatic(pathname) || new Response("Not found", {status:404});
+    },
+    "/bespoke-art/*": async (req) => await serveStatic(new URL(req.url).pathname) || new Response("Not found", {status:404}),
+
     // Serve blog images from public/blog-images/ folder
     "/blog-images/*": async (req) => {
       const pathname = new URL(req.url).pathname;
@@ -75,10 +86,14 @@ const server = serve({
     },
 
     "/atelier-hero.png": async () => await serveStatic("/atelier-hero.png") || new Response("Not found", { status: 404 }),
+    "/atelier-portrait.png": async () => await serveStatic("/atelier-portrait.png") || new Response("Not found", { status: 404 }),
+    "/atelier-portrait-desktop.png": async () => await serveStatic("/atelier-portrait-desktop.png") || new Response("Not found", { status: 404 }),
+    "/icons/*": async (req) => await serveStatic(new URL(req.url).pathname) || new Response("Not found", { status: 404 }),
 
     // Serve root-level static assets (exact paths)
     "/hero-bg.png": async () => await serveStatic("/hero-bg.png") || new Response("Not found", { status: 404 }),
     "/logo-hero.svg": async () => await serveStatic("/logo-hero.svg") || new Response("Not found", { status: 404 }),
+    "/luminore-logo.svg": async () => await serveStatic("/luminore-logo.svg") || new Response("Not found", { status: 404 }),
 
     // Video: must support HTTP range requests for browser streaming
     "/hero-video.mp4": async (req) => {

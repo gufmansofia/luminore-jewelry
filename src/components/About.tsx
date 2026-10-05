@@ -1,228 +1,80 @@
-import { useEffect, useRef, useState } from 'react';
+import { useId, useState } from 'react';
 import { useLanguage } from '../i18n';
+import { useReveal } from '../hooks/useMotion';
+import { choose } from '../lib/product-copy';
+import { ServiceStrip } from './ServiceStrip';
+import '../styles/about.css';
 
-function AnimatedCounter({ end, suffix, label, duration = 2000, isVisible }: {
-  end: number; suffix: string; label: string; duration?: number; isVisible: boolean;
-}) {
-  const [count, setCount] = useState(0);
-  const hasAnimated = useRef(false);
+const copy = {
+  ru: {
+    title: 'Наш подход',
+    intro: 'Расскажите, что для вас важно. Мы поможем разобраться в камнях, выбрать металл и согласовать детали.',
+    availability: 'Все модели можно заказать с натуральными или лабораторными бриллиантами.',
+    natural: 'Натуральные бриллианты', naturalDescription: 'Подберём камень с учётом ваших пожеланий и бюджета.',
+    lab: 'Лабораторные бриллианты', labDescription: 'Поможем сравнить характеристики и выбрать подходящий вариант.',
+    discuss: 'Обсудить украшение',
+  },
+  en: {
+    title: 'Our approach',
+    intro: 'Tell us what matters to you. We’ll help you understand the stones, choose a metal and agree on the details.',
+    availability: 'Every design can be ordered with natural or lab-grown diamonds.',
+    natural: 'Natural diamonds', naturalDescription: 'We’ll help you choose a stone that suits your preferences and budget.',
+    lab: 'Lab-grown diamonds', labDescription: 'We’ll help you compare the specifications and find the right option.',
+    discuss: 'Discuss a piece',
+  },
+  uk: {
+    title: 'Наш підхід',
+    intro: 'Розкажіть, що для вас важливо. Ми допоможемо розібратися в каменях, обрати метал і узгодити деталі.',
+    availability: 'Усі моделі можна замовити з природними або лабораторними діамантами.',
+    natural: 'Природні діаманти', naturalDescription: 'Підберемо камінь з урахуванням ваших побажань і бюджету.',
+    lab: 'Лабораторні діаманти', labDescription: 'Допоможемо порівняти характеристики й обрати відповідний варіант.',
+    discuss: 'Обговорити прикрасу',
+  },
+};
 
-  useEffect(() => {
-    if (!isVisible || hasAnimated.current) return;
-    hasAnimated.current = true;
-    const startTime = Date.now();
-    const step = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // easeOutQuart for smooth deceleration
-      const eased = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(eased * end));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [isVisible, end, duration]);
-
-  return (
-    <div className="text-center">
-      <div className="font-display text-4xl md:text-5xl text-accent mb-2" style={{ letterSpacing: '0.03em' }}>
-        {count}{suffix}
-      </div>
-      <div className="font-body text-sm text-graphite" style={{ letterSpacing: '0.05em' }}>
-        {label}
-      </div>
+function StoneDetail({ title, description }: { title: string; description: string }) {
+  const [open, setOpen] = useState(true);
+  const id = useId();
+  return <article className="approach-stone">
+    <h3><button type="button" className="approach-stone-toggle" id={`${id}-toggle`} aria-expanded={open} aria-controls={`${id}-answer`} onClick={() => setOpen(value => !value)}>
+      <span className="approach-stone-name">{title}</span>
+      <svg className="approach-toggle-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="m5 9 7 7 7-7" /></svg>
+    </button></h3>
+    <div className="approach-answer" id={`${id}-answer`} role="region" aria-labelledby={`${id}-toggle`} aria-hidden={!open} inert={!open} data-open={open}>
+      <div><p>{description}</p></div>
     </div>
-  );
+  </article>;
 }
 
 export function About() {
-  const { t } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [countersVisible, setCountersVisible] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const countersRef = useRef<HTMLDivElement>(null);
+  const { language } = useLanguage();
+  const t = copy[language];
+  const intro = useReveal<HTMLElement>();
+  // Observe the wrapper: a fully clipped panel cannot observe its own entrance.
+  const stones = useReveal<HTMLDivElement>();
+  const end = useReveal<HTMLDivElement>();
 
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setCountersVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    if (countersRef.current) observer.observe(countersRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const stats = [
-    { end: 200, suffix: '+', label: t.about.stat1Label },
-    { end: 18, suffix: 'K', label: t.about.stat2Label },
-    { end: 100, suffix: '%', label: t.about.stat3Label },
-    { end: 10, suffix: '+', label: t.about.stat4Label },
-  ];
-
-  return (
-    <section data-theme="light"
-      ref={sectionRef}
-      id="about"
-      className="relative pt-24 pb-12 lg:pt-32 lg:pb-16 bg-silver overflow-hidden"
-    >
-      {/* Concrete Silver background with subtle texture */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-silver"></div>
-        <div className="absolute inset-0 opacity-[0.05]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
-
-      {/* Soft suede texture overlay - materiality conflict */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='suede'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5'/%3E%3CfeDiffuseLighting lighting-color='%23D1642E' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23suede)'/%3E%3C/svg%3E")`,
-      }}></div>
-
-      {/* Shadows for depth */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-ink/10 to-transparent"></div>
-
-      {/* Luminore Rust warm accents - Fire in Ice with parallax */}
-      <div
-        className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-[120px] transition-none"
-        style={{ transform: `translateY(${scrollY * -0.05}px)` }}
-      ></div>
-
-      <div className="relative max-w-4xl mx-auto px-6 lg:px-8">
-          <div
-            className={`transition-all duration-1000 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
-          >
-            {/* Eyebrow */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-px bg-action"></div>
-              <span
-                className="font-display text-xs text-graphite"
-                style={{ letterSpacing: '0.2em' }}
-              >
-                {t.about.eyebrow}
-              </span>
-            </div>
-
-            {/* Headline - dark text on light background */}
-            <h2
-              className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-ink leading-[1.15] mb-8"
-              style={{ letterSpacing: '0.03em' }}
-            >
-              {t.about.headline1}<br />
-              <span className="text-accent">{t.about.headline2}</span>
-            </h2>
-
-            {/* Diamond source cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-              {/* Natural diamonds */}
-              <div className="bg-ink/6 border border-ink/12 hover:border-accent/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
-                <div className="w-fit mx-auto mb-4">
-                  <h3 className="font-display text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
-                    {t.about.naturalLabel.split(' ').slice(0, -1).join(' ')}<br />
-                    {t.about.naturalLabel.split(' ').slice(-1)[0]}
-                  </h3>
-                  <div className="h-px bg-action" />
-                </div>
-                <p className="font-body text-sm md:text-base text-graphite leading-relaxed mb-4">
-                  {t.about.naturalDesc}
-                </p>
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.naturalBullet1}</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.naturalBullet2}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Laboratory diamonds */}
-              <div className="bg-ink/6 border border-ink/12 hover:border-accent/40 transition-all duration-300 p-6 md:p-8 flex flex-col items-center text-center">
-                <div className="w-fit mx-auto mb-4">
-                  <h3 className="font-display text-sm font-bold text-ink mb-2 leading-snug" style={{ letterSpacing: '0.18em' }}>
-                    {t.about.labLabel.split(' ').slice(0, -1).join(' ')}<br />
-                    {t.about.labLabel.split(' ').slice(-1)[0]}
-                  </h3>
-                  <div className="h-px bg-action" />
-                </div>
-                <p className="font-body text-sm md:text-base text-graphite leading-relaxed mb-4">
-                  {t.about.labDesc}
-                </p>
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.labBullet1}</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-action rounded-full flex-shrink-0" />
-                    <span className="font-body text-xs md:text-sm text-graphite">{t.about.labBullet2}</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Bespoke statement */}
-            <div className="mt-4">
-              <p className="font-display text-xs text-ink text-center tracking-widest">
-                {t.about.bespokeStatement}
-              </p>
-            </div>
-          </div>
-
-        {/* Animated Counters */}
-        <div
-          ref={countersRef}
-          className={`mt-10 pt-8 border-t border-ink/10 transition-all duration-1000 ${
-            countersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            {stats.map((stat, i) => (
-              <AnimatedCounter
-                key={i}
-                end={stat.end}
-                suffix={stat.suffix}
-                label={stat.label}
-                isVisible={countersVisible}
-                duration={2000 + i * 200}
-              />
-            ))}
-          </div>
+  return <section id="about" data-theme="light" className="editorial-section about-section about-chapter" aria-labelledby="about-title">
+    <header className="approach-intro approach-shell" ref={intro.ref} data-reveal={intro.phase}>
+      <h2 className="approach-title" id="about-title">{t.title.split(' ').map((word, index) => <span key={index}><span className="approach-title-mask"><span className="approach-title-word" style={{ transitionDelay: `${index * 100}ms` }}>{word}</span></span>{' '}</span>)}</h2>
+      <p className="approach-intro-copy">{t.intro}</p>
+    </header>
+    <div className="approach-diamond-stage" ref={stones.ref} data-reveal={stones.phase}>
+      <div className="approach-diamonds">
+        <div className="approach-stone-content approach-shell">
+          <p className="approach-availability">{t.availability}</p>
+          <StoneDetail title={t.natural} description={t.naturalDescription} />
+          <StoneDetail title={t.lab} description={t.labDescription} />
         </div>
       </div>
-    </section>
-  );
+    </div>
+    <ServiceStrip />
+    <div className="approach-end" ref={end.ref} data-reveal={end.phase}>
+      <div className="manager-contact">
+        <p>{choose(language,'Contact our manager','Связаться с менеджером','Зв’язатися з менеджером')}</p>
+        <div><a className="outline-button" href="https://t.me/luminore_jewelry" target="_blank" rel="noopener noreferrer">Telegram ↗</a><a className="outline-button" href="https://wa.me/421940600708" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a></div>
+      </div>
+    </div>
+  </section>;
 }

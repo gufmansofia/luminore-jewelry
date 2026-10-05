@@ -1,54 +1,68 @@
-# Atelier preview design QA
+# Bespoke pencil sketches — design QA
+
+Date: 2026-10-04
 
 final result: passed
 
-## Evidence
-- Selected visual: second displayed concept, `exec-6d5fe570-603c-4fec-8ecb-fd5843ddfcb5.png` in the session's generated_images directory.
-- Implementation: `/preview/atelier`; desktop capture `/tmp/atelier-desktop.png`; mobile capture `/tmp/atelier-mobile-viewport.png`.
-- Desktop source: 1487 × 1058 pixels. Implementation: 1487 × 1058 CSS viewport and screenshot pixels; no rescaling required.
-- Mobile: 390 × 844 CSS viewport and screenshot pixels. The full-page browser capture had a capture artifact, so the viewport capture was used for review.
-- Source and implementation were opened together for direct visual comparison. State: English, page top.
+## Scope and visual truth
+
+Adapt two jewelry illustrations to the existing bespoke section and guided enquiry. The references are illustration assets, not complete interface mockups. Surrounding typography and form behavior follow the existing site. Prior About-section QA is preserved in `output/verification/bespoke-sketches/before/design-qa.md`.
+
+Source visual truth:
+- `public/bespoke-art/desktop-pencil.png`: 1672 × 941 pixels.
+- `public/bespoke-art/mobile-pencil.png`: 1254 × 1254 pixels.
+- User photographs: `/Users/sofia.personal/Desktop/d1cc5fa9faec958b-1600.webp` and `/Users/sofia.personal/Desktop/ec5404264ed6d4a0-1500.webp`.
+
+Implementation: `http://localhost:3000/ru/bespoke` and the shared section on `/ru`.
+
+## Captures and normalization
+
+Evidence directory: `output/verification/bespoke-sketches/`.
+
+Desktop uses a 1440 × 1000 CSS viewport. Full-page initial-selection capture `desktop-piece.jpg` is 1440 × 1617 pixels. Illustration measures 566.664 × 318.914 CSS pixels. `desktop-contact.jpg` shows the contact state.
+
+Mobile uses the actual page in a 390 × 844 CSS-pixel iframe. Surrounding verification canvas was removed from `mobile-review-full.jpg` to produce `mobile-intro.jpg`, 390 × 844 pixels. Illustration measures 330 × 330 CSS pixels and loads the mobile source. `mobile-shape.jpg`, `mobile-contact.jpg`, and `mobile-contact-bottom.jpg` show the other states.
+
+Narrow mobile uses a 320 × 844 CSS-pixel iframe. Content-only captures are `mobile-320.jpg` and `mobile-320-contact.jpg`. Illustration measures 280 × 280 CSS pixels. DOM scroll width equals viewport width at both mobile sizes.
+
+Screenshots have one image pixel per CSS pixel. Assets were scaled to their measured slots for focused comparison, without artwork edits. `desktop-asset-comparison.jpg` and `mobile-asset-comparison.jpg` place the normalized source beside its browser crop. Both comparisons were opened with the source assets and rendered full-page views before this report. `responsive-preview.jpg` combines the desktop and mobile captures for presentation; unscaled captures were used to assess text and controls. `homepage-bespoke.jpg` records the shared homepage section and its lazy-loaded art.
 
 ## Findings
-No remaining P0/P1/P2 findings. The white split composition, heading wrapping, hierarchy, image region, masthead, and closing divider match the selected direction.
 
-### Required surfaces
-- Typography: Cormorant Garamond display and descriptive text, Manrope navigation. Two-line headline and italic emphasis preserved. Real web-font metrics differ slightly from the generated concept.
-- Spacing: 78px header, 24px hero gap, equal-width columns, 824px desktop image. Supporting text and CTA sit slightly lower than the mock (P3).
-- Colors: white, charcoal, neutral gray dividers. Contrast preserved.
-- Imagery: generated standalone ring photograph follows the source composition and stationery art direction; its ring angle and embossing differ slightly (P3). It is conceptual editorial imagery, not a catalog product record.
-- Content: English source copy retained; Ukrainian and Russian translations available. Navigation and primary links connect to the existing homepage sections.
-- Focused review: headline, CTA, and navigation are legible at full capture resolution; no separate crop was needed.
+No actionable P0/P1/P2 differences remain within this change.
 
-## Interaction checks
-- Discover the collection navigates to the existing catalog, section top approximately 80px below viewport top.
-- Create your own navigates to the existing custom-order section, top approximately 80px below viewport top.
-- Language selector changes the visible heading/navigation to Ukrainian and back to English.
-- Mobile English and Ukrainian layouts have no horizontal overflow (390px document width).
-- Browser error log empty during verification.
-- Production build and local asset check pass.
+Fonts and typography: existing Cormorant Garamond display type and site body font remain in use. Bespoke heading is limited to 38–54 px with 1.08 line height, balancing the left column against the selection form. Russian heading wraps cleanly at 390 and 320 px. Labels remain legible without truncation.
 
-## Isolation
-Separate branch `codex/atelier-preview`, separate route, scoped stylesheet. Main homepage components and global typography are unchanged. Preview adds a client-side noindex directive; it is not an access control mechanism.
+Spacing and layout: desktop retains two columns with a 90 px gap. Illustration sits between the introduction and two-column process steps. Mobile stacks story, illustration, steps, and enquiry; artwork is capped at 330 px. White space separates drawings and controls. Art does not overlap fields or buttons. No horizontal overflow at either mobile width.
+
+Colors and tokens: white drawing backgrounds blend with the existing section. Graphite pencil lines complement charcoal headings, muted body text, and pale gray enquiry surface. No new decorative colors or effects.
+
+Image quality and fidelity: generated raster illustrations are used directly. Normalized comparison crops retain full subjects, construction lines, shading, and enlarged connectors. Mobile top stones are recognizable and fastening details have sufficient scale. No cropping, stretching, opacity reduction, or code-drawn replacements. Images are decorative and hidden from assistive technology; form controls retain their labels.
+
+Copy and content: existing localized copy, process explanations, selection labels, and form instructions are retained. No tiny illustration labels compete with the interface.
+
+## Interactions and validation
+
+Desktop: earrings → laboratory diamonds → custom piece → contact form. Summary and focused name field inspected.
+
+Mobile 390: rings → pear cut → natural diamonds → custom piece → contact form → locally prepared message. Jewelry, cut, and stone choices appear correctly in the message. No external message sent.
+
+Mobile 320: direct discussion shortcut opens contact form; inputs remain inside viewport. Initial Next button is disabled before selection. Selection controls, shape icons, summary, focus state, fields, consent, and prepared-message state inspected. Desktop and mobile console error logs: none captured.
+
+Asset check passed: 757 references. Experience tests: 6 passed, 2092 assertions. Interaction tests: 5 passed, 369 assertions. Isolated production build passed, prerendering 453 pages.
 
 ## Comparison history
-First desktop pass showed no blocking drift. Mobile viewport capture replaced a malformed full-page capture; DOM measurements confirmed no actual overflow. No P0/P1/P2 code corrections were required.
+
+The first source-to-rendered comparison found no actionable mismatch after matching illustration-slot size and removing verification canvas. No visual fixes were made after the comparison. Browser viewport-control timeouts were resolved using measured responsive iframes containing the actual site. This verifies responsive layout, not a physical device or its keyboard.
+
+## Implementation checklist
+
+- [x] Drawings saved as production assets and served locally.
+- [x] Responsive source selection, intrinsic dimensions, and loading behavior set.
+- [x] Desktop and mobile visually compared with source assets.
+- [x] Selection and enquiry exercised in browser.
+- [x] Build and relevant existing checks passed.
 
 ## Follow-up polish
-- Optional: add the small directional icon from the reference to the collection button.
-- Optional: refine photograph angle and the 15–20px CTA offset after feedback.
 
-## Mobile refinement — 2026-09-09
-User authorized a more luxurious mobile treatment after reviewing the original mobile screenshots. Updated only the mobile layout: one-row masthead with native disclosure menu, inset shorter image, centered serif headline, restrained full-width collection action, and finer rules. Desktop remains unchanged. Reviewed the new 390 × 844 viewport capture at `atelier-refined-mobile.png` in the session visualization directory against the earlier mobile capture. Headline and both actions now fit in the initial viewport. Native menu opens and closes and exposes all four navigation links. No horizontal overflow or browser errors. Intentional mobile departures from the desktop source are user-directed; no remaining P0/P1/P2 findings.
-
-## Extended sections — 2026-09-09
-Added collection, philosophy, bespoke, journal, and contact sections for user approval. Existing hero and three-line mobile menu preserved. Header and hero actions now use local preview anchors, superseding the original navigation checks above.
-
-Reviewed desktop screenshots at 1200 × 900 and mobile collection/bespoke screenshots at 390 × 844. Desktop philosophy evidence: `/tmp/atelier-philosophy-desktop.png`. Mobile collection evidence: `/tmp/atelier-collection-mobile.png`. All images loaded; no horizontal overflow at 390 or 1440 pixels. Product images use contain to preserve the whole piece. Neutral gray philosophy panel and charcoal footer continue the selected typography and palette. No blocking visual findings in reviewed sections.
-
-Verified Earrings filtering and expand/collapse (18 total products), local anchor navigation, and rendered product/article destinations. Browser error log empty. Production build, 86 local asset references, and diff whitespace check pass. Product and article detail pages retain their existing design. Changes remain isolated to the preview pending user approval.
-
-final result: passed
-
-## Restored graphite sections — 2026-09-11
-User selected the latest atelier hero with the original graphite homepage sections. Reused the existing About, Products, CTA, Testimonials, Blogs, Contact, Footer, and BackToTop components outside the atelier CSS scope. Removed the rejected replacement sections and their unused CSS. Hero and menu appearance preserved. Browser verification found all anchor destinations and no horizontal overflow at 652px; hero screenshot reviewed. Production build and asset validation pass. Earlier extended-section QA is historical and no longer describes the current preview.
+No blocking polish issues. Physical-device keyboard behavior was outside this illustration and layout change.

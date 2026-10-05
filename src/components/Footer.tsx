@@ -1,120 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
+import {Link} from 'react-router-dom';
+import {useDialog} from '../hooks/useDialog';
+import {choose} from '../lib/product-copy';
 import { useLanguage } from '../i18n';
-const logoFullUrl = '/logo-full.png';
+
+import {information} from '../data/information';
+import {HeaderLogo} from './HeaderLogo';
 
 const TELEGRAM_LINK = 'https://t.me/luminore_jewelry';
 const WHATSAPP_LINK = 'https://wa.me/421940600708';
 
 function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; language: string; infoKey: string }) {
-  // Prevent body scroll
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, []);
-
-  // Close on Escape
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [onClose]);
-
-  const allContent: Record<string, { ru: { title: string; text: string; cta: string }; uk: { title: string; text: string; cta: string }; en: { title: string; text: string; cta: string } }> = {
-    terms: {
-      ru: {
-        title: 'Пользовательское соглашение',
-        text: 'Используя сайт luminore.eu, вы соглашаетесь с настоящим соглашением. Все материалы сайта, включая тексты, изображения и логотипы, являются интеллектуальной собственностью Luminore Jewelry. Цены и наличие товаров могут быть изменены без предварительного уведомления. Luminore оставляет за собой право отказать в обслуживании по своему усмотрению. Для получения дополнительной информации свяжитесь с нами.',
-        cta: 'Напишите нам',
-      },
-      uk: {
-        title: 'Умови використання',
-        text: 'Використовуючи сайт luminore.eu, ви погоджуєтесь з цими умовами. Усі матеріали сайту, включаючи тексти, зображення та логотипи, є інтелектуальною власністю Luminore Jewelry. Ціни та наявність товарів можуть змінюватися без попереднього повідомлення. Luminore залишає за собою право відмовити в обслуговуванні на власний розсуд. Для отримання додаткової інформації зв\'яжіться з нами.',
-        cta: 'Напишіть нам',
-      },
-      en: {
-        title: 'Terms of Service',
-        text: 'By using luminore.eu you agree to these terms. All content on this site, including text, images, and logos, is the intellectual property of Luminore Jewelry. Prices and product availability are subject to change without notice. Luminore reserves the right to refuse service at its discretion. For further information, please contact us.',
-        cta: 'Message us',
-      },
-    },
-    delivery: {
-      ru: {
-        title: 'Доставка и оплата',
-        text: 'Мы стремимся сделать процесс покупки максимально удобным и прозрачным. Каждый заказ обрабатывается индивидуально, и наша команда сопровождает вас на каждом этапе — от выбора украшения до его доставки к вашей двери. Мы осуществляем доставку по всему миру. Способы оплаты включают банковский перевод и оплату при получении. Для получения подробной информации — свяжитесь с нами удобным для вас способом.',
-        cta: 'Напишите нам',
-      },
-      uk: {
-        title: 'Доставка та оплата',
-        text: 'Ми прагнемо зробити процес купівлі максимально зручним і прозорим. Кожне замовлення обробляється індивідуально, і наша команда супроводжує вас на кожному етапі — від вибору прикраси до доставки до ваших дверей. Ми здійснюємо доставку по всьому світу. Способи оплати включають банківський переказ та оплату при отриманні. Для отримання детальної інформації — зв\'яжіться з нами зручним для вас способом.',
-        cta: 'Напишіть нам',
-      },
-      en: {
-        title: 'Shipping & Payment',
-        text: 'We strive to make your purchasing experience as seamless and transparent as possible. Every order is handled individually, and our team guides you through each step — from selecting your piece to delivering it to your door. We offer worldwide shipping. Payment methods include bank transfer and cash on delivery. For detailed information about shipping options and timelines — please reach out to us.',
-        cta: 'Message us',
-      },
-    },
-    warranty: {
-      ru: {
-        title: 'Гарантия и возврат',
-        text: 'Все изделия Luminore сопровождаются пожизненной гарантией на производственные дефекты. Мы уверены в качестве каждого украшения, потому что каждое изделие проходит строгий контроль качества. Если вы не полностью довольны покупкой, мы предлагаем возврат или обмен в течение 14 дней с момента получения при сохранении оригинальной упаковки. Свяжитесь с нами для оформления возврата.',
-        cta: 'Напишите нам',
-      },
-      uk: {
-        title: 'Гарантія та повернення',
-        text: 'Усі вироби Luminore супроводжуються довічною гарантією на виробничі дефекти. Ми впевнені в якості кожної прикраси, адже кожен виріб проходить суворий контроль якості. Якщо ви не повністю задоволені покупкою, ми пропонуємо повернення або обмін протягом 14 днів з моменту отримання за умови збереження оригінальної упаковки. Зв\'яжіться з нами для оформлення повернення.',
-        cta: 'Напишіть нам',
-      },
-      en: {
-        title: 'Warranty & Returns',
-        text: 'All Luminore pieces come with a lifetime warranty against manufacturing defects. We stand behind the quality of every piece because each item undergoes rigorous quality control. If you are not completely satisfied with your purchase, we offer returns or exchanges within 14 days of delivery, provided the original packaging is preserved. Contact us to arrange a return.',
-        cta: 'Message us',
-      },
-    },
-    care: {
-      ru: {
-        title: 'Уход за украшениями',
-        text: 'Чтобы ваши украшения Luminore сияли долгие годы, рекомендуем соблюдать простые правила ухода. Храните изделия в мягком футляре отдельно друг от друга. Снимайте украшения перед занятиями спортом, посещением бассейна и нанесением косметики. Для чистки используйте мягкий мыльный раствор и безворсовую ткань. Раз в год приносите украшения на профессиональный осмотр и чистку.',
-        cta: 'Напишите нам',
-      },
-      uk: {
-        title: 'Догляд за прикрасами',
-        text: 'Щоб ваші прикраси Luminore сяяли довгі роки, рекомендуємо дотримуватися простих правил догляду. Зберігайте вироби в м\'якому чохлі окремо один від одного. Знімайте прикраси перед заняттями спортом, відвідуванням басейну та нанесенням косметики. Для чистки використовуйте м\'який мильний розчин і безворсову тканину. Раз на рік приносьте прикраси на професійний огляд і чищення.',
-        cta: 'Напишіть нам',
-      },
-      en: {
-        title: 'Jewelry Care',
-        text: 'To keep your Luminore jewelry sparkling for years to come, follow these simple care guidelines. Store each piece separately in a soft pouch. Remove jewelry before exercising, swimming, or applying cosmetics. Clean with a mild soapy solution and a lint-free cloth. Bring your pieces in once a year for a professional inspection and deep cleaning.',
-        cta: 'Message us',
-      },
-    },
-    privacy: {
-      ru: {
-        title: 'Политика конфиденциальности',
-        text: 'Luminore Jewelry уважает вашу конфиденциальность и защищает ваши персональные данные. Мы собираем только необходимую информацию для обработки заказов и улучшения обслуживания. Ваши данные никогда не передаются третьим лицам без вашего согласия. Мы используем современные методы шифрования для защиты ваших данных. Вы можете запросить удаление ваших данных в любое время, связавшись с нами.',
-        cta: 'Напишите нам',
-      },
-      uk: {
-        title: 'Політика конфіденційності',
-        text: 'Luminore Jewelry поважає вашу конфіденційність і захищає ваші персональні дані. Ми збираємо лише необхідну інформацію для обробки замовлень і покращення обслуговування. Ваші дані ніколи не передаються третім особам без вашої згоди. Ми використовуємо сучасні методи шифрування для захисту ваших даних. Ви можете запросити видалення ваших даних будь-коли, зв\'язавшись з нами.',
-        cta: 'Напишіть нам',
-      },
-      en: {
-        title: 'Privacy Policy',
-        text: 'Luminore Jewelry respects your privacy and protects your personal data. We collect only the information necessary to process orders and improve our service. Your data is never shared with third parties without your consent. We use modern encryption methods to safeguard your information. You may request deletion of your data at any time by contacting us.',
-        cta: 'Message us',
-      },
-    },
-  };
-
+  const dialogRef = useDialog(true, onClose);
   const lang = language === 'ru' ? 'ru' : language === 'uk' ? 'uk' : 'en';
-  const content = allContent[infoKey]?.[lang] || allContent.delivery[lang];
+  const content = information[infoKey]?.[lang] || information.delivery[lang];
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+      ref={dialogRef}
+      data-theme="light"
+      role="dialog" aria-modal="true" aria-labelledby="info-title" tabIndex={-1}
+      className="info-dialog fixed inset-0 z-[100] flex items-center justify-center px-4"
       onClick={onClose}
     >
       {/* Backdrop */}
@@ -122,38 +28,31 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
 
       {/* Popup */}
       <div
-        className="relative bg-graphite border border-silver/15 max-w-lg w-full p-8 md:p-10 animate-[fadeInUp_0.3s_ease-out]"
+        className="info-dialog-panel relative bg-white border border-silver/15 max-w-lg max-h-[85vh] overflow-y-auto w-full animate-[fadeInUp_0.3s_ease-out]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
+        <header className="info-dialog-heading">
+        <h3 id="info-title">{content.title}</h3>
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-silver/60 hover:text-white transition-colors"
-          aria-label="Close"
+          className="info-dialog-close w-11 h-11 flex items-center justify-center"
+          aria-label={choose(language as 'en'|'ru'|'uk', 'Close', 'Закрыть', 'Закрити')}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-
-        {/* Title */}
-        <h3
-          className="font-display text-xl text-white mb-6"
-          style={{ letterSpacing: '0.05em' }}
-        >
-          {content.title}
-        </h3>
-
+        </header>
+        <div className="info-dialog-content">
         {/* Text */}
-        <p className="font-body text-silver/80 leading-relaxed mb-8">
-          {content.text}
-        </p>
+        {content.paragraphs.map(text=><p key={text} className="font-body leading-relaxed mb-5">{text}</p>)}
+        <Link className="text-button" to={`/information/${infoKey}`} onClick={onClose}>{choose(lang,'Open full page','Открыть страницу','Відкрити сторінку')} →</Link>
 
         {/* Divider */}
         <div className="flex items-center gap-4 mb-6">
           <div className="flex-1 h-px bg-white/15"></div>
           <span className="font-body text-sm text-white/40">
-            {content.cta}
+            {choose(lang,'Message us','Напишите нам','Напишіть нам')}
           </span>
           <div className="flex-1 h-px bg-white/15"></div>
         </div>
@@ -187,17 +86,17 @@ function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; langua
             </span>
           </a>
         </div>
+        </div>
       </div>
     </div>
   );
 }
 
-export function Footer() {
+export function Footer({theme='dark'}:{theme?:'dark'|'light'}) {
   const { t, language } = useLanguage();
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [showInfoPopup, setShowInfoPopup] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Record<string,boolean>>({});
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -227,23 +126,6 @@ export function Footer() {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email && emailRegex.test(email)) {
-      setSubscribed(true);
-      setEmail('');
-      setTimeout(() => setSubscribed(false), 3000);
-    }
-  };
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const navLinks = [
     { id: 'about', label: t.nav?.about || 'О нас' },
     { id: 'products', label: t.nav?.collection || 'Коллекция' },
@@ -263,91 +145,90 @@ export function Footer() {
     <>
       <footer
         ref={footerRef}
-        className="relative bg-ink overflow-hidden"
+        data-theme={theme}
+        className={`site-footer ${theme==='light'?'site-footer--light':''} relative bg-ink overflow-hidden`}
       >
         {/* Texture overlay */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
+        <div className="footer-texture absolute inset-0 opacity-[0.03]" aria-hidden="true" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}></div>
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        <div className="footer-inner relative max-w-7xl mx-auto px-6 lg:px-8 py-16">
           <div
-            className={`grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 transition-all duration-1000 ${
+            className={`footer-grid grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 transition-all duration-1000 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
             {/* Brand Column */}
-            <div className="lg:col-span-1 space-y-6">
-              <button
-                onClick={() => scrollToSection('hero')}
-                className="block hover:opacity-80 transition-opacity"
+            <div className="footer-brand-block lg:col-span-1 space-y-6">
+              <Link
+                to="/" onClick={()=>window.scrollTo({top:0})}
+                className="footer-brand block hover:opacity-80 transition-opacity"
+                aria-label="Luminore"
               >
-                <img
-                  src={logoFullUrl}
-                  alt="Luminore Jewelry"
-                  className="h-12 w-auto brightness-0 invert"
-                  loading="lazy"
-                />
-              </button>
+                <HeaderLogo light={theme==='dark'} />
+              </Link>
               <p className="font-body text-silver/70 text-sm leading-relaxed">
                 {t.footer.description}
               </p>
             </div>
 
             {/* Navigation Column */}
-            <div className="space-y-6">
-              <h4
+            <div className="footer-disclosure space-y-6" data-open={!!expanded.navigation}>
+              <h2
                 className="font-display text-sm text-white"
                 style={{ letterSpacing: '0.1em' }}
               >
-                {t.footer.navigation}
-              </h4>
-              <ul className="space-y-3">
+                <span className="footer-desktop-label">{t.footer.navigation}</span>
+                <button className="footer-toggle" type="button" aria-expanded={!!expanded.navigation} aria-controls="footer-navigation" onClick={()=>setExpanded(value=>({...value,navigation:!value.navigation}))}>{t.footer.navigation}<span aria-hidden="true">{expanded.navigation?'−':'+'}</span></button>
+              </h2>
+              <ul id="footer-navigation" className="space-y-3">
                 {navLinks.map((link) => (
                   <li key={link.id}>
-                    <button
-                      onClick={() => scrollToSection(link.id)}
-                      className="relative font-body text-silver/70 hover:text-accent transition-colors text-sm group"
+                    <Link
+                      to={link.id==='products'?'/collection':link.id==='custom-order'?'/bespoke':link.id==='blog'?'/journal':`/#${link.id}`}
+                      className={`relative font-body text-silver/70 transition-colors text-sm group ${link.id === 'blog' ? 'hover:underline focus-visible:underline decoration-1 underline-offset-4' : 'hover:text-accent'}`}
                     >
                       {link.label}
-                      <span className="absolute bottom-0 left-0 w-0 h-px bg-action group-hover:w-full transition-all duration-300"></span>
-                    </button>
+                      {link.id !== 'blog' && <span className="absolute bottom-0 left-0 w-0 h-px bg-action group-hover:w-full transition-all duration-300"></span>}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Info Column */}
-            <div className="space-y-6">
-              <h4
+            <div className="footer-disclosure space-y-6" data-open={!!expanded.information}>
+              <h2
                 className="font-display text-sm text-white"
                 style={{ letterSpacing: '0.1em' }}
               >
-                {t.footer.info}
-              </h4>
-              <ul className="space-y-3">
+                <span className="footer-desktop-label">{t.footer.info}</span>
+                <button className="footer-toggle" type="button" aria-expanded={!!expanded.information} aria-controls="footer-information" onClick={()=>setExpanded(value=>({...value,information:!value.information}))}>{t.footer.info}<span aria-hidden="true">{expanded.information?'−':'+'}</span></button>
+              </h2>
+              <ul id="footer-information" className="space-y-3">
                 {infoLinks.map((item) => (
                   <li key={item.key}>
-                    <button
-                      onClick={() => setShowInfoPopup(item.key)}
+                    <Link
+                      to={`/information/${item.key}`}
                       className="relative font-body text-silver/70 hover:text-accent transition-colors text-sm group"
                     >
                       {item.label}
                       <span className="absolute bottom-0 left-0 w-0 h-px bg-action group-hover:w-full transition-all duration-300"></span>
-                    </button>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Contact Column */}
-            <div className="space-y-6">
-              <h4
+            <div className="footer-contact space-y-6">
+              <h2
                 className="font-display text-sm text-white"
                 style={{ letterSpacing: '0.1em' }}
               >
                 {t.footer.contactHeading}
-              </h4>
+              </h2>
               <ul className="space-y-3">
                 <li>
                   <a href="tel:+421940600708" className="font-body text-silver/70 hover:text-accent transition-colors text-sm">
@@ -383,18 +264,18 @@ export function Footer() {
               {t.footer.copyright}
             </p>
             <div className="flex gap-6">
-              <button
-                onClick={() => setShowInfoPopup('terms')}
+              <Link
+                to="/information/terms"
                 className="font-body text-silver/50 hover:text-accent transition-colors text-sm"
               >
-                {t.footer.terms}
-              </button>
-              <button
-                onClick={() => setShowInfoPopup('privacy')}
+                {information.terms[language].title}
+              </Link>
+              <Link
+                to="/information/privacy"
                 className="font-body text-silver/50 hover:text-accent transition-colors text-sm"
               >
                 {t.footer.privacy}
-              </button>
+              </Link>
             </div>
           </div>
         </div>

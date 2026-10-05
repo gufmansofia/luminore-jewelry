@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import type { Language, Translations } from './translations';
 import { translations } from './translations';
+import { localePath } from '../lib/locale-path';
+import { rememberLanguagePosition } from '../hooks/useRouteScroll';
 
 interface LanguageContextType {
   language: Language;
@@ -22,11 +24,13 @@ export function LanguageProvider({ children, defaultLanguage = 'en' }: LanguageP
   const [language, setLanguageState] = useState<Language>(defaultLanguage);
 
   const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('luminore-language', lang);
-      document.documentElement.lang = lang;
-    }
+    if (typeof window === 'undefined') { setLanguageState(lang); return; }
+    try { localStorage.setItem('luminore-language', lang); } catch {}
+    const url = new URL(window.location.href);
+    url.searchParams.delete('lang');
+    const destination = localePath(url.pathname, lang) + url.search + url.hash;
+    rememberLanguagePosition(destination);
+    window.location.assign(destination);
   }, []);
 
   const toggleLanguage = useCallback(() => {
@@ -35,18 +39,8 @@ export function LanguageProvider({ children, defaultLanguage = 'en' }: LanguageP
     setLanguage(LANGUAGE_CYCLE[nextIndex]);
   }, [language, setLanguage]);
 
-  // Load saved preference on mount and sync HTML lang attribute
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('luminore-language') as Language | null;
-      if (saved && (saved === 'en' || saved === 'uk' || saved === 'ru')) {
-        setLanguageState(saved);
-        document.documentElement.lang = saved;
-      } else {
-        document.documentElement.lang = language;
-      }
-    }
-  }, []);
+  // The URL is authoritative, so shared links and pre-rendered HTML use the same language.
+  React.useEffect(() => { document.documentElement.lang = language; }, [language]);
 
   const value: LanguageContextType = {
     language,

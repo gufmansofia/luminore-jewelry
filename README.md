@@ -43,10 +43,23 @@ Before committing, inspect `git diff --check`, `git diff --stat`, and `git statu
 python3 scripts/convert_excel_to_ts.py source-materials/inventory/Jewelry_Inventory_Final11.xlsx /tmp/products-draft.ts
 ```
 
-## Current limitation
+## Publishing updates
 
-The contact form validates input and displays a success state locally, but does not send or store inquiries. Connect a submission service before relying on it for customer messages. Existing email and messenger links are separate contact options.
+- Permanent website: https://luminore-jewelry.vercel.app
+- GitHub repository: https://github.com/gufmansofia/luminore-jewelry
+- Production branch: `main`.
+- Vercel automatically builds and publishes successful pushes to `main` at the same website address. Local edits alone are not published.
+- Commit approved website changes, run the relevant checks and build, then push to `origin/main`. Wait for the Vercel deployment to succeed and verify the permanent URL before reporting that an update is live.
+- Keep local reports, screenshots, source documents and credentials out of Git. Only website assets in `public/` are deployed. Do not use a deployment-specific preview URL as the permanent link.
 
-## Atelier design preview
+```sh
+bun run check:assets
+bun run build
+git push origin main
+```
 
-The selected white atelier direction is isolated at `/preview/atelier` on branch `codex/atelier-preview`. Its component and styles live in `src/previews/`; the existing homepage remains at `/`. Collection and bespoke actions lead to sections within the preview. The preview combines the latest atelier hero and navigation with the original graphite homepage sections, testimonials, and contact form. The generated hero is concept photography, not an inventory product image. This preview is not linked from the main navigation.
+## Enquiries and page layout
+
+The enquiry forms validate locally and prepare a message for Telegram or WhatsApp. The visitor reviews and sends that message in the chosen messenger; the website does not send it automatically.
+
+The approved atelier layout is the homepage at `/`. The complete collection is at `/collection`, with three cards per desktop row and two per mobile row. English, Russian and Ukrainian pages are built as static HTML, including product and journal routes. The older `/preview/atelier` route remains available as a design reference.

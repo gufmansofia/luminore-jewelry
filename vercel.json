@@ -1,12 +1,8 @@
 {
   "framework": null,
   "buildCommand": "bun run build",
-  "installCommand": "bun install",
+  "installCommand": "bun install --frozen-lockfile",
   "outputDirectory": "dist",
-  "rewrites": [
-    {
-      "source": "/((?!.*\\.).*)",
-      "destination": "/index.html"
-    }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
