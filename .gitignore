@@ -5,10 +5,6 @@ node_modules
 out
 dist
 *.tgz
-/output/
-/outputs/
-/edited-video/
-/.vercel/
 
 # code coverage
 coverage

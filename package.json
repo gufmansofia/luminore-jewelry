@@ -9,13 +9,7 @@
     "dev": "bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun src/index.tsx",
     "build": "bun run build.ts",
-    "check:assets": "bun run scripts/check-assets.ts",
-    "test:catalogue": "bun test ./scripts/check-catalogue.ts && bun scripts/render-catalogue-check.tsx",
-    "test:experience": "bun test ./scripts/check-experience.ts",
-    "test:seo": "bun test ./scripts/check-seo.ts",
-    "test:interactions": "bun test ./scripts/check-interactions.ts",
-    "preview": "bun scripts/serve-built.ts",
-    "test:mobile": "bun test ./scripts/check-mobile-improvements.ts"
+    "check:assets": "bun run scripts/check-assets.ts"
   },
   "dependencies": {
     "bun-plugin-tailwind": "^0.0.14",

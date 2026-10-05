@@ -1,7 +1,5 @@
 # Luminore Jewelry Brand Guidelines
 
-> Website theme update: the live UI now uses graphite, black, white, and silver. See [Website theme](WEBSITE_THEME.md) for the current implementation. The original palette below is retained as historical brand reference.
-
 ## Table of Contents
 
 1. [Introduction](#introduction)

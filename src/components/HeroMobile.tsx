@@ -33,10 +33,10 @@ export function HeroMobile() {
     <section className="relative overflow-hidden md:hidden">
 
       {/* Crop a small slice from the top so the logo is centred in the visible frame */}
-      <div className="relative w-full overflow-hidden" style={{ backgroundColor: 'var(--color-ink)' }}>
+      <div className="relative w-full overflow-hidden" style={{ backgroundColor: '#1B0D14' }}>
         <video
           ref={videoRef}
-          className="w-full h-auto block grayscale"
+          className="w-full h-auto block"
           style={{ marginTop: '-10%' }}
           autoPlay
           muted
@@ -50,7 +50,7 @@ export function HeroMobile() {
 
         {/* Dark overlay — always visible from load so no raw video frame flashes */}
         <div
-          className="absolute inset-0 bg-ink/55 pointer-events-none"
+          className="absolute inset-0 bg-[#1B0D14]/55 pointer-events-none"
         />
 
         {/* Logo + CTAs in a single centered column — no spacer needed */}
@@ -74,14 +74,14 @@ export function HeroMobile() {
           >
             <button
               onClick={() => scrollToSection('products')}
-              className="w-full py-1.5 bg-action text-white font-display text-xs transition-all duration-300 hover:bg-action-hover"
+              className="w-full py-1.5 bg-[#D1642E] text-white font-cinzel text-xs transition-all duration-300 hover:bg-[#B85420]"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaPrimary}
             </button>
             <button
               onClick={() => scrollToSection('custom-order')}
-              className="w-full py-1.5 border border-white/55 text-white font-display text-xs hover:border-accent hover:text-accent transition-all duration-300"
+              className="w-full py-1.5 border border-white/55 text-white font-cinzel text-xs hover:border-[#D1642E] hover:text-[#D1642E] transition-all duration-300"
               style={{ letterSpacing: '0.1em' }}
             >
               {t.hero.ctaSecondary}
@@ -90,14 +90,14 @@ export function HeroMobile() {
             {/* Trust signals */}
             <div className="flex items-center justify-center gap-4">
               <div className="flex items-center gap-1.5">
-                <div className="w-1 h-1 bg-action rounded-full flex-shrink-0" />
+                <div className="w-1 h-1 bg-[#D1642E] rounded-full flex-shrink-0" />
                 <span className="font-body text-[8px] text-white/70" style={{ letterSpacing: '0.05em' }}>
                   {t.hero.certified}
                 </span>
               </div>
               <div className="w-px h-2 bg-white/20 flex-shrink-0" />
               <div className="flex items-center gap-1.5">
-                <div className="w-1 h-1 bg-action rounded-full flex-shrink-0" />
+                <div className="w-1 h-1 bg-[#D1642E] rounded-full flex-shrink-0" />
                 <span className="font-body text-[8px] text-white/70" style={{ letterSpacing: '0.05em' }}>
                   {t.hero.personalApproach}
                 </span>
@@ -107,7 +107,7 @@ export function HeroMobile() {
         </div>
 
         {/* Top fade for navbar legibility — always visible */}
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-ink/60 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#1B0D14]/60 to-transparent pointer-events-none" />
 
         {/* Sentinel at logo centre — Navbar watches this to know when to appear */}
         <div id="hero-logo-sentinel" className="absolute inset-x-0 top-1/2 h-px pointer-events-none" />

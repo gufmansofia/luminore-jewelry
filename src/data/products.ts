@@ -1,21 +1,4 @@
-import stockPhotoAssets from "./stock-photo-assets.json";
-import stockFacts from "./stock-facts.json";
-import { approvedPrices } from "./approved-prices";
-import { stockProducts } from "./stock-products";
-
 export interface Product {
-  sourceCode?: string;
-  size?: string;
-  sizeKind?: string;
-  caratBasis?: string;
-  perEarring?: string;
-  sourceName?: string;
-  sourceBrand?: string;
-  sourceUrl?: string;
-  sourceDetails?: string;
-  grossWeight?: number | null;
-  certificateNumber?: string;
-  allowNaturalOption?: boolean;
   id: number;
   sku: string;
   name: string;
@@ -45,7 +28,7 @@ export interface Product {
   seoTags: string;
 }
 
-const existingProducts: Product[] = [
+export const products: Product[] = [
   {
     "id": 1,
     "sku": "P001",
@@ -185,9 +168,9 @@ const existingProducts: Product[] = [
   {
     "id": 5,
     "sku": "P005",
-    "name": "Кольцо-солитер",
+    "name": "Кольцо Solitaire",
     "nameEn": "Solitaire Diamond Ring",
-    "nameUk": "Каблучка-солітер",
+    "nameUk": "Каблучка Solitaire",
     "category": "Кольца",
     "categoryEn": "Rings",
     "categoryUk": "Каблучки",
@@ -253,9 +236,9 @@ const existingProducts: Product[] = [
   {
     "id": 7,
     "sku": "P007",
-    "name": "Кольцо-солитер",
+    "name": "Кольцо Solitaire",
     "nameEn": "Oval Solitaire Diamond Ring 2ct",
-    "nameUk": "Каблучка-солітер овальна 2ct",
+    "nameUk": "Каблучка Solitaire овальна 2ct",
     "category": "Кольца",
     "categoryEn": "Rings",
     "categoryUk": "Каблучки",
@@ -276,10 +259,11 @@ const existingProducts: Product[] = [
     "descriptionUk": "Приголомшлива каблучка-солітер з овальним лабораторним діамантом 2 карати F VVS2 із сертифікатом IGI. Елегантна оправа з білого золота 18K підкреслює блискуче овальне огранювання для максимального сяяння.",
     "careInstructions": "Remove during physical activities. Clean regularly with jewelry cleaner.",
     "images": [
-      "/Products/catalogue/RNG-034/1-8.png",
-      "/Products/catalogue/RNG-034/3752_cs2ct_t2ct_g2.78_s54_front.jpg",
-      "/Products/catalogue/RNG-034/3752_cs2ct_t2ct_g2.78_s54_sidee.jpg"
-],
+      "/Products/Rings/Oval Solitaire Diamond Ring 2ct(P007)/luminore-lab-grown-diamond-solitaire-ring-2ct-f-vvs2-18k-white-gold-front.jpg",
+      "/Products/Rings/Oval Solitaire Diamond Ring 2ct(P007)/luminore-lab-grown-diamond-solitaire-ring-2ct-f-vvs2-18k-white-gold-model.jpg",
+      "/Products/Rings/Oval Solitaire Diamond Ring 2ct(P007)/luminore-lab-grown-diamond-solitaire-ring-2ct-f-vvs2-18k-white-gold-side.jpg",
+      "/Products/Rings/Oval Solitaire Diamond Ring 2ct(P007)/luminore-lab-grown-diamond-solitaire-ring-2ct-f-vvs2-18k-white-gold-top.png"
+    ],
     "altText": "Luminore Jewelry Stunning Oval Diamond Solitaire Ring featuring 2 carat F VVS2 lab-grown diamonds in 18K White Gold",
     "seoTags": "rings, oval solitaire ring, oval diamond ring, diamond ring, lab grown diamond, lab created diamond, ethical diamond, sustainable diamond, eco-friendly diamond, 18k white gold, white gold jewelry, 2 carat, F color diamond, colorless diamond, VVS2 clarity, high clarity diamond, engagement ring, luxury ring, bridal jewelry, wedding ring, luxury jewelry, fine jewelry, designer jewelry, premium diamond jewelry, certified diamond, IGI certified, conflict-free diamond"
   },
@@ -659,19 +643,6 @@ const existingProducts: Product[] = [
   }
 ];
 
-export const categories = ['Все', 'Кольца', 'Серьги', 'Подвески', 'Браслеты', 'Колье'];
+export const categories = ['Все', 'Кольца', 'Серьги', 'Подвески', 'Браслеты'];
 
-export const categoriesEn = ['All', 'Rings', 'Earrings', 'Pendants', 'Bracelets', 'Necklaces'];
-
-// Reconcile confirmed stock facts while retaining product URLs and original photographs.
-const existingStockCodes: Record<number, string> = {"1": "EAR-001", "3": "EAR-002", "5": "RNG-002", "7": "RNG-034", "14": "PND-002"};
-export const products: Product[] = [
-  ...existingProducts.map(product => ({ ...product, sourceCode: existingStockCodes[product.id] })),
-  ...stockProducts,
-].map(product => {
-  const facts = stockFacts[product.sourceCode as keyof typeof stockFacts];
-  const updated = facts ? { ...product, priceUsd: facts.price, totalCarat: facts.carat, metalType: facts.metal, grossWeight: facts.gross, gemstoneType: facts.stone, diamondCut: facts.cut, diamondColor: facts.color, diamondClarity: facts.clarity, certificateType: facts.certificate, size: facts.size, sizeKind: facts.sizeKind, caratBasis: facts.caratBasis, perEarring: facts.perEarring } : product;
-  // Use the recorded total consistently in names that explicitly include a carat weight.
-  const cleanName = (name: string) => name.replace(/\b[\d.]+\s*ct\b/, `${updated.totalCarat} ct`).replace(/\s+stated\b/g, "");
-  return { ...updated, images: updated.images.length ? updated.images : stockPhotoAssets[String(product.id) as keyof typeof stockPhotoAssets] ? [stockPhotoAssets[String(product.id) as keyof typeof stockPhotoAssets]] : [], priceUsd: approvedPrices[product.id] ?? updated.priceUsd, name: cleanName(updated.name), nameEn: cleanName(updated.nameEn), nameUk: cleanName(updated.nameUk) };
-});
+export const categoriesEn = ['All', 'Rings', 'Earrings', 'Pendants', 'Bracelets'];
