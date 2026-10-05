@@ -118,7 +118,21 @@ body:has(.product-page) { background: #fff; }
   .product-enquiry { scroll-margin-top: 84px; }
   .product-related { padding: 32px 26px 48px; }
   .product-related > h2 { font-size: 30px; }
-  .product-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+  .product-related-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 24px) / 2);
+    gap: 16px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 26px;
+    margin-inline: -26px;
+    padding: 6px 26px 16px;
+    scrollbar-width: none;
+  }
+  .product-related-grid::-webkit-scrollbar { display: none; }
+  .product-related-item { scroll-snap-align: start; }
   .product-related-item h3, .product-related-item > p { font-size: 13px; }
 }
 @media (max-width: 359px) {
