@@ -1,472 +1,174 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
+import { collectionPath } from '../data/collections';
 import { products } from '../data/products';
 import { useLanguage } from '../i18n';
+import { choose } from '../lib/product-copy';
+import { catalogueCategory, filterCatalogue, PAGE_SIZE } from '../lib/catalogue';
+import { CatalogueCard } from './CatalogueCard';
+import { SavedPiecesButton } from './SavedPieces';
+import { Reveal } from './Reveal';
+import { useReducedMotion } from '../hooks/useMotion';
+import { useRestoredScroll } from '../hooks/useRouteScroll';
 
-// Accordion Filter Component
-interface FilterOption {
-  key: string;
-  label: string;
-  count?: number;
-}
+type CatalogState = { activeCategory?: string; priceSort?: string; visibleCount?: number; search?: string; scrollY?: number; selectedProduct?: number };
 
-interface AccordionFilterProps {
+// A compact home selection; the complete collection retains every piece.
+const HOME_PREVIEW_IDS = new Set([85, 103, 55, 79]);
+
+function CatalogueFilter({ label, value, options, open, onToggle, onClose, onChange, price = false }: {
   label: string;
   value: string;
-  options: FilterOption[];
-  onChange: (key: string) => void;
-  isOpen: boolean;
+  options: string[][];
+  open: boolean;
   onToggle: () => void;
-}
-
-function AccordionFilter({ label, value, options, onChange, isOpen, onToggle }: AccordionFilterProps) {
-  const selectedOption = options.find(opt => opt.key === value);
-
-  return (
-    <div className="border border-silver/20 bg-graphite/10 overflow-hidden">
-      {/* Accordion Header */}
-      <button
-        onClick={onToggle}
-        className={`w-full flex items-center justify-between px-4 py-3 ${
-          isOpen ? 'bg-graphite/30' : 'hover:bg-graphite/20'
-        }`}
-        aria-expanded={isOpen}
-      >
-        <div className="flex flex-col items-start">
-          <span
-            className="font-display text-[10px] text-silver/50 uppercase mb-1"
-            style={{ letterSpacing: '0.15em' }}
-          >
-            {label}
-          </span>
-          <span className="font-body text-sm text-white">
-            {selectedOption?.label}
-          </span>
-        </div>
-        <svg
-          className={`w-5 h-5 text-accent transition-transform duration-150 flex-shrink-0 ml-2 ${isOpen ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      {/* Accordion Content — grid-template-rows transition is GPU-accelerated, no JS measurement needed */}
-      <div
-        className="grid transition-[grid-template-rows] duration-150 ease-out"
-        style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
-      >
-        <div className="min-h-0 overflow-hidden border-t border-silver/10">
-          {options.map((option) => (
-            <button
-              key={option.key}
-              onClick={() => {
-                onChange(option.key);
-                onToggle();
-              }}
-              className={`w-full flex items-center justify-between px-4 py-3 text-left transition-all duration-200 border-b border-silver/5 last:border-b-0 ${
-                value === option.key
-                  ? 'bg-accent/15 text-white'
-                  : 'text-silver hover:bg-graphite/30 hover:text-white'
-              }`}
-            >
-              <span className="font-body text-sm">{option.label}</span>
-              {value === option.key && (
-                <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 ml-2">
-                  <div className="w-2 h-2 rounded-full bg-action"></div>
-                </div>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
+  onClose: () => void;
+  onChange: (value: string) => void;
+  price?: boolean;
+}) {
+  const id = useId();
+  const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+  const selected = options.find(([key]) => key === value)?.[1];
+  useEffect(() => {
+    if (!open) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !root.current?.contains(event.target)) onClose();
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    return () => document.removeEventListener('pointerdown', closeOutside);
+  }, [open, onClose]);
+  const focusSelected = () => requestAnimationFrame(() => {
+    const buttons = panel.current?.querySelectorAll<HTMLButtonElement>('button');
+    buttons?.[Math.max(0, options.findIndex(([key]) => key === value))]?.focus();
+  });
+  return <div ref={root} className={`catalogue-filter${price ? ' catalogue-filter--price' : ''}`}
+    onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) onClose(); }}
+    onKeyDown={event => { if (event.key === 'Escape' && open) { event.preventDefault(); onClose(); trigger.current?.focus(); } }}>
+    <button ref={trigger} type="button" className="catalogue-filter-trigger" aria-expanded={open} aria-controls={`${id}-options`} aria-labelledby={`${id}-label ${id}-value`} onClick={onToggle}
+      onKeyDown={event => { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); if (!open) onToggle(); focusSelected(); } }}>
+      <span className="catalogue-filter-label" id={`${id}-label`}>{label}</span>
+      <span className="catalogue-filter-value" id={`${id}-value`}>{selected}</span>
+      <svg className="catalogue-filter-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" aria-hidden="true"><path d="m5 9 7 7 7-7" /></svg>
+    </button>
+    <div ref={panel} id={`${id}-options`} className="catalogue-filter-options" role="group" aria-labelledby={`${id}-label`} hidden={!open}
+      onKeyDown={event => {
+        if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const buttons = Array.from(panel.current?.querySelectorAll<HTMLButtonElement>('button') ?? []);
+        const current = buttons.indexOf(document.activeElement as HTMLButtonElement);
+        const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (current + (event.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length;
+        buttons[next]?.focus();
+      }}>
+      {options.map(([key, option]) => <button type="button" key={key} className="catalogue-filter-option" aria-pressed={value === key} onClick={() => { onChange(key); onClose(); trigger.current?.focus(); }}>
+        <span>{option}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m5 12 4 4 10-10" /></svg>
+      </button>)}
     </div>
-  );
+  </div>;
 }
 
-const INITIAL_SHOW_COUNT = 6;
-
-const getMainImage = (images: string[]): string => {
-  const modelOrSide = images.find(img => img.includes('-model.') || img.includes('-side.'));
-  return modelOrSide || images[0];
-};
-
-const formatUsd = (amount: number | null): string => {
-  if (amount === null) return '—';
-  return '$' + amount.toLocaleString('en-US');
-};
-
-export function Products() {
-  const { t, language } = useLanguage();
+export function Products({categoryKey='all',page=1,paginated=false,title,intro}:{categoryKey?:string;page?:number;paginated?:boolean;title?:string;intro?:string}) {
+  const { t, language: l } = useLanguage();
   const location = useLocation();
-  const savedCatalog = location.state?.catalog;
-  const [activeCategory, setActiveCategory] = useState(savedCatalog?.activeCategory ?? 'all');
-  const [priceSort, setPriceSort] = useState(savedCatalog?.priceSort ?? 'all');
-  const [isVisible, setIsVisible] = useState(false);
-  const [showAll, setShowAll] = useState(savedCatalog?.showAll ?? false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Accordion state - only one open at a time
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
-
-  // Category definitions with translations
-  const categories = useMemo(() => [
-    { key: 'all', label: t.products.all, keyRu: 'all', keyEn: 'all' },
-    { key: 'Кольца', label: t.products.rings, keyRu: 'Кольца', keyEn: 'Rings' },
-    { key: 'Серьги', label: t.products.earrings, keyRu: 'Серьги', keyEn: 'Earrings' },
-    { key: 'Подвески', label: t.products.pendants, keyRu: 'Подвески', keyEn: 'Pendants' },
-    { key: 'Браслеты', label: t.products.bracelets, keyRu: 'Браслеты', keyEn: 'Bracelets' },
-  ], [t]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.05,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Reset showAll when any filter changes
-  useEffect(() => {
-    setShowAll(false);
-  }, [activeCategory, priceSort]);
-
-  // Filtration with price sorting
-  const filteredProducts = useMemo(() => {
-    let filtered = [...products];
-
-    // Category filter
-    if (activeCategory !== 'all') {
-      const categoryMapping: Record<string, string> = {
-        'Кольца': 'Rings',
-        'Серьги': 'Earrings',
-        'Подвески': 'Pendants',
-        'Браслеты': 'Bracelets',
-        'Rings': 'Rings',
-        'Earrings': 'Earrings',
-        'Pendants': 'Pendants',
-        'Bracelets': 'Bracelets',
-      };
-      const targetCat = categoryMapping[activeCategory];
-      filtered = filtered.filter(p => p.categoryEn === targetCat);
-    }
-
-    // Price sort
-    if (priceSort === 'low-to-high') {
-      filtered.sort((a, b) => (a.priceUsd ?? 0) - (b.priceUsd ?? 0));
-    } else if (priceSort === 'high-to-low') {
-      filtered.sort((a, b) => (b.priceUsd ?? 0) - (a.priceUsd ?? 0));
-    } else {
-      filtered.sort((a, b) => a.id - b.id);
-    }
-
-    return filtered;
-  }, [activeCategory, priceSort]);
-
-  // Determine which products to show
-  const hasMoreProducts = filteredProducts.length > INITIAL_SHOW_COUNT;
-  const displayedProducts = showAll
-    ? filteredProducts
-    : filteredProducts.slice(0, INITIAL_SHOW_COUNT);
-
-  const handleCategoryChange = (categoryKey: string) => {
-    setActiveCategory(categoryKey);
-  };
-
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-    if (showAll && sectionRef.current) {
-      sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  };
-
-  // Helper function to get pluralized items text
-  const getItemsText = (count: number) => {
-    if (count === 0) return t.products.items;
-    if (count === 1) return t.products.item;
-    if (count >= 2 && count <= 4) return t.products.itemsFew;
-    return t.products.items;
-  };
-
-  // Filter options (no counts)
-  const categoryOptions: FilterOption[] = categories.map((category) => ({
-    key: category.key,
-    label: category.label,
-  }));
-
-  const priceSortOptions: FilterOption[] = [
-    { key: 'all', label: t.products.priceSortAll },
-    { key: 'low-to-high', label: t.products.priceSortLowHigh },
-    { key: 'high-to-low', label: t.products.priceSortHighLow },
-  ];
-
-  const handleAccordionToggle = (name: string) => {
-    setOpenAccordion(openAccordion === name ? null : name);
-  };
-
-  useEffect(() => {
-    if (location.state?.returnToCatalog) {
-      // Allow the homepage layout to settle before positioning the catalog.
-      const timer = window.setTimeout(() => {
-        if (!sectionRef.current) return;
-        const top = sectionRef.current.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: top - (location.pathname === '/' ? 80 : 0), behavior: 'instant' });
-      }, 150);
-      return () => window.clearTimeout(timer);
-    }
+  const navigation = useNavigationType();
+  const restoredScroll = useRestoredScroll();
+  const navigate=useNavigate();
+  const storageKey = `luminore-catalog:${location.pathname}`;
+  const saved = useMemo(() => {
+    let value: CatalogState = {};
+    try { value = JSON.parse(sessionStorage.getItem(storageKey) || '{}'); } catch {}
+    return navigation === 'PUSH' && location.state?.restoreFilters
+      ? { ...value, ...location.state.catalog } as CatalogState
+      : { ...location.state?.catalog, ...value } as CatalogState;
   }, [location.key]);
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState(catalogueCategory(categoryKey));
+  const [sort, setSort] = useState('all');
+  const [openFilter, setOpenFilter] = useState<'category' | 'price' | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  useEffect(() => {
+    if (reduced) return;
+    const animations = Array.from(gridRef.current?.children ?? []).map((node, index) => node.animate(
+      [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 380, delay: Math.min(index, 5) * 35, easing: 'cubic-bezier(.2,.7,.2,1)' }
+    ));
+    return () => animations.forEach(animation => animation.cancel());
+  }, [category, sort, search, reduced]);
+  const pick = (en: string, ru: string, uk: string) => choose(l, en, ru, uk);
+  const categories = [['all', t.products.all], ['Rings', t.products.rings], ['Earrings', t.products.earrings], ['Pendants', t.products.pendants], ['Bracelets', t.products.bracelets], ['Necklaces', t.products.necklaces]];
+  const filtered = useMemo(() => filterCatalogue(products, search, category, sort), [search, category, sort]);
+  const defaultView = !search && category === categoryKey && sort === 'all';
+  const pageStart = paginated && defaultView ? (page - 1) * PAGE_SIZE : 0;
+  const previewProducts = defaultView ? filtered.filter(product => HOME_PREVIEW_IDS.has(product.id)) : filtered;
+  const shown = paginated ? filtered.slice(pageStart, pageStart + visibleCount) : previewProducts.slice(0, 4);
+  const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
+  const base = collectionPath(categoryKey);
+  const plural = new Intl.PluralRules(l).select(filtered.length);
+  const countLabel = pick(filtered.length === 1 ? 'piece' : 'pieces', plural === 'one' ? 'изделие' : plural === 'few' ? 'изделия' : 'изделий', plural === 'one' ? 'виріб' : plural === 'few' ? 'вироби' : 'виробів');
+  const catalog = { activeCategory: category, priceSort: sort, visibleCount, search };
+  useEffect(() => {
+    try { sessionStorage.setItem(storageKey, JSON.stringify(catalog)); } catch {}
+  }, [storageKey, category, sort, visibleCount, search]);
+  const savePosition = (selectedProduct: number) => { try { sessionStorage.setItem(storageKey, JSON.stringify({ ...catalog, selectedProduct, scrollY: window.scrollY })); } catch {} };
+  const reset = () => { setSearch(''); setCategory(categoryKey); setSort('all'); setVisibleCount(PAGE_SIZE); searchRef.current?.focus(); };
+  useEffect(() => {
+    if (!location.state?.returnToCatalog && !location.state?.restoreFilters && restoredScroll === undefined) return;
+    setSearch(saved.search ?? ''); setCategory(paginated ? categoryKey : catalogueCategory(saved.activeCategory ?? categoryKey)); setSort(saved.priceSort ?? 'all'); setVisibleCount(Math.max(PAGE_SIZE,saved.visibleCount ?? PAGE_SIZE));
+    if (restoredScroll !== undefined || location.state?.restoreFilters) return;
+    const timer = setTimeout(() => {
+      const top = sectionRef.current ? sectionRef.current.getBoundingClientRect().top + window.scrollY - 96 : 0;
+      window.scrollTo({ top: saved.scrollY ?? top, behavior: 'instant' });
+      if (saved.selectedProduct) gridRef.current?.querySelector<HTMLAnchorElement>(`a[href$="/product/${saved.selectedProduct}"]`)?.focus({preventScroll:true});
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [location.key]);
+  const loadMore = () => {
+    const firstNew = shown.length;
+    setVisibleCount(count => count + PAGE_SIZE);
+    requestAnimationFrame(() => gridRef.current?.querySelectorAll<HTMLAnchorElement>('a')[firstNew]?.focus({ preventScroll: true }));
+  };
+  const pagePath = (number: number) => number === 1 ? base : `${base}/page/${number}`;
+  const scrollToResults = () => requestAnimationFrame(() => {
+    if (paginated && gridRef.current && gridRef.current.getBoundingClientRect().top < 140) {
+      gridRef.current.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+  });
+  const Heading = paginated ? 'h1' : 'h2';
+  return <section id="products" ref={sectionRef} data-theme="light" className={`catalogue-section${paginated ? ' catalogue-section--full' : ''}`} aria-labelledby="catalogue-title">
+    <div className="catalogue-container">
+      <Reveal><header className="catalogue-heading">
+        <Heading id="catalogue-title">{title || <>{t.products.headline1}<br /><span>{t.products.headline2}</span></>}</Heading>
+        <p>{intro || t.products.description}</p>
+      </header></Reveal>
+      <div className="catalogue-tools">
+        <div className="catalogue-search">
+          <label className="sr-only" htmlFor="product-search">{pick('Search jewellery', 'Поиск украшений', 'Пошук прикрас')}</label>
+          <input id="product-search" ref={searchRef} type="search" value={search} placeholder={paginated&&categoryKey!=='all'?pick('Search this category…','Поиск в этой категории…','Пошук у цій категорії…'):pick('Search the collection…', 'Поиск по всему каталогу…', 'Пошук у всьому каталозі…')} onChange={e => { setSearch(e.target.value); setVisibleCount(PAGE_SIZE); if (e.target.value.trim()&&!paginated) setCategory('all'); }} />
+          {search && <button className="text-button search-clear" onClick={reset} aria-label={pick('Clear search and filters', 'Очистить поиск и фильтры', 'Очистити пошук і фільтри')}>{pick('Clear', 'Очистить', 'Очистити')}</button>}
+        </div>
+        <div className="catalogue-count-row"><p className="catalogue-count" role="status" aria-atomic="true">{filtered.length} {countLabel}</p><SavedPiecesButton text /></div>
+      </div>
+      <div className="catalogue-filter-row">
+        <CatalogueFilter label={t.products.category} value={category} options={categories} open={openFilter === 'category'} onToggle={() => setOpenFilter(openFilter === 'category' ? null : 'category')} onClose={() => setOpenFilter(current => current === 'category' ? null : current)} onChange={value => { if(paginated){navigate(collectionPath(value),{state:{restoreFilters:true,catalog:{...catalog,activeCategory:value}}});return;}setCategory(value); setVisibleCount(PAGE_SIZE); }} />
+        <CatalogueFilter price label={t.products.priceSort} value={sort} options={[["all", t.products.priceSortAll], ["low-to-high", t.products.priceSortLowHigh], ["high-to-low", t.products.priceSortHighLow]]} open={openFilter === 'price'} onToggle={() => setOpenFilter(openFilter === 'price' ? null : 'price')} onClose={() => setOpenFilter(current => current === 'price' ? null : current)} onChange={value => { setSort(value); setVisibleCount(PAGE_SIZE); scrollToResults(); }} />
 
-  return (
-    <section
-      ref={sectionRef}
-      id="products"
-      className="relative pt-10 pb-24 lg:pt-14 lg:pb-32 bg-ink overflow-hidden"
-    >
-      {/* Black Cherry background with subtle texture */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-ink"></div>
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}></div>
       </div>
 
-      {/* Dusty Amethyst shadows for depth */}
-      <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-graphite/20 to-transparent"></div>
-      <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-graphite/25 to-transparent"></div>
-
-      {/* Fire in Ice - Luminore Rust warm glow */}
-      <div className="absolute top-1/4 left-1/3 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[120px]"></div>
-
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Section Header */}
-        <div
-          className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-1000 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-        >
-          {/* Eyebrow */}
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-8 h-px bg-action"></div>
-            <span
-              className="font-display text-xs text-silver/70"
-              style={{ letterSpacing: '0.2em' }}
-            >
-              {t.products.eyebrow}
-            </span>
-            <div className="w-8 h-px bg-action"></div>
-          </div>
-
-          {/* Headline - Cinzel with 3% tracking */}
-          <h2
-            className="font-display text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-[1.15] mb-6"
-            style={{ letterSpacing: '0.03em' }}
-          >
-            {t.products.headline1}<br />
-            <span className="text-accent">{t.products.headline2}</span>
-          </h2>
-
-          <p className="font-body text-silver/80 text-lg leading-relaxed">
-            {t.products.description}
-          </p>
-        </div>
-
-        {/* Mobile Filters - Accordions */}
-        <div className={`md:hidden mb-12 transition-all duration-1000 delay-200 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="space-y-3">
-            <AccordionFilter
-              label={t.products.category}
-              value={activeCategory}
-              options={categoryOptions}
-              onChange={handleCategoryChange}
-              isOpen={openAccordion === 'category'}
-              onToggle={() => handleAccordionToggle('category')}
-            />
-            <AccordionFilter
-              label={t.products.priceSort}
-              value={priceSort}
-              options={priceSortOptions}
-              onChange={setPriceSort}
-              isOpen={openAccordion === 'price'}
-              onToggle={() => handleAccordionToggle('price')}
-            />
-          </div>
-        </div>
-
-        {/* Desktop Filters - Accordions */}
-        <div className={`hidden md:block mb-12 transition-all duration-1000 delay-200 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="flex flex-wrap justify-center gap-4">
-            {/* Category Accordion */}
-            <div className="w-64">
-              <AccordionFilter
-                label={t.products.category}
-                value={activeCategory}
-                options={categoryOptions}
-                onChange={handleCategoryChange}
-                isOpen={openAccordion === 'category'}
-                onToggle={() => handleAccordionToggle('category')}
-              />
-            </div>
-
-            {/* Price Sort Accordion */}
-            <div className="w-56">
-              <AccordionFilter
-                label={t.products.priceSort}
-                value={priceSort}
-                options={priceSortOptions}
-                onChange={setPriceSort}
-                isOpen={openAccordion === 'price'}
-                onToggle={() => handleAccordionToggle('price')}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* No Results */}
-        {filteredProducts.length === 0 && (
-          <div className="text-center mb-8">
-            <p className="font-body text-sm text-silver/60">{t.products.noItems}</p>
-          </div>
-        )}
-
-        {/* Products Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
-          {displayedProducts.map((product, index) => (
-            <Link
-              key={product.id}
-              to={`/product/${product.id}`}
-              state={{ catalogPath: location.pathname, catalog: { activeCategory, priceSort, showAll } }}
-              className={`group bg-graphite/20 border border-silver/10 transition-all duration-700 hover:border-accent/30 hover:-translate-y-2 hover:shadow-xl hover:shadow-accent/10 flex flex-col ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{ transitionDelay: `${300 + (index % INITIAL_SHOW_COUNT) * 100}ms` }}
-            >
-              {/* Image Container - Product photography style */}
-              <div className="relative aspect-square bg-ink overflow-hidden">
-                {/* Cold environment with texture */}
-                <div className="absolute inset-0 bg-gradient-to-br from-graphite/30 via-ink/60 to-ink/80"></div>
-
-                {/* Surface texture */}
-                <div className="absolute inset-0 opacity-20" style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                }}></div>
-
-                {/* Product Image */}
-                {product.images && product.images.length > 0 ? (
-                  <img
-                    src={getMainImage(product.images)}
-                    alt={language === 'ru' ? product.name : language === 'uk' ? product.nameUk : product.nameEn}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10"
-                    loading="lazy"
-                  />
-                ) : (
-                  /* Product placeholder */
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-24 h-24 mx-auto mb-4 border border-accent/30 bg-accent/5 flex items-center justify-center relative">
-                        <div className="absolute inset-0 bg-accent/5 blur-lg"></div>
-                        <svg className="w-12 h-12 text-accent/60 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 3l9 7-9 11-9-11 9-7z" />
-                        </svg>
-                      </div>
-                      <p
-                        className="font-display text-silver/40 text-xs"
-                        style={{ letterSpacing: '0.15em' }}
-                      >
-                        {product.category}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Chiaroscuro overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent z-20"></div>
-
-                {/* Warm accent on hover */}
-                <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/10 transition-all duration-500 z-30"></div>
-
-              </div>
-
-              {/* Product Info */}
-              <div className="p-3 md:p-6 flex flex-col flex-1">
-                <h3
-                  className="font-display text-xs sm:text-sm md:text-base lg:text-lg text-white mb-1 md:mb-2 group-hover:text-accent transition-colors leading-snug line-clamp-2"
-                  style={{ letterSpacing: '0.03em' }}
-                >
-                  {language === 'ru' ? product.name : language === 'uk' ? product.nameUk : product.nameEn}
-                </h3>
-                <p className="hidden md:block font-body text-sm text-silver/70 mb-4 line-clamp-2">
-                  {language === 'ru' ? product.description : language === 'uk' ? product.descriptionUk : product.descriptionEn}
-                </p>
-                <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-silver/10 mt-auto">
-                  <span
-                    className="font-display text-sm md:text-lg lg:text-xl text-white"
-                    style={{ letterSpacing: '0.03em' }}
-                  >
-                    {formatUsd(product.priceUsd)}
-                  </span>
-                  <span
-                    className="px-2 py-1 md:px-4 md:py-2 font-display text-[10px] md:text-xs text-silver border border-silver/30 group-hover:bg-action group-hover:text-white group-hover:border-accent transition-all duration-300"
-                    style={{ letterSpacing: '0.05em' }}
-                  >
-                    {t.products.details}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Show More / Show Less Button */}
-        {hasMoreProducts && (
-          <div
-            className={`text-center mt-16 transition-all duration-700 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
-          >
-            <button
-              onClick={toggleShowAll}
-              className="group px-10 py-4 bg-transparent border border-accent text-accent font-display text-sm hover:bg-action hover:text-white transition-all duration-300 flex items-center gap-3 mx-auto"
-              style={{ letterSpacing: '0.1em' }}
-            >
-              {showAll ? (
-                <>
-                  <svg className="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                  </svg>
-                  {t.products.hide}
-                </>
-              ) : (
-                <>
-                  {t.products.showMore}
-                  <svg className="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </>
-              )}
-            </button>
-          </div>
-        )}
-      </div>
-
-    </section>
-  );
+      {filtered.length === 0 && <div className="catalogue-empty"><p>{pick(`No matches for “${search.trim()}”${category !== 'all' ? ' in this category' : ''}.`, `По запросу «${search.trim()}»${category !== 'all' ? ' в этой категории' : ''} ничего не найдено.`, `За запитом «${search.trim()}»${category !== 'all' ? ' у цій категорії' : ''} нічого не знайдено.`)}</p><button className="outline-button" onClick={reset}>{pick('Reset search and filters', 'Сбросить поиск и фильтры', 'Скинути пошук і фільтри')}</button></div>}
+      <div ref={gridRef} className={`catalogue-grid${paginated ? '' : ' catalogue-grid--preview'}`} id="catalogue-grid">{shown.map(p => <CatalogueCard key={p.id} product={p} state={{ catalogPath: location.pathname, catalog: { ...catalog, selectedProduct: p.id } }} onOpen={() => savePosition(p.id)} />)}</div>
+      {paginated && filtered.length > 0 && <div className="catalogue-pagination"><p role="status" aria-atomic="true">{pick(`Showing ${pageStart+1}–${pageStart+shown.length} of ${filtered.length}`, `Показано ${pageStart+1}–${pageStart+shown.length} из ${filtered.length}`, `Показано ${pageStart+1}–${pageStart+shown.length} із ${filtered.length}`)}</p>{!defaultView && shown.length < filtered.length && <button className="outline-button" aria-controls="catalogue-grid" onClick={loadMore}>{t.products.showMore}</button>}</div>}
+      {paginated && defaultView && pageCount>1 && <nav className="catalogue-page-links" aria-label={pick('Collection pages','Страницы коллекции','Сторінки колекції')}>
+        {page>1 ? <Link className="catalogue-page-mobile" to={pagePath(page-1)} rel="prev">{pick('Previous','Назад','Назад')}</Link> : <span className="catalogue-page-mobile" aria-disabled="true">{pick('Previous','Назад','Назад')}</span>}
+        <span className="catalogue-page-mobile catalogue-page-current" aria-current="page" aria-label={pick(`Page ${page} of ${pageCount}`,`Страница ${page} из ${pageCount}`,`Сторінка ${page} із ${pageCount}`)}>{page} / {pageCount}</span>
+        {Array.from({length:pageCount},(_,i)=><Link className="catalogue-page-number" key={i} to={pagePath(i+1)} aria-label={pick(`Page ${i+1}`,`Страница ${i+1}`,`Сторінка ${i+1}`)} aria-current={page===i+1?'page':undefined}>{i+1}</Link>)}
+        {page<pageCount ? <Link className="catalogue-page-mobile" to={pagePath(page+1)} rel="next">{pick('Next','Далее','Далі')}</Link> : <span className="catalogue-page-mobile" aria-disabled="true">{pick('Next','Далее','Далі')}</span>}
+      </nav>}
+      {!paginated && <div className="catalogue-pagination"><Link to="/collection" className="outline-button">{pick('Complete Collection','Вся коллекция','Уся колекція')}</Link></div>}
+    </div>
+  </section>;
 }

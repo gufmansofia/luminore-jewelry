@@ -4,6 +4,7 @@ import plugin from "bun-plugin-tailwind";
 import { existsSync } from "fs";
 import { rm, cp } from "fs/promises";
 import path from "path";
+import { buildSeo } from "./scripts/build-seo";
 
 // Print help text if requested
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
@@ -187,6 +188,8 @@ if (existsSync(vercelJsonPath)) {
   console.log("📄 Copying vercel.json...");
   await cp(vercelJsonPath, path.join(outdir, "vercel.json"));
 }
+
+await buildSeo(outdir);
 
 console.table(outputTable);
 const buildTime = (end - start).toFixed(2);

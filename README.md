@@ -43,10 +43,14 @@ Before committing, inspect `git diff --check`, `git diff --stat`, and `git statu
 python3 scripts/convert_excel_to_ts.py source-materials/inventory/Jewelry_Inventory_Final11.xlsx /tmp/products-draft.ts
 ```
 
-## Current limitation
+## Current website
 
-The contact form validates input and displays a success state locally, but does not send or store inquiries. Connect a submission service before relying on it for customer messages. Existing email and messenger links are separate contact options.
+The approved atelier design is the homepage at `/`. It includes the hero video, category preview, manager contact icons, a compact collection preview (three cards on desktop and four on mobile), the bespoke film and enquiry form, and the journal. `/collection` contains the complete catalogue. The catalogue has category and sorting controls; the budget filter has been removed.
 
-## Atelier design preview
+Enquiry forms prepare a message for the customer to review and send through Telegram or WhatsApp. They do not send or store enquiries automatically.
 
-The selected white atelier direction is isolated at `/preview/atelier` on branch `codex/atelier-preview`. Its component and styles live in `src/previews/`; the existing homepage remains at `/`. Collection and bespoke actions lead to sections within the preview. The preview combines the latest atelier hero and navigation with the original graphite homepage sections, testimonials, and contact form. The generated hero is concept photography, not an inventory product image. This preview is not linked from the main navigation.
+## Publication
+
+The existing Vercel project builds the GitHub `main` branch and serves `https://luminore-jewelry.vercel.app`. Push the complete approved working website, including its `src/`, `public/`, build scripts and lockfile. Vercel installs the locked dependencies and builds `dist/` from those sources.
+
+Before publishing, run the asset check, build and relevant tests. After deployment, verify that the deployment commit matches the pushed commit and compare its JavaScript, CSS and media with the local build. Check the current desktop and mobile homepage; do not use an older branch or design preview as the source. Local review output, rollback copies and source video edits remain outside Git.
