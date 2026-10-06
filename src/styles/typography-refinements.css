@@ -1,0 +1,19 @@
+/* Tenor Sans has one weight. Use the paired Montserrat Light for large
+   display text, while preserving regular-weight body copy and small labels. */
+#root :is(
+  h1:not(.wordmark),
+  h2,
+  .manager-contact p,
+  .approach-stone h3,
+  .journal-card-title,
+  .guided-stage > h3,
+  .form-heading h3,
+  .enquiry-review h3,
+  .article-related h3,
+  .testimonial-content blockquote,
+  .reviews-list blockquote p
+):not(.site-footer *) {
+  font-family: var(--font-site) !important;
+  font-weight: 300 !important;
+}
+#root :is(h1, h2, h3) em { font-weight: inherit; }
