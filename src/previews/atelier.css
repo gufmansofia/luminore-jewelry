@@ -22,11 +22,11 @@ body:has(.atelier) section[id] { scroll-margin-top: 106px; }
 .atelier-film-skip { position: absolute; z-index: 2; top: 12px; left: 12px; padding: 12px 16px; background: #fff; color: #151515; border: 1px solid currentColor; font: inherit; opacity: 0; pointer-events: none; }
 .atelier-film-skip:focus-visible { opacity: 1; pointer-events: auto; }
 .atelier-story { grid-area: story; min-width: 0; }
-.atelier h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(56px, 6vw, 96px); font-weight: 400; letter-spacing: -.045em; line-height: 1.05; margin: 0; }
+.atelier h1 { font-family: var(--font-editorial); font-size: clamp(40px, 4.4vw, 68px); font-weight: 400; letter-spacing: .015em; line-height: 1.05; margin: 0; }
 .atelier em { font-weight: 400; }
 .atelier-description { font-size: clamp(18px, 1.95vw, 30px); line-height: 1.4; margin: 30px 0 0; letter-spacing: 0; }
 .atelier-actions { grid-area: actions; min-width: 0; border-top: 1px solid #aaa; }
-.atelier-action { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 94px; padding: 18px 2px; border-bottom: 1px solid #aaa; font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(28px, 3vw, 46px); line-height: 1.15; letter-spacing: -.035em; }
+.atelier-action { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 94px; padding: 18px 2px; border-bottom: 1px solid #aaa; font-family: var(--font-site); font-size: clamp(22px, 2.1vw, 30px); line-height: 1.15; letter-spacing: .015em; }
 .atelier-action span { min-width: 0; }
 .atelier-action img { flex: none; width: 44px; height: 44px; transition: transform .2s ease; }
 .atelier-action:is(:hover, :focus-visible) span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .16em; }
@@ -34,14 +34,14 @@ body:has(.atelier) section[id] { scroll-margin-top: 106px; }
 .atelier-action:focus-visible { outline-offset: 6px; }
 .atelier-closing { display: flex; align-items: center; justify-content: center; min-height: 180px; margin: 48px 0 0; padding: 48px 32px; background: #252525; color: #fff; }
 
-.atelier-closing h2 { max-width: 1000px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 46px; line-height: 1.2; font-weight: 400; font-style: italic; letter-spacing: -.035em; text-align: center; margin: 0; }
+.atelier-closing h2 { max-width: 1000px; font-family: var(--font-editorial); font-size: 46px; line-height: 1.2; font-weight: 400; font-style: normal; letter-spacing: .015em; text-align: center; margin: 0; }
 @media (min-width: 1700px) { .atelier-hero { padding-left: 64px; padding-right: 64px; } }
 @media (max-width: 1100px) {
  .atelier-nav { gap: 22px; font-size: 12px; }
  .atelier-hero { column-gap: 36px; row-gap: 30px; margin-top: 72px; padding-left: 4%; padding-right: 4%; }
- .atelier h1 { font-size: 6.1vw; }
+ .atelier h1 { font-size: 4.4vw; }
  .atelier-description { font-size: 18px; margin-top: 24px; }
- .atelier-action { min-height: 76px; font-size: 3.1vw; }
+ .atelier-action { min-height: 76px; font-size: 2.1vw; }
  .atelier-closing h2 { font-size: 35px; }
 }
 .atelier-mobile-menu { display: none; }
@@ -64,9 +64,9 @@ body:has(.atelier) section[id] { scroll-margin-top: 106px; }
  .atelier-hero { grid-template-rows: auto; }
  .atelier-story { padding: 0 26px; text-align: center; }
  .atelier-actions { margin-inline:18px; }
- .atelier h1 { font-size: clamp(34px, 10.25vw, 60px); line-height: 1.06; letter-spacing: -.04em; }
+ .atelier h1 { font-size: clamp(28px, 8.5vw, 50px); line-height: 1.06; letter-spacing: .015em; }
  .atelier-description { margin: 18px 0 0; font-size: 15px; line-height: 1.5; color: #292929; }
- .atelier-action { font-size: clamp(26px, 7.4vw, 38px); min-height: 60px; padding: 12px 4px; gap: 12px; }
+ .atelier-action { font-size: clamp(19px, 5.3vw, 26px); min-height: 60px; padding: 12px 4px; gap: 12px; }
  .atelier-action img { width: 34px; height: 34px; }
  .atelier-closing { min-height: 148px; margin: 40px 0 0; padding: 32px 28px; }
  .atelier-closing h2 { max-width: 310px; font-size: 34px; line-height: 1.12; }
@@ -79,18 +79,18 @@ body:has(.atelier) section[id] { scroll-margin-top: 106px; }
 
 /* Carry the atelier typography through the existing homepage sections. */
 .atelier-content h2 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(40px, 4.2vw, 64px);
+  font-family: var(--font-editorial);
+  font-size: clamp(30px, 3.5vw, 48px);
   font-weight: 400;
   line-height: 1.08;
-  letter-spacing: -.025em !important;
+  letter-spacing: .015em !important;
   text-wrap: balance;
 }
 .atelier-content #blog h3 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(25px, 2vw, 30px);
+  font-family: var(--font-editorial);
+  font-size: clamp(22px, 1.8vw, 26px);
   line-height: 1.18;
-  letter-spacing: 0 !important;
+  letter-spacing: .015em !important;
 }
 .atelier-content #blog h2 br { display: none; }
 .atelier-content #blog h2 span::before { content: ' '; }

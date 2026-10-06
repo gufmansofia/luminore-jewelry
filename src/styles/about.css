@@ -3,11 +3,11 @@
   --approach-ink:#191b1d; --approach-graphite:#25282b; --approach-gray:#52565b;
   --approach-rule:#d6d9dc; --approach-dark-rule:#73787c;
   --approach-duration:880ms; --approach-curve:cubic-bezier(.22,1,.36,1);
-  padding:0; background:#fff; color:var(--approach-ink); font:400 16px/1.6 'Manrope',sans-serif;
+  padding:0; background:#fff; color:var(--approach-ink); font:400 16px/1.6 var(--font-site);
 }
 .approach-shell { max-width:1280px; margin-inline:auto; }
 .approach-intro { padding:62px 36px 52px; text-align:center; }
-.about-chapter .approach-title { font:400 68px/1.05 var(--font-editorial); letter-spacing:-.045em!important; margin:0; }
+.about-chapter .approach-title { font:400 48px/1.12 var(--font-editorial); letter-spacing:.015em!important; margin:0; }
 .approach-title-mask { display:inline-block; overflow:hidden; vertical-align:bottom; padding:0 .035em .07em; margin:0 -.035em -.07em; }
 .approach-title-word { display:inline-block; transition:transform calc(var(--approach-duration) * 1.2) var(--approach-curve); }
 .approach-intro-copy { max-width:670px; margin:24px auto 0; font-size:17px; line-height:1.7; color:var(--approach-gray); text-wrap:pretty; }
@@ -16,7 +16,7 @@
 .approach-availability { max-width:720px; text-align:center; margin:0 auto 29px; font-size:20px; line-height:1.6; text-wrap:balance; }
 .approach-stone { position:relative; padding:24px 0 23px; }
 .approach-stone::before { content:''; position:absolute; inset:0 0 auto; height:1px; background:var(--approach-dark-rule); transform-origin:left; transition:transform calc(var(--approach-duration) * 1.15) var(--approach-curve); }
-.approach-stone h3 { font:400 31px/1.15 var(--font-editorial); letter-spacing:-.012em; }
+.approach-stone h3 { font:400 31px/1.15 var(--font-editorial); letter-spacing:.015em; }
 .approach-stone-toggle { width:100%; padding:0; background:transparent; color:inherit; border:0; display:flex; align-items:center; justify-content:space-between; gap:24px; text-align:left; min-height:44px; font:inherit; cursor:pointer; }
 .approach-stone-name { transition:transform 450ms var(--approach-curve); text-wrap:balance; }
 .approach-toggle-chevron { flex:0 0 24px; width:24px; height:24px; transition:transform 350ms var(--approach-curve); }

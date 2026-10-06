@@ -285,7 +285,7 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
  .journal-section--preview .journal-grid::-webkit-scrollbar { display:none; }
  .journal-section--preview .journal-card { scroll-snap-align:start; }
  .journal-section--preview .journal-card--mobile-extra { display:flex; }
- .journal-card .journal-card-title,.atelier-content #blog .journal-card .journal-card-title { font-size:30px; }
+ .journal-card .journal-card-title,.atelier-content #blog .journal-card .journal-card-title { font-size:24px; overflow-wrap:break-word; }
  .journal-card > p { margin:12px 0 16px; }
  .journal-card-meta { margin-top:16px; }
  .contact-direct { margin-top:24px; padding-top:20px; }
@@ -297,7 +297,7 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
  .article-page .wordmark,.journal-page .wordmark { font-size:18px; letter-spacing:.15em; }
  .article-hero { padding-top:32px; }
  .article-meta { gap:8px 16px; font-size:12px; }
- .article-hero h1 { font-size:38px; margin:22px auto 28px; }
+ .article-hero h1 { font-size:clamp(28px,8.5vw,38px); margin:22px auto 28px; }
  .article-hero > img { aspect-ratio:1.6; }
  .article-hero > .article-image--portrait-ring { aspect-ratio:4/5; max-height:none; }
  .article-hero > .article-image--diamond-line { aspect-ratio:4/3; max-height:none; }
