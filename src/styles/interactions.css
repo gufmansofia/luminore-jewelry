@@ -24,7 +24,6 @@
 .trust-commitments strong { display:block;font:400 36px/1.15 var(--font-editorial); }
 .trust-commitments span { display:block;color:#d2d5d5;font-size:13px;margin-top:8px; }
 .trust-experience[data-reveal="visible"] .trust-commitments { animation:interaction-enter .65s .2s both; }
-.catalogue-count-row { display:flex;align-items:center;justify-content:space-between;gap:12px; }
 .catalogue-card { position:relative; }
 .catalogue-card-link { display:flex;flex-direction:column;flex:1;min-width:0;text-decoration:none; }
 .catalogue-photo { position:relative; }

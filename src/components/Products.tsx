@@ -6,7 +6,6 @@ import { useLanguage } from '../i18n';
 import { choose } from '../lib/product-copy';
 import { catalogueCategory, filterCatalogue, PAGE_SIZE } from '../lib/catalogue';
 import { CatalogueCard } from './CatalogueCard';
-import { SavedPiecesButton } from './SavedPieces';
 import { Reveal } from './Reveal';
 import { useReducedMotion } from '../hooks/useMotion';
 import { useRestoredScroll } from '../hooks/useRouteScroll';
@@ -108,8 +107,6 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
   const shown = paginated ? filtered.slice(pageStart, pageStart + visibleCount) : previewProducts.slice(0, 4);
   const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
   const base = collectionPath(categoryKey);
-  const plural = new Intl.PluralRules(l).select(filtered.length);
-  const countLabel = pick(filtered.length === 1 ? 'piece' : 'pieces', plural === 'one' ? 'изделие' : plural === 'few' ? 'изделия' : 'изделий', plural === 'one' ? 'виріб' : plural === 'few' ? 'вироби' : 'виробів');
   const catalog = { activeCategory: category, priceSort: sort, visibleCount, search };
   useEffect(() => {
     try { sessionStorage.setItem(storageKey, JSON.stringify(catalog)); } catch {}
@@ -151,7 +148,6 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
           <input id="product-search" ref={searchRef} type="search" value={search} placeholder={paginated&&categoryKey!=='all'?pick('Search this category…','Поиск в этой категории…','Пошук у цій категорії…'):pick('Search the collection…', 'Поиск по всему каталогу…', 'Пошук у всьому каталозі…')} onChange={e => { setSearch(e.target.value); setVisibleCount(PAGE_SIZE); if (e.target.value.trim()&&!paginated) setCategory('all'); }} />
           {search && <button className="text-button search-clear" onClick={reset} aria-label={pick('Clear search and filters', 'Очистить поиск и фильтры', 'Очистити пошук і фільтри')}>{pick('Clear', 'Очистить', 'Очистити')}</button>}
         </div>
-        <div className="catalogue-count-row"><p className="catalogue-count" role="status" aria-atomic="true">{filtered.length} {countLabel}</p><SavedPiecesButton text /></div>
       </div>
       <div className="catalogue-filter-row">
         <CatalogueFilter label={t.products.category} value={category} options={categories} open={openFilter === 'category'} onToggle={() => setOpenFilter(openFilter === 'category' ? null : 'category')} onClose={() => setOpenFilter(current => current === 'category' ? null : current)} onChange={value => { if(paginated){navigate(collectionPath(value),{state:{restoreFilters:true,catalog:{...catalog,activeCategory:value}}});return;}setCategory(value); setVisibleCount(PAGE_SIZE); }} />
@@ -161,7 +157,7 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
 
       {filtered.length === 0 && <div className="catalogue-empty"><p>{pick(`No matches for “${search.trim()}”${category !== 'all' ? ' in this category' : ''}.`, `По запросу «${search.trim()}»${category !== 'all' ? ' в этой категории' : ''} ничего не найдено.`, `За запитом «${search.trim()}»${category !== 'all' ? ' у цій категорії' : ''} нічого не знайдено.`)}</p><button className="outline-button" onClick={reset}>{pick('Reset search and filters', 'Сбросить поиск и фильтры', 'Скинути пошук і фільтри')}</button></div>}
       <div ref={gridRef} className={`catalogue-grid${paginated ? '' : ' catalogue-grid--preview'}`} id="catalogue-grid">{shown.map(p => <CatalogueCard key={p.id} product={p} state={{ catalogPath: location.pathname, catalog: { ...catalog, selectedProduct: p.id } }} onOpen={() => savePosition(p.id)} />)}</div>
-      {paginated && filtered.length > 0 && <div className="catalogue-pagination"><p role="status" aria-atomic="true">{pick(`Showing ${pageStart+1}–${pageStart+shown.length} of ${filtered.length}`, `Показано ${pageStart+1}–${pageStart+shown.length} из ${filtered.length}`, `Показано ${pageStart+1}–${pageStart+shown.length} із ${filtered.length}`)}</p>{!defaultView && shown.length < filtered.length && <button className="outline-button" aria-controls="catalogue-grid" onClick={loadMore}>{t.products.showMore}</button>}</div>}
+      {paginated && filtered.length > 0 && <div className="catalogue-pagination"><p role="status" aria-atomic="true">{pick(`Showing ${pageStart+1}–${pageStart+shown.length}`, `Показано ${pageStart+1}–${pageStart+shown.length}`, `Показано ${pageStart+1}–${pageStart+shown.length}`)}</p>{!defaultView && shown.length < filtered.length && <button className="outline-button" aria-controls="catalogue-grid" onClick={loadMore}>{t.products.showMore}</button>}</div>}
       {paginated && defaultView && pageCount>1 && <nav className="catalogue-page-links" aria-label={pick('Collection pages','Страницы коллекции','Сторінки колекції')}>
         {page>1 ? <Link className="catalogue-page-mobile" to={pagePath(page-1)} rel="prev">{pick('Previous','Назад','Назад')}</Link> : <span className="catalogue-page-mobile" aria-disabled="true">{pick('Previous','Назад','Назад')}</span>}
         <span className="catalogue-page-mobile catalogue-page-current" aria-current="page" aria-label={pick(`Page ${page} of ${pageCount}`,`Страница ${page} из ${pageCount}`,`Сторінка ${page} із ${pageCount}`)}>{page} / {pageCount}</span>

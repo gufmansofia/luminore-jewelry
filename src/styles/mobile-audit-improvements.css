@@ -88,7 +88,6 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
  .catalogue-section .catalogue-filter-trigger { position:relative; }
  .catalogue-section .catalogue-filter-options { left:0; right:0; max-height:min(340px,52dvh); }
  .catalogue-section .catalogue-filter-option { min-height:48px; font-size:15px; padding:12px 16px; }
- .catalogue-section .catalogue-count { font-size:12px; }
  .product-page .product-layout { gap:20px; padding-inline:20px; }
  .product-page .product-overview .product-title { font-size:28px; line-height:1.12; }
  .product-page .product-thumbnails { gap:12px; padding-bottom:8px; }
