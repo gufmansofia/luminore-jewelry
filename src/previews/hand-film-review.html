@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Монтаж видео — руки и украшения</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f6f4ef; color: #292721; font-family: Arial, sans-serif; }
+    header { padding: 22px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    h1 { margin: 0 0 7px; font-size: 18px; font-weight: 400; }
+    p { margin: 0; font-size: 13px; color: #6e6a61; }
+    a { color: inherit; font-size: 13px; text-underline-offset: 4px; white-space: nowrap; }
+    video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #161511; }
+    @media (max-width: 600px) { header { padding: 18px; align-items: flex-start; } h1 { font-size: 16px; } p { line-height: 1.5; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>Руки и украшения</h1><p>Один кадр · исходная скорость · повтор каждые 10,6 секунды</p></div>
+    <a href="/optimized/atelier-hands-loop.mp4" download>Скачать видео</a>
+  </header>
+  <main>
+    <video autoplay muted playsinline loop controls preload="auto" poster="/optimized/atelier-hands-poster.jpg?edit=2" aria-label="Зацикленный монтаж с крупными планами рук, колец и браслета">
+      <source src="/optimized/atelier-hands-loop.mp4?edit=2" type="video/mp4">
+    </video>
+  </main>
+</body>
+</html>

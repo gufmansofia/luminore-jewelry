@@ -61,6 +61,10 @@ async function serveStatic(pathname: string): Promise<Response | null> {
 
 const server = serve({
   routes: {
+    // Standalone film review; no changes to the homepage hero.
+    "/preview/hero-film": () => new Response(Bun.file(join(process.cwd(), 'src/previews/hand-film-review.html')), {
+      headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' },
+    }),
     // Serve product images from public/Products folder
     "/Products/*": async (req) => {
       const pathname = new URL(req.url).pathname;
@@ -70,7 +74,7 @@ const server = serve({
 
     "/optimized/*": async (req) => {
       const pathname = new URL(req.url).pathname;
-      if (/^\/optimized\/(?:atelier-(?:intro|loop)-(?:720|1080|wide)|atelier-study-(?:macro|triptych|duo)|bespoke-film-(?:desktop|mobile))\.mp4$/.test(pathname)) {
+      if (/^\/optimized\/(?:atelier-(?:intro|loop)-(?:720|1080|wide)|atelier-hands-loop|atelier-study-(?:macro|triptych|duo)|bespoke-film-(?:desktop|mobile))\.mp4$/.test(pathname)) {
         const file = Bun.file(join(process.cwd(), 'public', pathname));
         return await file.exists() ? videoResponse(file, req) : new Response('Not found', { status: 404 });
       }
