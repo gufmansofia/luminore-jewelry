@@ -137,6 +137,9 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
    intersection callback starts a delayed reveal. Carousel and video playback
    retain their own animations. */
 @media(max-width:800px) {
+ .atelier-content { --spotlight-section-gap:64px; }
+ .atelier-content .category-preview { padding-bottom:var(--spotlight-section-gap); }
+ .atelier-content #spotlight + #about .approach-intro { padding-top:var(--spotlight-section-gap); }
  .atelier-content .motion-reveal,
  .atelier-content .motion-reveal[data-reveal="waiting"],
  .atelier-content .about-chapter .approach-intro[data-reveal] .approach-title-word,
