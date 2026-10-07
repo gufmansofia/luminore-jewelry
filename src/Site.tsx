@@ -3,7 +3,7 @@ import { Journal } from './components/Blogs';
 import {Seo} from './components/Seo';
 import {NotFound} from './components/NotFound';
 import { AtelierHero } from './previews/Atelier';
-import { useEffect } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import Atelier from './previews/Atelier';
 import HeroDirections from './previews/HeroDirections';
 import HeroActionStudies, { WhiteHeaderHeroPreview } from './previews/HeroActionStudies';
@@ -23,6 +23,10 @@ import { RouteScrollRestoration, useRestoredScroll } from './hooks/useRouteScrol
 
 function SkipLink(){const {language}=useLanguage();return <a className="skip-link" href="#main-content">{language==='ru'?'Перейти к содержимому':language==='uk'?'Перейти до вмісту':'Skip to content'}</a>}
 
+const subscribeToLocalPreview = () => () => {};
+const localPreviewSnapshot = () => process.env.NODE_ENV !== 'production';
+const publishedPreviewSnapshot = () => false;
+
 export function LangSync() {
   const { language } = useLanguage();
   useEffect(() => {
@@ -32,7 +36,7 @@ export function LangSync() {
 }
 
 
-function HomePage({ previewWhiteHero = false, previewQuietHero = false }: { previewWhiteHero?: boolean; previewQuietHero?: boolean }) {
+function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotlightFirst = false }: { previewWhiteHero?: boolean; previewQuietHero?: boolean; spotlightFirst?: boolean }) {
   const location = useLocation();
   const restoredScroll = useRestoredScroll();
 
@@ -58,9 +62,8 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false }: { prev
   return (
     <>
       {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath={previewQuietHero ? '/preview/hero-quiet' : '/'} film="hands" quiet mobilePhoto captureLayers={previewQuietHero && new URLSearchParams(location.search).get('capture') === 'layers'} />}
-      <main id="main-content" tabIndex={-1} className="atelier-content">
-        <CategoryPreview />
-        <ProductSpotlight />
+      <main id="main-content" tabIndex={-1} className={`atelier-content${spotlightFirst ? ' atelier-content--spotlight-first' : ''}`}>
+        {spotlightFirst ? <><ProductSpotlight /><CategoryPreview /></> : <><CategoryPreview /><ProductSpotlight /></>}
         <About />
         <Products />
         <CTA />
@@ -75,6 +78,8 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false }: { prev
 }
 
 export function SiteContent() {
+  // Keep pre-rendered production pages unchanged; enable the study in the dev browser only.
+  const localSpotlightFirst = useSyncExternalStore(subscribeToLocalPreview, localPreviewSnapshot, publishedPreviewSnapshot);
   return (
         <SavedPiecesProvider>
         <RouteScrollRestoration />
@@ -82,7 +87,8 @@ export function SiteContent() {
         <SkipLink/>
         <div className="animate-page-enter">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            {/* Local composition study; production retains the approved section order. */}
+            <Route path="/" element={<HomePage spotlightFirst={localSpotlightFirst} />} />
             <Route path="/preview/atelier" element={<Atelier />} />
             <Route path="/preview/hero" element={<HeroDirections />} />
             <Route path="/preview/hero-wide" element={<HeroDirections wide />} />

@@ -140,6 +140,8 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
  .atelier-content { --spotlight-section-gap:64px; }
  .atelier-content .category-preview { padding-top:56px; padding-bottom:var(--spotlight-section-gap); }
  .atelier-content #spotlight + #about .approach-intro { padding-top:var(--spotlight-section-gap); }
+ .atelier-content--spotlight-first #spotlight { margin-top:var(--spotlight-section-gap); }
+ .atelier-content--spotlight-first #categories + #about .approach-intro { padding-top:var(--spotlight-section-gap); }
  .atelier-content .motion-reveal,
  .atelier-content .motion-reveal[data-reveal="waiting"],
  .atelier-content .about-chapter .approach-intro[data-reveal] .approach-title-word,
