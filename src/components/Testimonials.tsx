@@ -151,7 +151,7 @@ export function Testimonials() {
     onBlurCapture={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node | null))setKeyboardFocused(false);}}
     onKeyDown={e=>{if(readAll)return;if(e.key==='ArrowRight'){e.preventDefault();setKeyboardFocused(true);move(1);}if(e.key==='ArrowLeft'){e.preventDefault();setKeyboardFocused(true);move(-1);}}}>
     <div className="editorial-container testimonial-layout">
-      <header className="section-heading"><p className="section-eyebrow">{t.testimonials.eyebrow}</p><h2 id="testimonials-title">{t.testimonials.headline1}{t.testimonials.headline2}</h2></header>
+      <header className="section-heading"><h2 id="testimonials-title">{t.testimonials.headline1}{t.testimonials.headline2}</h2></header>
       <div className="testimonial-panel">
         {readAll&&<div className="reviews-list">{testimonials.map(item=><figure key={item.nameEn}><blockquote><p>{pick("“","«","«")}{pick(item.textEn,item.text,item.textUk)}{pick("”","»","»")}</p></blockquote><figcaption>{pick(item.nameEn,item.name,item.nameUk)} · {pick(item.roleEn,item.role,item.roleUk)}</figcaption></figure>)}</div>}
         <div hidden={readAll}>
