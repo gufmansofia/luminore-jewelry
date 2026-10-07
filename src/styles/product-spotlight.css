@@ -77,6 +77,10 @@ body:has(.atelier) section#spotlight { scroll-margin-top:var(--spotlight-header)
 .spotlight-pause:focus { z-index:2; top:0; left:20px; width:auto; height:auto; padding:10px 14px; background:#fff; border:1px solid currentColor; clip-path:none; }
 @media(max-width:800px) {
   .product-spotlight { --spotlight-header:56px; }
+  .spotlight-slide > img {
+    mask-image:linear-gradient(to bottom, transparent, #000 22%, #000 68%, #0003 88%, transparent);
+    -webkit-mask-image:linear-gradient(to bottom, transparent, #000 22%, #000 68%, #0003 88%, transparent);
+  }
   .product-spotlight .spotlight-slide .spotlight-copy h3 { max-width:265px; }
 }
 @media(max-width:350px) {
