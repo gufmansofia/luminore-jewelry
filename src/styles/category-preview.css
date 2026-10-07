@@ -28,6 +28,9 @@
 .category-preview .category-preview-card h3 { font:400 14px/1.16 var(--font-editorial); letter-spacing:.1em; margin:17px 0 7px; }
 .category-preview-card:is(:hover,:focus-visible) h3 { text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px; }
 .category-preview-card:focus-visible { outline:2px solid currentColor; outline-offset:-2px; }
+@media(min-width:801px) {
+  .atelier-content--spotlight-first #categories { padding-top:86px; }
+}
 @media(max-width:700px) {
   .category-preview { padding:35px 0 37px; }
   .category-preview-inner { padding:0; }

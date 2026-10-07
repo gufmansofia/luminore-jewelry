@@ -42,8 +42,6 @@ body:has(.atelier) section#spotlight { scroll-margin-top:var(--spotlight-header)
   height:100%;
   object-fit:cover;
   object-position:var(--spotlight-position,50% 50%);
-  mask-image:linear-gradient(to bottom, transparent, #000 22%, #000 68%, #0003 88%, transparent);
-  -webkit-mask-image:linear-gradient(to bottom, transparent, #000 22%, #000 68%, #0003 88%, transparent);
 }
 .spotlight-copy {
   position:absolute;

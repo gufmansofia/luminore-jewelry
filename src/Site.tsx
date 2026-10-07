@@ -57,7 +57,7 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotligh
 
   return (
     <>
-      {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath={previewQuietHero ? '/preview/hero-quiet' : '/'} film="hands" quiet mobilePhoto captureLayers={previewQuietHero && new URLSearchParams(location.search).get('capture') === 'layers'} />}
+      {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath={previewQuietHero ? '/preview/hero-quiet' : '/'} film="hands" quiet portraitPhoto captureLayers={previewQuietHero && new URLSearchParams(location.search).get('capture') === 'layers'} />}
       <main id="main-content" tabIndex={-1} className={`atelier-content${spotlightFirst ? ' atelier-content--spotlight-first' : ''}`}>
         {spotlightFirst ? <><ProductSpotlight /><CategoryPreview /></> : <><CategoryPreview /><ProductSpotlight /></>}
         <About />

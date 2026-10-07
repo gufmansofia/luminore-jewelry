@@ -47,7 +47,7 @@ python3 scripts/convert_excel_to_ts.py source-materials/inventory/Jewelry_Invent
 
 The approved atelier design is the homepage at `/`. It includes the hero video, category preview, manager contact icons, a compact collection preview (three cards on desktop and four on mobile), the bespoke film and enquiry form, and the journal. `/collection` contains the complete catalogue. The catalogue has category and sorting controls; the budget filter has been removed.
 
-The hero uses the approved looping hand film at 1080p on desktop. On mobile, the supplied jewellery portrait fills the same 7:9 media frame, with the white header above it and compact uppercase Garamond collection and design links directly beneath it, without the introductory copy or playback icon. Desktop retains its introductory copy with Garamond action links. The five main homepage section headings share one responsive size.
+The hero uses the supplied jewellery portrait on desktop and mobile in the same 7:9 media frame. Mobile keeps the white header above it and compact uppercase Garamond collection and design links directly beneath it, without the introductory copy or playback icon. Desktop retains its introductory copy with Garamond action links. The jewellery spotlight has no gradient mask over the products, and desktop has 86px of space above the following category section. The five main homepage section headings share one responsive size.
 
 Enquiry forms prepare a message for the customer to review and send through Telegram or WhatsApp. They do not send or store enquiries automatically.
 
