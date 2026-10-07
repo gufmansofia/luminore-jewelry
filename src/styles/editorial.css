@@ -166,6 +166,7 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
 .journal-card-image .article-image--gia-diamond { object-position:50% 60%; }
 .journal-card-image .article-image--engagement-ring { object-position:50% 48%; }
 .journal-card-image .article-image--diamond-rings { object-position:50% 60%; }
+.journal-card-image .article-image--jewellery-portrait { object-position:50% 30%; }
 .journal-card-meta { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; font-size:12px; line-height:1.5; color:var(--gallery-muted); margin:20px 0 14px; }
 .journal-card .journal-card-title { font-family:var(--font-editorial); font-size:30px; line-height:1.14; }
 .journal-card:hover .journal-card-title, .journal-card:focus-visible .journal-card-title { text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px; }
@@ -192,6 +193,7 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
 .article-hero > .article-image--gia-diamond { aspect-ratio:2; max-height:600px; object-position:50% 60%; }
 .article-hero > .article-image--engagement-ring { aspect-ratio:2; max-height:600px; object-position:50% 48%; }
 .article-hero > .article-image--diamond-rings { aspect-ratio:2; max-height:600px; object-position:50% 60%; }
+.article-hero > .article-image--jewellery-portrait { aspect-ratio:1.6; max-height:720px; object-position:50% 30%; }
 .article-progress { position:fixed; top:78px; left:0; right:0; z-index:51; height:2px; }
 .article-progress > div { height:100%; background:var(--gallery-ink); }
 .article-body { max-width:740px; width:calc(100% - 48px); margin:48px auto 64px; font-size:18px; line-height:1.8; }
@@ -316,6 +318,7 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
  .article-hero > .article-image--gia-diamond { aspect-ratio:2/3; max-height:none; }
  .article-hero > .article-image--engagement-ring { aspect-ratio:3/4; max-height:none; }
  .article-hero > .article-image--diamond-rings { aspect-ratio:3/4; max-height:none; }
+ .article-hero > .article-image--jewellery-portrait { aspect-ratio:2/3; max-height:none; }
  .article-progress { top:63px; }
  .article-body { width:calc(100% - 40px); font-size:16px; line-height:1.8; margin-top:30px; }
  .article-body > p:first-child { font-size:19px; }

@@ -113,8 +113,11 @@ export const blogPosts: BlogPost[] = [
     "readTime": "1 мин",
     "readTimeEn": "2 min",
     "readTimeUk": "1 хв",
-    "image": "/blog-images/art-of-preservation.jpg",
-    "imageAlt": "Collection of loose diamonds and an emerald in various cuts — round brilliant, pear, marquise, emerald — scattered on a dark surface with light refractions - Luminore diamond jewelry care guide",
+    "image": "/blog-images/diamond-jewellery-portrait.jpg",
+    "imageAlt": "Model wearing diamond earrings, rings, a necklace and a bracelet against a grey background",
+    "imageAltRu": "Модель в серьгах, кольцах, колье и браслете с бриллиантами на сером фоне",
+    "imageAltUk": "Модель у сережках, каблучках, кольє та браслеті з діамантами на сірому тлі",
+    "imageClassName": "article-image--jewellery-portrait",
     "content": [
       "Уход начинается с понимания особенностей изделия. Уточните, какой способ чистки подходит его камням, обработке и оправе, особенно если в украшении несколько видов камней.",
       "## Чистка дома",
