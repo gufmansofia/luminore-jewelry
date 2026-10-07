@@ -21,6 +21,7 @@ body:has(.atelier--capture-layers) .animate-page-enter { animation: none !import
 .atelier-photo .atelier-hero-still,
 .atelier-photo .atelier-hero-film { position: absolute; top: 0; left: 0; display: block; width: 100%; height: calc(100% * 7 / 6); object-fit: cover; }
 .atelier-hero-still { object-position: 50% 100%; }
+.atelier-photo--portrait > img { display: block; width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; object-position: 50% 0%; }
 .atelier-hero-film { z-index: 1; object-position: 50% 22%; opacity: 0; pointer-events: none; }
 .atelier-photo[data-phase="video"] .atelier-hero-film { opacity: 1; transition: opacity 150ms ease; }
 .atelier-photo[data-phase="animation"] .atelier-hero-animation { opacity: 1; transition: opacity 150ms ease; }

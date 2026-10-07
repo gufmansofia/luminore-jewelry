@@ -14,6 +14,7 @@ import { useReveal } from '../hooks/useMotion';
 import { AtelierHeroMedia } from './AtelierHeroMedia';
 import { HeroLoopMedia, type HeroStudy } from './HeroLoopMedia';
 import { CategoryPreview } from '../components/CategoryPreview';
+import { ResponsiveHomeHeroMedia } from './ResponsiveHomeHeroMedia';
 
 const copy = {
   en: { about: 'About', collection: 'Collection', journal: 'Journal', contact: 'Contact', line1: 'Diamond', line2: 'jewellery.', description: 'Natural or lab-grown diamonds.', description2: 'Choose from the collection, or create a piece with us.', discover: 'Explore jewellery', create: 'Discuss your design', imageAlt: 'A model wearing Luminore diamond rings on both hands', closing: 'Made to become ', yours: 'yours' },
@@ -48,7 +49,7 @@ export default function Atelier() {
 
 export type HeroDirection = 'minimal' | 'editorial' | 'cinema' | 'wide-immersive' | 'wide-caption' | 'wide-center' | 'sharp-macro' | 'sharp-triptych' | 'sharp-duo';
 
-export function AtelierHero({ homePath = "/preview/atelier", direction, film, quiet = false, captureLayers = false }: { homePath?: string; direction?: HeroDirection; film?: 'hands'; quiet?: boolean; captureLayers?: boolean }) {
+export function AtelierHero({ homePath = "/preview/atelier", direction, film, quiet = false, mobilePhoto = false, captureLayers = false }: { homePath?: string; direction?: HeroDirection; film?: 'hands'; quiet?: boolean; mobilePhoto?: boolean; captureLayers?: boolean }) {
   const { language } = useLanguage();
   const t = copy[language];
   const heroMotion = useReveal<HTMLElement>();
@@ -92,7 +93,11 @@ export function AtelierHero({ homePath = "/preview/atelier", direction, film, qu
             <p className="atelier-description">{t.description}<br />{t.description2}</p>
             {direction === 'editorial' && <p className="hero-direction-caption">{language === 'ru' ? 'Коллекция и индивидуальный дизайн' : language === 'uk' ? 'Колекція та індивідуальний дизайн' : 'The collection & your own creation'}</p>}
           </div>
-          {direction || film ? <HeroLoopMedia alt={t.imageAlt} wide={wide} study={study} film={film}
+          {mobilePhoto ? <ResponsiveHomeHeroMedia alt={t.imageAlt} film={film} highQuality={quiet}
+            photoAlt={language === 'ru' ? 'Модель в колье, серьгах, кольце и браслете Luminore с бриллиантами' : language === 'uk' ? 'Модель у кольє, сережках, каблучці та браслеті Luminore з діамантами' : 'A model wearing a Luminore diamond necklace, earrings, ring and bracelet'}
+            pauseLabel={language === 'ru' ? 'Приостановить видео' : language === 'uk' ? 'Призупинити відео' : 'Pause video'}
+            resumeLabel={language === 'ru' ? 'Продолжить видео' : language === 'uk' ? 'Продовжити відео' : 'Resume video'} />
+            : direction || film ? <HeroLoopMedia alt={t.imageAlt} wide={wide} study={study} film={film}
             highQuality={quiet}
             pauseLabel={language === 'ru' ? 'Приостановить видео' : language === 'uk' ? 'Призупинити відео' : 'Pause video'}
             resumeLabel={language === 'ru' ? 'Продолжить видео' : language === 'uk' ? 'Продовжити відео' : 'Resume video'} />
