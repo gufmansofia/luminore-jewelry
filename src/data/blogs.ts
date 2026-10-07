@@ -237,8 +237,11 @@ export const blogPosts: BlogPost[] = [
     "readTime": "1 мин",
     "readTimeEn": "2 min",
     "readTimeUk": "1 хв",
-    "image": "/blog-images/diamond-certification-guide.jpg",
-    "imageAlt": "Luminore loupe, IGI laboratory-grown diamond certificate, loose round brilliant diamond and precision scale arranged on a marble surface - Luminore diamond certification guide IGI vs GIA",
+    "image": "/blog-images/gia-yellow-diamond.jpg",
+    "imageAlt": "Yellow diamond in a GIA display case against a black background",
+    "imageAltRu": "Жёлтый бриллиант в футляре GIA на чёрном фоне",
+    "imageAltUk": "Жовтий діамант у футлярі GIA на чорному тлі",
+    "imageClassName": "article-image--gia-diamond",
     "content": [
       "Геммологический отчёт фиксирует оценку камня лабораторией. Изучайте его вместе с характеристиками изделия, которое собираетесь купить. Одно название лаборатории не описывает всё украшение.",
       "## Определите, что описывает документ",
