@@ -22,7 +22,7 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   </svg>;
 }
 
-function Study({ variant, whiteHeader = false }: { variant: Variant; whiteHeader?: boolean }) {
+function Study({ variant, whiteHeader = false, homePath = '/' }: { variant: Variant; whiteHeader?: boolean; homePath?: string }) {
   const { language } = useLanguage();
   const t = copy[language];
   const portrait = variant === 'gallery';
@@ -37,14 +37,14 @@ function Study({ variant, whiteHeader = false }: { variant: Variant; whiteHeader
     desktopFallback: portrait ? '/optimized/atelier-hands-motion-desktop.webp' : '/optimized/atelier-hands-motion-landscape.webp',
     onPlaying: () => setPlaying(true),
   });
-  const contact = `${localePath('/', language)}#contact`;
+  const contact = `${localePath(homePath, language)}#contact`;
   return <section className={`ha-stage ha-${variant}${whiteHeader && variant === 'cinema' ? ' ha-cinema-white' : ''}`} aria-labelledby="ha-title" data-theme={dark ? 'dark' : 'light'}>
     <h1 id="ha-title" className="ha-sr">{t.title}</h1>
     <header className="ha-header">
       <Link to="/" className="ha-logo" aria-label="Luminore"><HeaderLogo light={dark && !(whiteHeader && variant === 'cinema')} /></Link>
       <nav className="ha-navigation" aria-label={t.collection}>
         <Link to="/collection">{t.collection}</Link>
-        <a href={`${localePath('/', language)}#about`}>{t.about}</a>
+        <a href={`${localePath(homePath, language)}#about`}>{t.about}</a>
         <a href={contact}>{t.contact}</a>
       </nav>
       <div className="ha-utilities"><SavedPiecesButton /><LanguageSelect /></div>
@@ -72,6 +72,12 @@ function Study({ variant, whiteHeader = false }: { variant: Variant; whiteHeader
       </div>
     </div>
   </section>;
+}
+
+export function WhiteHeaderHeroPreview() {
+  return <div className="hero-action-studies ha-film-capture">
+    <Study variant="cinema" whiteHeader homePath="/preview/hero-white" />
+  </div>;
 }
 
 export default function HeroActionStudies() {

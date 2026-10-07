@@ -6,7 +6,7 @@ import { AtelierHero } from './previews/Atelier';
 import { useEffect } from 'react';
 import Atelier from './previews/Atelier';
 import HeroDirections from './previews/HeroDirections';
-import HeroActionStudies from './previews/HeroActionStudies';
+import HeroActionStudies, { WhiteHeaderHeroPreview } from './previews/HeroActionStudies';
 import {InformationPage} from './components/InformationPage';
 import { CollectionPage } from './components/CollectionPage';
 import { BespokePage } from './components/BespokePage';
@@ -32,7 +32,7 @@ export function LangSync() {
 }
 
 
-function HomePage() {
+function HomePage({ previewWhiteHero = false }: { previewWhiteHero?: boolean }) {
   const location = useLocation();
   const restoredScroll = useRestoredScroll();
 
@@ -57,7 +57,7 @@ function HomePage() {
 
   return (
     <>
-      <AtelierHero homePath="/" film="hands" />
+      {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath="/" film="hands" />}
       <main id="main-content" tabIndex={-1} className="atelier-content">
         <CategoryPreview />
         <ProductSpotlight />
@@ -88,6 +88,7 @@ export function SiteContent() {
             <Route path="/preview/hero-wide" element={<HeroDirections wide />} />
             <Route path="/preview/hero-new" element={<HeroDirections fresh />} />
             <Route path="/preview/hero-current" element={<HomePage />} />
+            <Route path="/preview/hero-white" element={<HomePage previewWhiteHero />} />
             <Route path="/preview/hero-actions" element={<HeroActionStudies />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/journal" element={<Journal />} />
