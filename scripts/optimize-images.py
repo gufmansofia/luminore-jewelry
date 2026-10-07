@@ -3,7 +3,7 @@ import hashlib,json,subprocess
 from pathlib import Path
 from PIL import Image,ImageOps
 root=Path(__file__).resolve().parent.parent
-paths=json.loads(subprocess.check_output(['bun','-e','import {products} from "./src/data/products"; import {blogPosts} from "./src/data/blogs"; console.log(JSON.stringify([...new Set([...products.flatMap(p=>p.images),...blogPosts.map(p=>p.image).filter(Boolean),"/atelier-hero.png"])]));'],cwd=root,text=True))
+paths=json.loads(subprocess.check_output(['bun','-e','import {products} from "./src/data/products"; import {blogPosts} from "./src/data/blogs"; import {spotlightPieces} from "./src/data/spotlight"; console.log(JSON.stringify([...new Set([...products.flatMap(p=>p.images),...blogPosts.map(p=>p.image).filter(Boolean),...spotlightPieces.map(p=>p.image),"/atelier-hero.png"])]));'],cwd=root,text=True))
 out=root/'public/optimized';out.mkdir(exist_ok=True)
 manifest={};original_bytes=0;delivery_bytes=0
 for source in paths:

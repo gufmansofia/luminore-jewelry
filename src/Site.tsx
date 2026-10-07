@@ -16,6 +16,7 @@ import { BlogPost } from './components/BlogPost';
 import { BackToTop } from './components/BackToTop';
 import { Testimonials } from './components/Testimonials';
 import { CategoryPreview } from './components/CategoryPreview';
+import { ProductSpotlight } from './components/ProductSpotlight';
 import { RouteScrollRestoration, useRestoredScroll } from './hooks/useRouteScroll';
 
 function SkipLink(){const {language}=useLanguage();return <a className="skip-link" href="#main-content">{language==='ru'?'Перейти к содержимому':language==='uk'?'Перейти до вмісту':'Skip to content'}</a>}
@@ -57,6 +58,7 @@ function HomePage() {
       <AtelierHero homePath="/" />
       <main id="main-content" tabIndex={-1} className="atelier-content">
         <CategoryPreview />
+        <ProductSpotlight />
         <About />
         <Products />
         <CTA />

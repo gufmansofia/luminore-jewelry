@@ -2,8 +2,10 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { products } from "../src/data/products";
 import { blogPosts } from "../src/data/blogs";
+import { spotlightPieces } from "../src/data/spotlight";
 
 const urls = new Set(products.flatMap(product => product.images));
+for (const piece of spotlightPieces) urls.add(piece.image);
 for (const blog of blogPosts) if (blog.image) urls.add(blog.image);
 for (const file of new Bun.Glob("**/*.{tsx,html,css}").scanSync("src")) {
   const text = await Bun.file(resolve("src", file)).text();
