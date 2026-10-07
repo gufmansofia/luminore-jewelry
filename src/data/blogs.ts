@@ -374,8 +374,11 @@ export const blogPosts: BlogPost[] = [
     "readTime": "1 мин",
     "readTimeEn": "2 min",
     "readTimeUk": "1 хв",
-    "image": "/blog-images/sustainable-luxury.png",
-    "imageAlt": "Collection of lab-grown diamonds in various cuts including round, cushion, emerald, and princess cuts with natural rainbow light refractions, surrounded by sustainable green foliage - Luminore ethical luxury",
+    "image": "/blog-images/diamond-rings-reflection.jpg",
+    "imageAlt": "Diamond rings in different cuts reflected on a black surface",
+    "imageAltRu": "Кольца с бриллиантами разных огранок на чёрной зеркальной поверхности",
+    "imageAltUk": "Каблучки з діамантами різних огранювань на чорній дзеркальній поверхні",
+    "imageClassName": "article-image--diamond-rings",
     "content": [
       "Если происхождение важно для вашего выбора, задавайте вопросы о конкретном камне и поставщике. Общее обозначение менее полезно, чем информация, связанная с рассматриваемым изделием.",
       "## Узнайте, как вырастили камень",
