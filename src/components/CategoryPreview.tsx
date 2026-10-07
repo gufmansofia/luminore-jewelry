@@ -8,7 +8,7 @@ import '../styles/category-preview.css';
 
 const categories = [
   { category: 'Rings', productId: 49, names: { en: 'Rings', ru: 'Кольца', uk: 'Каблучки' } },
-  { category: 'Necklaces', productId: 103, names: { en: 'Necklaces', ru: 'Колье', uk: 'Кольє' } },
+  { category: 'Necklaces', productId: 100, names: { en: 'Necklaces', ru: 'Колье', uk: 'Кольє' } },
   { category: 'Pendants', productId: 112, names: { en: 'Pendants', ru: 'Подвески', uk: 'Підвіски' } },
   { category: 'Bracelets', productId: 71, names: { en: 'Bracelets', ru: 'Браслеты', uk: 'Браслети' } },
   { category: 'Earrings', productId: 85, names: { en: 'Earrings', ru: 'Серьги', uk: 'Сережки' } },
