@@ -216,14 +216,15 @@ export function Footer({theme='dark'}:{theme?:'dark'|'light'}) {
             </div>
 
             {/* Contact Column */}
-            <div className="footer-contact space-y-6">
+            <div className="footer-contact footer-disclosure space-y-6" data-open={!!expanded.contact}>
               <h2
                 className="font-display text-sm text-white"
                 style={{ letterSpacing: '0.1em' }}
               >
-                {t.footer.contactHeading}
+                <span className="footer-desktop-label">{t.footer.contactHeading}</span>
+                <button className="footer-toggle" type="button" aria-expanded={!!expanded.contact} aria-controls="footer-contact" onClick={()=>setExpanded(value=>({...value,contact:!value.contact}))}>{t.footer.contactHeading}<span aria-hidden="true">{expanded.contact?'−':'+'}</span></button>
               </h2>
-              <ul className="space-y-3">
+              <ul id="footer-contact" className="space-y-3">
                 <li>
                   <a href="tel:+421940600708" className="font-body text-silver/70 hover:text-accent transition-colors text-sm">
                     +421 940 600 708

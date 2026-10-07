@@ -71,7 +71,6 @@ const REVIEW_INTERVAL_MS = 2500;
 
 export function Testimonials() {
   const { language:l, t } = useLanguage();
-  const [paused,setPaused]=useState(false);
   const pauseUntil=useRef(0);
   const [readAll, setReadAll] = useState(false);
   const [active, setActive] = useState(0);
@@ -139,7 +138,7 @@ export function Testimonials() {
     setLeaving(false);
   },[reducedMotion]);
 
-  const rotating=!paused&&!readAll&&!reducedMotion&&!keyboardFocused&&!touching&&visible&&pageVisible;
+  const rotating=!readAll&&!reducedMotion&&!keyboardFocused&&!touching&&visible&&pageVisible;
   useEffect(()=>{
     if(!rotating)return;
     const timer=window.setTimeout(()=>move(1,false),Math.max(REVIEW_INTERVAL_MS,pauseUntil.current-Date.now()));
@@ -154,11 +153,10 @@ export function Testimonials() {
     <div className="editorial-container testimonial-layout">
       <header className="section-heading"><p className="section-eyebrow">{t.testimonials.eyebrow}</p><h2 id="testimonials-title">{t.testimonials.headline1}{t.testimonials.headline2}</h2></header>
       <div className="testimonial-panel">
-        <button type="button" className="text-button reviews-mode" aria-expanded={readAll} onClick={()=>{setReadAll(!readAll);setRevealed(true);}}>{readAll?pick("Back to carousel","Вернуться к карусели","Повернутися до каруселі"):pick("Read all reviews","Читать все отзывы","Читати всі відгуки")}</button>
         {readAll&&<div className="reviews-list">{testimonials.map(item=><figure key={item.nameEn}><blockquote><p>{pick("“","«","«")}{pick(item.textEn,item.text,item.textUk)}{pick("”","»","»")}</p></blockquote><figcaption>{pick(item.nameEn,item.name,item.nameUk)} · {pick(item.roleEn,item.role,item.roleUk)}</figcaption></figure>)}</div>}
         <div hidden={readAll}>
-        <div ref={content} className="testimonial-content" aria-live={announce?'polite':'off'} aria-atomic="true"
-          onPointerDown={e=>{if(e.pointerType==='touch'){touchStart.current={x:e.clientX,y:e.clientY};setTouching(true);e.currentTarget.setPointerCapture(e.pointerId);}}}
+        <div ref={content} className="testimonial-content" tabIndex={0} aria-live={announce?'polite':'off'} aria-atomic="true"
+          onPointerDown={e=>{if(e.isPrimary&&e.button===0){touchStart.current={x:e.clientX,y:e.clientY};setTouching(true);e.currentTarget.setPointerCapture(e.pointerId);}}}
           onPointerCancel={()=>{touchStart.current=null;setTouching(false);}}
           onLostPointerCapture={()=>{touchStart.current=null;setTouching(false);}}
           onPointerUp={e=>{
@@ -172,13 +170,8 @@ export function Testimonials() {
             <figcaption><p className="testimonial-author">{pick(item.nameEn,item.name,item.nameUk)}</p><p className="testimonial-role">{pick(item.roleEn,item.role,item.roleUk)}</p></figcaption>
           </figure>)}
         </div>
-        <button type="button" className="text-button testimonial-pause" aria-pressed={paused} onClick={()=>{pauseUntil.current=0;setPaused(value=>!value);setCycle(value=>value+1);}}>{paused?pick('Resume autoplay','Продолжить автопрокрутку','Продовжити автопрокрутку'):pick('Pause autoplay','Остановить автопрокрутку','Зупинити автопрокрутку')}</button>
-        <div className="testimonial-controls">
-          <button className="testimonial-arrow testimonial-previous" onClick={()=>move(-1)} aria-label={pick('Previous testimonial','Предыдущий отзыв','Попередній відгук')}><span aria-hidden="true">←</span></button>
-          <div className="testimonial-dots" role="group" aria-label={pick('Testimonial navigation','Навигация по отзывам','Навігація по відгуках')}>{testimonials.map((item,i)=><button key={i} aria-pressed={active===i} onClick={()=>select(i,true)} aria-label={pick('Show testimonial from ','Показать отзыв от ','Показати відгук від ')+pick(item.nameEn,item.name,item.nameUk)}><span aria-hidden="true" /></button>)}</div>
-          <button className="testimonial-arrow testimonial-next" onClick={()=>move(1)} aria-label={pick('Next testimonial','Следующий отзыв','Наступний відгук')}><span aria-hidden="true">→</span></button>
         </div>
-        </div>
+        <button type="button" className="text-button reviews-mode" aria-expanded={readAll} onClick={()=>{setReadAll(!readAll);setRevealed(true);}}>{readAll?pick("Back to carousel","Вернуться к карусели","Повернутися до каруселі"):pick("Read all reviews","Читать все отзывы","Читати всі відгуки")}</button>
       </div>
     </div>
   </section>;

@@ -33,7 +33,7 @@
 .catalogue-heading h1{font-family:var(--font-editorial);font-size:clamp(38px,5vw,60px);line-height:1.1;font-weight:400}
 @media(max-width:700px){.atelier-description{font-size:15px!important;line-height:1.55!important}.atelier-closing.atelier-closing--divider{height:24px}}
 /* Small improvements to the existing white and graphite system. */
-.reviews-mode{display:block;margin:0 0 24px auto;color:inherit;font-size:14px}
+.reviews-mode{display:block;margin:12px 0 0;min-height:44px;color:inherit;font-size:14px;text-align:left}
 .reviews-list{display:grid;gap:30px}.reviews-list figure{margin:0;padding:0 0 30px;border-bottom:1px solid #d8d8d8}.reviews-list blockquote{margin:0}.reviews-list blockquote p{font-family:var(--font-editorial);font-size:clamp(24px,2.5vw,34px);line-height:1.35}.reviews-list figcaption{font-size:14px;margin-top:18px;color:#595959}
 .testimonial-panel>[hidden]{display:none!important}.saved-help{font-size:13px;color:#595959;margin:0 0 24px}
 .enquiry-message{width:100%;resize:vertical;border:1px solid #bbb;background:#fff;color:#222;padding:18px;font:inherit;font-size:14px;line-height:1.6;margin:20px 0 12px}.enquiry-review .text-button{margin:12px 18px 12px 0}.guided-step-note{max-width:46ch}.guided-progress{margin-bottom:20px}
