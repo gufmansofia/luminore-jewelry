@@ -138,7 +138,7 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
    retain their own animations. */
 @media(max-width:800px) {
  .atelier-content { --spotlight-section-gap:64px; }
- .atelier-content .category-preview { padding-bottom:var(--spotlight-section-gap); }
+ .atelier-content .category-preview { padding-top:56px; padding-bottom:var(--spotlight-section-gap); }
  .atelier-content #spotlight + #about .approach-intro { padding-top:var(--spotlight-section-gap); }
  .atelier-content .motion-reveal,
  .atelier-content .motion-reveal[data-reveal="waiting"],
