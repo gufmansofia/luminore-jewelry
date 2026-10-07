@@ -146,17 +146,8 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
 .testimonial-slide.is-active { opacity:1; visibility:visible; transition:opacity .6s ease,visibility 0s; }
 .testimonial-content blockquote { margin:0 0 28px; font-family:var(--font-editorial); font-size:clamp(27px,2.5vw,36px); line-height:1.35; }
 .testimonial-slide figcaption { margin-top:auto; padding-top:22px; border-top:1px solid var(--gallery-rule); }
-.testimonial-author { font-size:15px; font-weight:500; }
+.testimonial-author { font-size:15px; font-weight:400; }
 .testimonial-role { color:var(--gallery-muted); font-size:13px; margin-top:6px; }
-.testimonial-controls { display:grid; grid-template-columns:44px auto 44px; grid-template-areas:'previous dots next'; justify-content:space-between; align-items:center; gap:6px; margin-top:18px; }
-.testimonial-arrow { display:grid; place-items:center; width:44px; height:44px; padding:0; border:0; border-radius:0; box-shadow:none; background:transparent; color:var(--gallery-ink); font:400 28px/1 var(--font-editorial); cursor:pointer; }
-.testimonial-arrow:hover { color:#626262; }
-.testimonial-previous { grid-area:previous; }
-.testimonial-next { grid-area:next; }
-.testimonial-dots { grid-area:dots; display:flex; justify-content:center; }
-.testimonial-dots button { width:44px; height:44px; display:grid; place-items:center; cursor:pointer; }
-.testimonial-dots span { width:5px; height:5px; border:1px solid var(--gallery-muted); border-radius:50%; }
-.testimonial-dots [aria-pressed="true"] span { background:var(--gallery-ink); border-color:var(--gallery-ink); }
 .journal-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:48px 28px; }
 .journal-card { display:flex; flex-direction:column; min-width:0; }
 .journal-section--preview .journal-card--mobile-extra { display:none; }
@@ -277,17 +268,16 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
  .enquiry-form,.enquiry-review { padding:24px 20px; }
  .primary-button,.outline-button { font-size:14px; padding-inline:16px; }
  .form-heading h3,.enquiry-review h3 { font-size:30px; }
- .testimonials-section { padding:56px 0; }
+ .testimonials-section { padding:32px 0; }
  .testimonial-layout { grid-template-columns:1fr; gap:28px; }
  .testimonials-section .section-heading { padding-top:0; }
- .testimonials-section .section-eyebrow { font-size:14px; }
- .testimonials-section .section-heading h2 { max-width:380px; }
- .testimonial-panel { padding:28px 20px 16px; }
- .testimonial-content blockquote { font-size:28px; }
- .testimonial-slide figcaption { padding-top:20px; }
- .testimonial-author { font-size:14px; }
+ .testimonials-section .section-eyebrow { font-size:12px; }
+ .testimonials-section .section-heading h2 { max-width:380px; font-size:32px; line-height:1.1; }
+ .testimonial-panel { padding:20px 20px 14px; }
+ .testimonial-content blockquote { font-size:24px; line-height:1.25; margin-bottom:18px; }
+ .testimonial-slide figcaption { padding-top:16px; }
+ .testimonial-author { font-size:13px; }
  .testimonial-role { font-size:12px; }
- .testimonial-dots button { width:clamp(32px,9vw,44px); height:44px; }
  .journal-grid { grid-template-columns:1fr; gap:36px; }
  /* All homepage articles are available in one native swipe row on phones. */
  .journal-section--preview .section-heading > .text-button { display:none; }
