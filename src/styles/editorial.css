@@ -171,6 +171,9 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
 .contact-direct > .contact-phone { font-family:var(--font-editorial); font-size:30px; }
 .contact-channels { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
 .contact-channels .contact-channel { flex:1 1 128px; min-width:0; padding-inline:12px; }
+.contact-channels .contact-channel--icon { display:inline-flex; align-items:center; justify-content:center; flex:0 0 44px; width:44px; height:44px; min-height:44px; padding:10px; border:0; background:transparent; }
+.contact-channels .contact-channel--icon img { display:block; flex:none; width:24px; height:24px; }
+.contact-channels .contact-channel--icon:hover img { opacity:.6; }
 .article-share a { display:inline-flex; align-items:center; min-height:44px; text-decoration:underline; text-underline-offset:5px; font-size:14px; }
 .detail-header.detail-header--light { background:#fff; color:var(--gallery-ink); border-color:var(--gallery-rule); }
 .detail-header--light .detail-back { color:var(--gallery-ink); font-size:14px; }
