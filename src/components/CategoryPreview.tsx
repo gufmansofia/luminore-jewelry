@@ -19,9 +19,9 @@ const categories = [
 }));
 
 const copy = {
-  en: { title: 'Explore by category', intro: 'Natural or lab-grown diamonds.', browse: 'Browse the Complete Collection', categories: 'Jewellery categories', previous: 'Previous categories', next: 'Next categories' },
-  ru: { title: 'Украшения по категориям', intro: 'Натуральные или лабораторные бриллианты.', browse: 'Смотреть всю коллекцию', categories: 'Категории украшений', previous: 'Предыдущие категории', next: 'Следующие категории' },
-  uk: { title: 'Прикраси за категоріями', intro: 'Природні або лабораторні діаманти.', browse: 'Переглянути всю колекцію', categories: 'Категорії прикрас', previous: 'Попередні категорії', next: 'Наступні категорії' },
+  en: { title: 'Explore by category', intro: 'Natural or lab-grown diamonds.', categories: 'Jewellery categories', previous: 'Previous categories', next: 'Next categories' },
+  ru: { title: 'Украшения по категориям', intro: 'Натуральные или лабораторные бриллианты.', categories: 'Категории украшений', previous: 'Предыдущие категории', next: 'Следующие категории' },
+  uk: { title: 'Прикраси за категоріями', intro: 'Природні або лабораторні діаманти.', categories: 'Категорії прикрас', previous: 'Попередні категорії', next: 'Наступні категорії' },
 };
 
 export function CategoryPreview() {
@@ -66,7 +66,6 @@ export function CategoryPreview() {
       </ul>
       <button type="button" className="category-arrow category-arrow--next" aria-label={t.next} aria-controls="category-preview-list" disabled={edges.end} onClick={() => browse(1)}><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="m1 1 6 5-6 5Z" fill="currentColor" /></svg></button>
       </div>
-      <div className="category-preview-browse"><Link to="/collection">{t.browse}</Link></div>
     </div>
   </section>;
 }
