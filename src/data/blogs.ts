@@ -48,8 +48,11 @@ export const blogPosts: BlogPost[] = [
     "readTime": "1 мин",
     "readTimeEn": "2 min",
     "readTimeUk": "1 хв",
-    "image": "/blog-images/engagement-ring-guide.png",
-    "imageAlt": "Four exquisite diamond engagement rings featuring round brilliant, pear, cushion halo, and vintage filigree settings displayed on a marble surface with elegant lighting - Luminore 2026 engagement ring guide",
+    "image": "/blog-images/pear-halo-engagement-ring.jpg",
+    "imageAlt": "Pear-shaped diamond halo ring reflected on a black surface",
+    "imageAltRu": "Кольцо с грушевидным бриллиантом и ореолом камней на чёрной зеркальной поверхности",
+    "imageAltUk": "Каблучка з грушоподібним діамантом та ореолом каменів на чорній дзеркальній поверхні",
+    "imageClassName": "article-image--engagement-ring",
     "content": [
       "Начните с того, как вы будете носить кольцо, какие формы вам нравятся и какой бюджет удобен. Несколько примеров помогут объяснить пожелания. Готовый дизайн для первого разговора не нужен.",
       "## Четыре характеристики бриллианта",
