@@ -12,7 +12,6 @@ body:has(.atelier) section[id] { scroll-margin-top: 106px; }
 .atelier-hero { display: grid; grid-template-areas: 'story photo' 'actions photo'; grid-template-columns: minmax(0, .43fr) minmax(0, .57fr); column-gap: clamp(40px, 4.4vw, 76px); row-gap: 36px; align-items: start; max-width: 1600px; margin: clamp(72px, 7.9vw, 128px) auto 0; padding: 0 5.8% 84px; }
 .atelier-hero { grid-template-rows: auto 1fr; }
 .atelier-photo { grid-area: photo; align-self: start; width: 100%; justify-self: center; position: relative; aspect-ratio: 7 / 9; overflow: hidden; isolation: isolate; background: #858f8b; }
-.atelier--quiet .atelier-story { visibility: hidden; }
 .atelier--capture-layers .atelier-photo { background: #fff; }
 .atelier--capture-layers .atelier-photo > img,
 .atelier--capture-layers .atelier-photo > video { visibility: hidden; }
@@ -76,6 +75,9 @@ body:has(.atelier--capture-layers) .animate-page-enter { animation: none !import
  .atelier-description { margin: 18px 0 0; font-size: 15px; line-height: 1.5; color: #292929; }
  .atelier-action { font-size: clamp(19px, 5.3vw, 26px); min-height: 60px; padding: 12px 4px; gap: 12px; }
  .atelier-action img { width: 34px; height: 34px; }
+ .atelier--quiet .atelier-story { display: none; }
+ .atelier--quiet .atelier-hero { grid-template-areas: 'photo' 'actions'; gap: 0; }
+ .atelier--quiet .atelier-film-control { display: none; }
  .atelier-closing { min-height: 148px; margin: 40px 0 0; padding: 32px 28px; }
  .atelier-closing h2 { max-width: 310px; font-size: 34px; line-height: 1.12; }
 }

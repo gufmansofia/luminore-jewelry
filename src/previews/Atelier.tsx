@@ -79,15 +79,15 @@ export function AtelierHero({ homePath = "/preview/atelier", direction, film, qu
       </header>
       </div>
       <div>
-        <section ref={heroMotion.ref} data-reveal={heroMotion.phase} className="atelier-hero" aria-labelledby={quiet ? undefined : 'atelier-title'} aria-label={quiet ? t.discover : undefined}>
-          <div className="atelier-story" aria-hidden={quiet || undefined}>
+        <section ref={heroMotion.ref} data-reveal={heroMotion.phase} className="atelier-hero" aria-labelledby="atelier-title">
+          <div className="atelier-story">
             {direction && <p className="hero-direction-eyebrow">{language === 'ru' ? 'Luminore · Ювелирное ателье' : language === 'uk' ? 'Luminore · Ювелірне ательє' : 'Luminore · Jewellery atelier'}</p>}
             <h1 id="atelier-title"><span className="hero-line"><span>{t.line1}</span></span><span className="hero-line"><em>{t.line2}</em></span></h1>
             <p className="atelier-description">{t.description}<br />{t.description2}</p>
             {direction === 'editorial' && <p className="hero-direction-caption">{language === 'ru' ? 'Коллекция и индивидуальный дизайн' : language === 'uk' ? 'Колекція та індивідуальний дизайн' : 'The collection & your own creation'}</p>}
           </div>
           {direction || film ? <HeroLoopMedia alt={t.imageAlt} wide={wide} study={study} film={film}
-            showControl={!quiet} highQuality={quiet}
+            highQuality={quiet}
             pauseLabel={language === 'ru' ? 'Приостановить видео' : language === 'uk' ? 'Призупинити відео' : 'Pause video'}
             resumeLabel={language === 'ru' ? 'Продолжить видео' : language === 'uk' ? 'Продовжити відео' : 'Resume video'} />
             : <AtelierHeroMedia alt={t.imageAlt} skipLabel={language === 'ru' ? 'Пропустить видео' : language === 'uk' ? 'Пропустити відео' : 'Skip video'} />}
