@@ -1,0 +1,138 @@
+.hero-action-studies { color: #20221e; background: #f8f7f3; font-family: var(--font-site); --ha-selector-height: 62px; }
+.hero-action-studies * { box-sizing: border-box; }
+.hero-action-studies a { color: inherit; text-decoration: none; }
+.hero-action-studies .ha-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.hero-action-studies .ha-stage { position: relative; height: calc(100svh - var(--ha-selector-height)); min-height: 580px; overflow: hidden; }
+.hero-action-studies .ha-header { position: relative; z-index: 5; height: 76px; padding: 0 36px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; border-bottom: 1px solid #23261f22; }
+.hero-action-studies .ha-header .header-logo { display: block; width: 188px; max-width: none; height: auto; }
+.hero-action-studies .ha-logo { justify-self: start; }
+.hero-action-studies .ha-navigation { display: flex; gap: 30px; font-size: 12px; letter-spacing: .04em; }
+.hero-action-studies .ha-navigation a { padding-block: 16px; }
+.hero-action-studies .ha-utilities { justify-self: end; display: flex; align-items: center; gap: 16px; }
+.hero-action-studies .saved-trigger, .hero-action-studies .language-trigger { color: inherit; }
+.hero-action-studies .ha-content { position: relative; height: calc(100% - 76px); }
+.hero-action-studies .ha-media { position: relative; overflow: hidden; background: #72776b; }
+.hero-action-studies .ha-poster, .hero-action-studies .ha-poster img,
+.hero-action-studies .ha-media video, .hero-action-studies .ha-animation { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.hero-action-studies .ha-media video { z-index: 1; opacity: 0; pointer-events: none; }
+.hero-action-studies .ha-media[data-playing="true"] video { opacity: 1; }
+.hero-action-studies .ha-media video[hidden] { display: none; }
+.hero-action-studies .ha-animation { z-index: 2; }
+.hero-action-studies .ha-shade { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.hero-action-studies .ha-pause { position: absolute; right: 20px; bottom: 20px; z-index: 4; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid #ffffff99; border-radius: 50%; background: #1c231c66; color: white; cursor: pointer; }
+.hero-action-studies .ha-actions { position: relative; z-index: 4; }
+.hero-action-studies .ha-action { display: flex; align-items: center; justify-content: space-between; gap: 24px; font-size: 17px; line-height: 1.4; letter-spacing: 0; word-break: normal; overflow-wrap: normal; }
+.hero-action-studies .ha-action svg { flex-shrink: 0; }
+.hero-action-studies .ha-action:hover span, .hero-action-studies .ha-navigation a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.hero-action-studies a:focus-visible, .hero-action-studies button:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+
+/* Cinema: the moving image fills the screen; only two small actions float on it. */
+.hero-action-studies .ha-cinema { background: #252b23; color: white; }
+.hero-action-studies .ha-cinema .ha-header { position: absolute; inset: 0 0 auto; border-color: #ffffff40; }
+.hero-action-studies .ha-cinema .ha-content, .hero-action-studies .ha-cinema .ha-media { height: 100%; }
+.hero-action-studies .ha-cinema .ha-shade { background: linear-gradient(180deg, #101c164f, transparent 28%, transparent 57%, #101c1673); }
+.hero-action-studies .ha-cinema .ha-actions { position: absolute; bottom: 48px; left: 0; right: 0; display: flex; justify-content: center; gap: 14px; }
+.hero-action-studies .ha-cinema .ha-action { min-height: 58px; padding: 16px 24px; font-size: 14px; }
+.hero-action-studies .ha-cinema .ha-primary { background: #faf9f4; color: #22271f; }
+.hero-action-studies .ha-cinema .ha-secondary { border: 1px solid #ffffffb3; background: #10221724; }
+
+/* Showcase: white navigation and a quiet, full-width caption rail. */
+.hero-action-studies .ha-showcase { background: #fff; }
+.hero-action-studies .ha-showcase .ha-content { display: grid; grid-template-rows: minmax(0, 1fr) 86px; }
+.hero-action-studies .ha-showcase .ha-media video, .hero-action-studies .ha-showcase .ha-poster img, .hero-action-studies .ha-showcase .ha-animation { object-position: 50% 65%; }
+.hero-action-studies .ha-showcase .ha-actions { display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
+.hero-action-studies .ha-showcase .ha-action { min-height: 54px; font-size: 17px; }
+.hero-action-studies .ha-showcase .ha-secondary { font-size: 14px; }
+
+/* Gallery: an intact portrait film, with actions on either side and ample air. */
+.hero-action-studies .ha-gallery { background: #f7f6f1; }
+.hero-action-studies .ha-gallery .ha-header { border: 0; }
+.hero-action-studies .ha-gallery .ha-logo { grid-column: 2; grid-row: 1; justify-self: center; }
+.hero-action-studies .ha-gallery .ha-navigation { grid-column: 1; grid-row: 1; gap: 22px; }
+.hero-action-studies .ha-gallery .ha-content { display: flex; align-items: center; justify-content: center; }
+.hero-action-studies .ha-gallery .ha-media { height: calc(100% - 32px); aspect-ratio: 9 / 16; flex-shrink: 0; }
+.hero-action-studies .ha-gallery .ha-actions { position: absolute; inset: 0 5%; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+.hero-action-studies .ha-gallery .ha-action { width: 23%; max-width: 242px; padding: 20px 0; border-bottom: 1px solid #292d2866; font-family: var(--font-editorial); font-size: 25px; pointer-events: auto; }
+.hero-action-studies .ha-gallery .ha-action svg { width: 28px; }
+.hero-action-studies .ha-gallery .ha-secondary { text-align: left; }
+
+/* Two actions: one large framed film and two equal, architectural destinations. */
+.hero-action-studies .ha-frame { background: #eeeae1; }
+.hero-action-studies .ha-frame .ha-content { padding: 28px 30px 32px; display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 24px; }
+.hero-action-studies .ha-frame .ha-actions { display: grid; grid-template-rows: 1fr 1fr; gap: 18px; }
+.hero-action-studies .ha-frame .ha-action { position: relative; display: block; padding: 30px 26px; font-family: var(--font-editorial); font-size: 28px; line-height: 1.3; }
+.hero-action-studies .ha-frame .ha-action span { display: block; max-width: 192px; }
+.hero-action-studies .ha-frame .ha-action svg { position: absolute; right: 26px; bottom: 26px; width: 46px; height: 46px; }
+.hero-action-studies .ha-frame .ha-primary { color: #f6f4ed; background: #303a30; }
+.hero-action-studies .ha-frame .ha-secondary { background: #f9f7f1; border: 1px solid #36382d30; }
+
+/* Graphite: an ink-coloured side rail and a film that reaches the other edges. */
+.hero-action-studies .ha-graphite { background: #1f2722; color: #f5f4ed; }
+.hero-action-studies .ha-graphite .ha-header { position: absolute; inset: 0 auto 0 0; width: 28%; height: 100%; padding: 40px 32px; display: flex; align-items: flex-start; flex-direction: column; border: 0; }
+.hero-action-studies .ha-graphite .ha-header .header-logo { width: 205px; max-width: 100%; }
+.hero-action-studies .ha-graphite .ha-navigation { margin-top: 48px; flex-direction: column; gap: 3px; font-size: 12px; }
+.hero-action-studies .ha-graphite .ha-navigation a { padding: 9px 0; }
+.hero-action-studies .ha-graphite .ha-utilities { margin-top: 20px; }
+.hero-action-studies .ha-graphite .ha-content { height: 100%; }
+.hero-action-studies .ha-graphite .ha-media { position: absolute; inset: 0 0 0 28%; }
+.hero-action-studies .ha-graphite .ha-actions { position: absolute; z-index: 6; left: 32px; bottom: 40px; width: calc(28% - 64px); }
+.hero-action-studies .ha-graphite .ha-action { padding: 22px 0; border-top: 1px solid #eef1e152; font-family: var(--font-editorial); font-size: 25px; }
+.hero-action-studies .ha-graphite .ha-action svg { width: 28px; }
+.hero-action-studies .ha-graphite .ha-secondary { font-family: var(--font-site); font-size: 14px; }
+
+.hero-action-studies .ha-selector { min-height: var(--ha-selector-height); padding: 0 26px; display: flex; align-items: center; justify-content: space-between; gap: 20px; background: #fff; border-top: 1px solid #e3e2db; color: #363b34; }
+.hero-action-studies .ha-preview-label, .hero-action-studies .ha-home { font-size: 10px; letter-spacing: .04em; white-space: nowrap; }
+.hero-action-studies .ha-preview-label { color: #777d73; }
+.hero-action-studies .ha-options { display: flex; align-items: center; gap: 6px; }
+.hero-action-studies .ha-options button { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 10px 14px; border: 0; background: transparent; color: inherit; font: 400 12px/1.2 var(--font-site); cursor: pointer; white-space: nowrap; }
+.hero-action-studies .ha-options button span { font-size: 9px; color: #81867c; }
+.hero-action-studies .ha-options button[aria-pressed="true"] { background: #f0f1eb; }
+@media(max-width:1000px) and (min-width:761px) {
+ .hero-action-studies .ha-header { padding-inline: 24px; }
+ .hero-action-studies .ha-navigation { gap: 18px; }
+ .hero-action-studies .ha-frame .ha-content { grid-template-columns: minmax(0,1fr) 220px; gap: 18px; padding: 22px; }
+ .hero-action-studies .ha-frame .ha-action { font-size: 25px; padding: 24px; }
+ .hero-action-studies .ha-gallery .ha-action { width: 22%; font-size: 21px; }
+ .hero-action-studies .ha-graphite .ha-header { padding-inline: 24px; }
+ .hero-action-studies .ha-graphite .ha-actions { left: 24px; width: calc(28% - 48px); }
+ .hero-action-studies .ha-graphite .ha-action { font-size: 20px; gap: 12px; }
+ .hero-action-studies .ha-selector { padding-inline: 12px; gap: 10px; }
+ .hero-action-studies .ha-options button { padding-inline: 10px; }
+}
+@media(max-width:760px) {
+ .hero-action-studies { --ha-selector-height: 56px; }
+ .hero-action-studies .ha-stage { min-height: 600px; }
+ .hero-action-studies .ha-header { height: 62px; padding: 0 18px; grid-template-columns: 1fr auto; }
+ .hero-action-studies .ha-header .header-logo { width: 158px; }
+ .hero-action-studies .ha-navigation { display: none; }
+ .hero-action-studies .ha-utilities { gap: 6px; }
+ .hero-action-studies .ha-content { height: calc(100% - 62px); }
+ .hero-action-studies .ha-pause { width: 36px; height: 36px; bottom: 16px; right: 16px; }
+ .hero-action-studies .ha-cinema .ha-actions { bottom: 26px; padding: 0 18px; flex-direction: column; gap: 10px; }
+ .hero-action-studies .ha-cinema .ha-action { min-height: 54px; }
+ .hero-action-studies .ha-cinema .ha-pause { bottom: 170px; }
+ .hero-action-studies .ha-showcase .ha-content { grid-template-rows: minmax(0,1fr) 130px; }
+ .hero-action-studies .ha-showcase .ha-actions { padding: 10px 22px; display: block; }
+ .hero-action-studies .ha-showcase .ha-action { font-size: 15px; }
+ .hero-action-studies .ha-showcase .ha-secondary { border-top: 1px solid #d5d7cf; font-size: 13px; }
+ .hero-action-studies .ha-gallery .ha-logo { grid-column: 1; justify-self: start; }
+ .hero-action-studies .ha-gallery .ha-content { height: calc(100% - 62px); padding: 14px 26px 126px; }
+ .hero-action-studies .ha-gallery .ha-media { height: 100%; width: auto; max-width: 100%; }
+ .hero-action-studies .ha-gallery .ha-actions { inset: auto 26px 16px; flex-direction: column; align-items: stretch; }
+ .hero-action-studies .ha-gallery .ha-action { width: 100%; max-width: none; font-size: 17px; padding: 12px 0; }
+ .hero-action-studies .ha-frame .ha-content { padding: 16px; grid-template-columns: 1fr; grid-template-rows: minmax(0,1fr) 158px; gap: 14px; }
+ .hero-action-studies .ha-frame .ha-actions { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; gap: 12px; }
+ .hero-action-studies .ha-frame .ha-action { padding: 20px 16px; font-size: 19px; }
+ .hero-action-studies .ha-frame .ha-action svg { width: 32px; height: 32px; bottom: 16px; right: 16px; }
+ .hero-action-studies .ha-graphite .ha-header { inset: 0 0 auto; width: 100%; height: 62px; padding: 0 18px; display: grid; grid-template-columns: 1fr auto; align-items: center; }
+ .hero-action-studies .ha-graphite .ha-header .header-logo { width: 158px; }
+ .hero-action-studies .ha-graphite .ha-utilities { margin: 0; }
+ .hero-action-studies .ha-graphite .ha-media { inset: 62px 0 150px; }
+ .hero-action-studies .ha-graphite .ha-actions { left: 22px; right: 22px; bottom: 8px; width: auto; }
+ .hero-action-studies .ha-graphite .ha-action { font-size: 19px; padding: 18px 0; }
+ .hero-action-studies .ha-graphite .ha-secondary { font-size: 14px; }
+ .hero-action-studies .ha-selector { padding-inline: 10px; overflow-x: auto; justify-content: flex-start; }
+ .hero-action-studies .ha-preview-label, .hero-action-studies .ha-home { display: none; }
+ .hero-action-studies .ha-options { gap: 2px; }
+ .hero-action-studies .ha-options button { padding-inline: 8px; gap: 5px; font-size: 10px; min-height: 44px; }
+}

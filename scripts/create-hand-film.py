@@ -50,6 +50,10 @@ if not args.portrait_only:
     subprocess.run([args.ffmpeg, '-hide_banner', '-loglevel', 'error', '-y',
         '-i', str(destination / 'atelier-hands-loop.mp4'), '-frames:v', '1', '-q:v', '2',
         str(destination / 'atelier-hands-poster.jpg')], check=True)
+    subprocess.run([args.ffmpeg, '-hide_banner', '-loglevel', 'error', '-y',
+        '-i', str(destination / 'atelier-hands-loop.mp4'), '-vf', 'fps=12,scale=960:-2',
+        '-c:v', 'libwebp_anim', '-quality', '70', '-loop', '0',
+        str(destination / 'atelier-hands-motion-landscape.webp')], check=True)
 else:
     # Preserve the full portrait composition while retaining every edit point.
     portrait_filters = ['[0:v]fps=30,scale=1080:1920,split=7' + ''.join(f'[p{i}]' for i in range(7))]

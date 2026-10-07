@@ -6,6 +6,7 @@ import { AtelierHero } from './previews/Atelier';
 import { useEffect } from 'react';
 import Atelier from './previews/Atelier';
 import HeroDirections from './previews/HeroDirections';
+import HeroActionStudies from './previews/HeroActionStudies';
 import {InformationPage} from './components/InformationPage';
 import { CollectionPage } from './components/CollectionPage';
 import { BespokePage } from './components/BespokePage';
@@ -87,6 +88,7 @@ export function SiteContent() {
             <Route path="/preview/hero-wide" element={<HeroDirections wide />} />
             <Route path="/preview/hero-new" element={<HeroDirections fresh />} />
             <Route path="/preview/hero-current" element={<HomePage />} />
+            <Route path="/preview/hero-actions" element={<HeroActionStudies />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/collection/*" element={<CollectionPage />} />

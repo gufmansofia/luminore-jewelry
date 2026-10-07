@@ -6,7 +6,7 @@ import {renderPage} from './prerender';
 const escape=(s:string)=>s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 export async function buildSeo(outdir:string){
  const template=await readFile(path.join(outdir,'index.html'),'utf8');
- const publicPaths=publicRoutes(),routes=[...publicPaths,'/preview/atelier','/preview/hero','/preview/hero-wide','/preview/hero-new','/preview/hero-current','/404'];
+ const publicPaths=publicRoutes(),routes=[...publicPaths,'/preview/atelier','/preview/hero','/preview/hero-wide','/preview/hero-new','/preview/hero-current','/preview/hero-actions','/404'];
  for(const language of languages)for(const route of routes){
   const m=pageMetadata(route,language),localized=localePath(route,language);
   let html=template.replace(/<html\s+lang=["'][^"']+["']/,`<html lang="${language}"`).replace(/<title>.*?<\/title>/s,`<title>${escape(m.title)}</title>`).replace(/<meta\s+(?:name|property)=["'](?:description|robots|og:[^"']+|twitter:[^"']+)["'][^>]*>/g,'').replace(/<link[^>]+rel=["'](?:canonical|alternate)["'][^>]*>/g,'');
