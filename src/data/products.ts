@@ -1,4 +1,3 @@
-import stockPhotoAssets from "./stock-photo-assets.json";
 import stockFacts from "./stock-facts.json";
 import { approvedPrices } from "./approved-prices";
 import { stockProducts } from "./stock-products";
@@ -673,5 +672,5 @@ export const products: Product[] = [
   const updated = facts ? { ...product, priceUsd: facts.price, totalCarat: facts.carat, metalType: facts.metal, grossWeight: facts.gross, gemstoneType: facts.stone, diamondCut: facts.cut, diamondColor: facts.color, diamondClarity: facts.clarity, certificateType: facts.certificate, size: facts.size, sizeKind: facts.sizeKind, caratBasis: facts.caratBasis, perEarring: facts.perEarring } : product;
   // Use the recorded total consistently in names that explicitly include a carat weight.
   const cleanName = (name: string) => name.replace(/\b[\d.]+\s*ct\b/, `${updated.totalCarat} ct`).replace(/\s+stated\b/g, "");
-  return { ...updated, images: updated.images.length ? updated.images : stockPhotoAssets[String(product.id) as keyof typeof stockPhotoAssets] ? [stockPhotoAssets[String(product.id) as keyof typeof stockPhotoAssets]] : [], priceUsd: approvedPrices[product.id] ?? updated.priceUsd, name: cleanName(updated.name), nameEn: cleanName(updated.nameEn), nameUk: cleanName(updated.nameUk) };
+  return { ...updated, priceUsd: approvedPrices[product.id] ?? updated.priceUsd, name: cleanName(updated.name), nameEn: cleanName(updated.nameEn), nameUk: cleanName(updated.nameUk) };
 });

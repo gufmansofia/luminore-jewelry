@@ -5,7 +5,6 @@ import type { Product } from '../data/products';
 // These existing top views show the complete pendant and its attachments.
 const closeUpIndex: Record<number, number> = { 12: 3, 13: 3, 14: 3, 15: 3 };
 const framing: Record<number, [number, string]> = {
-  20:[2.1,'67% 58%'],21:[2.1,'67% 58%'],22:[2.1,'67% 58%'],
   12: [1.3, '50% 64%'],
   109: [2.6, '52% 88%'],
   110: [3, '50% 84%'],
