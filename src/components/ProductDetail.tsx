@@ -12,7 +12,7 @@ import {NotFound} from './NotFound';
 import {collectionPath,collectionRoute} from '../data/collections';
 import {localePath} from '../lib/locale-path';
 import {SITE} from '../lib/seo';
-import {SavePieceButton,SavedPiecesButton} from './SavedPieces';
+import {SavePieceButton} from './SavedPieces';
 import '../styles/product-detail.css';
 import {useBackNavigation} from '../hooks/useBackNavigation';
 import {useRestoredScroll} from '../hooks/useRouteScroll';
@@ -81,12 +81,13 @@ export function ProductDetail(){
  <p className="product-order-note">{pick("We’ll discuss availability, timing and delivery costs before you order.","До заказа обсудим наличие, сроки и стоимость доставки.","До замовлення обговоримо наявність, строки й вартість доставки.")} <Link to="/information/delivery" className="text-button">{pick("Delivery details","О доставке","Про доставку")}</Link></p>
  <p className="product-contact-phone">{t.product.orCall} <a href="tel:+421940600708" className="underline underline-offset-4">+421 940 600 708</a></p>
  </section>
- <div className="product-save-row"><SavePieceButton product={p} text /><SavedPiecesButton text /></div>
+ <div className="product-save-row"><SavePieceButton product={p} text /></div>
  <p key={`description-${natural}`} className="product-description stone-transition">{description}</p>
- <section className="product-details-section" aria-labelledby="spec-heading"><h2 id="spec-heading" >{t.product.specifications}</h2>
+ <details key={p.id} className="product-details-section product-specifications" aria-labelledby="spec-heading">
+ <summary><h2 id="spec-heading">{t.product.specifications}</h2><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 9 7 7 7-7" /></svg></summary>
  <div className="product-spec-groups">{specGroups.map(group=><div className="product-spec-group" key={group.title}><h3>{group.title}</h3><dl className="product-specs">{group.specs.map(s=><div key={s.label}><dt>{s.label}</dt><dd>{s.value}</dd></div>)}</dl></div>)}</div>
  {!natural&&pendingSpecs.length>0&&<p className="product-spec-pending">{pick('We’ll confirm before you order:','Перед заказом уточним:','Перед замовленням уточнимо:')} {pendingSpecs.join('; ')}.</p>}
- </section>
+ </details>
 
  </div></div>
  </main>
