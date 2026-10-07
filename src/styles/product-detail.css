@@ -20,6 +20,13 @@ body:has(.product-page) { background: #fff; }
 .product-gallery, .product-information { min-width: 0; }
 .product-gallery { margin-top: -40px; }
 .product-gallery-stage { position: relative; aspect-ratio: 1.05; }
+.product-gallery-track { position: absolute; inset: 0; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; touch-action: pan-x pan-y pinch-zoom; scrollbar-width: none; }
+.product-gallery-track::-webkit-scrollbar { display: none; }
+.product-gallery-track[data-dragging] { scroll-snap-type: none; }
+.product-gallery-slide { position: relative; flex: 0 0 100%; min-width: 0; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+.product-gallery-track--scrollable .product-image-open { cursor: grab; }
+.product-gallery-track[data-dragging] .product-image-open { cursor: grabbing; }
+.product-gallery-track img { user-select: none; -webkit-user-drag: none; }
 .product-image-open { position: absolute; inset: 0; width: 100%; height: 100%; cursor: zoom-in; }
 .product-main-image { width: 100%; height: 100%; object-fit: contain; }
 .product-image-empty { height: 100%; display: grid; place-items: center; background: #f7f7f6; color: #71716f; }

@@ -5,6 +5,7 @@ import {useLanguage} from '../i18n';
 import {Footer} from './Footer';
 import {DetailHeader} from './DetailHeader';
 import {ProductImage} from './ProductImage';
+import {ProductGallery} from './ProductGallery';
 import {ContactChannel} from './ContactChannel';
 import {choose,catalogueWeight,productName,productTitle,productDescription,productSpecGroups,requestDetail} from '../lib/product-copy';
 import {formatCarat} from '../lib/carat';
@@ -21,20 +22,17 @@ export function ProductDetail(){
  const {id}=useParams();const location=useLocation();const {language:l,t}=useLanguage();
  const p=products.find(p=>p.id===Number(id));
  const restoredScroll=useRestoredScroll();
- const [index,setIndex]=useState(0);const [natural,setNatural]=useState(false);
- const [galleryZoom,setGalleryZoom]=useState(false);
+ const [natural,setNatural]=useState(false);
  const [showSticky,setShowSticky]=useState(false);
  const actionRef=useRef<HTMLDivElement>(null);
  useEffect(()=>{const target=actionRef.current;if(!target)return;const observer=new IntersectionObserver(([entry])=>setShowSticky(!entry.isIntersecting&&entry.boundingClientRect.top<0));observer.observe(target);return()=>observer.disconnect();},[id]);
- const touchStart=useRef<{x:number;y:number}|null>(null);const swiped=useRef(false);
  const images=p?.images??[];
  const previousPath=location.state?.catalogPath;
  const catPath=previousPath==='/preview/atelier'?previousPath:typeof previousPath==='string'&&collectionRoute(previousPath)?previousPath:collectionPath(p?.categoryEn??'all');
  const catState={catalogPath:catPath,catalog:location.state?.catalog};
  const back=useBackNavigation(`${catPath}#products`,{catalog:catState.catalog,returnToCatalog:true});
  const pick=(en:string,ru:string,uk:string)=>choose(l,en,ru,uk);
- const step=(delta:number)=>{setIndex(i=>(i+delta+images.length)%images.length);setGalleryZoom(false);};
- useEffect(()=>{setIndex(0);setNatural(false);setGalleryZoom(false);if(restoredScroll===undefined)window.scrollTo(0,0);},[id]);
+ useEffect(()=>{setNatural(false);if(restoredScroll===undefined)window.scrollTo(0,0);},[id]);
  if(!p)return <NotFound/>;
  const name=productName(p,l),description=productDescription(p,l,natural,false),allSpecGroups=productSpecGroups(p,l,natural);
  const pendingSpecs=allSpecGroups.flatMap(group=>group.specs).filter(spec=>spec.value===requestDetail(l)).map(spec=>spec.label);
@@ -56,12 +54,7 @@ export function ProductDetail(){
  <p className="product-mobile-price" aria-live="polite">{price}</p>
  </header>
  <div className="product-gallery">
- <div className={`product-gallery-stage product-photo${images.length?'':' product-gallery-stage--empty'}`}>
- {images.length?<><button type="button" className={`product-image-open${galleryZoom?' is-zoomed':''}`} aria-pressed={galleryZoom} onClick={event=>{if(swiped.current){swiped.current=false;return;}const img=event.currentTarget.querySelector('img');if(img){const rect=event.currentTarget.getBoundingClientRect();img.style.transformOrigin=event.detail===0?'50% 50%':`${(event.clientX-rect.left)/rect.width*100}% ${(event.clientY-rect.top)/rect.height*100}%`;}setGalleryZoom(value=>!value);}} onPointerMove={event=>{if(!galleryZoom||event.pointerType==='touch')return;const rect=event.currentTarget.getBoundingClientRect();const img=event.currentTarget.querySelector('img');if(img)img.style.transformOrigin=`${(event.clientX-rect.left)/rect.width*100}% ${(event.clientY-rect.top)/rect.height*100}%`;}} onPointerLeave={event=>{const img=event.currentTarget.querySelector('img');if(img)img.style.transformOrigin='50% 50%';}} onTouchStart={event=>{swiped.current=false;touchStart.current={x:event.touches[0].clientX,y:event.touches[0].clientY};}} onTouchEnd={event=>{if(!touchStart.current||galleryZoom||images.length<2)return;const dx=event.changedTouches[0].clientX-touchStart.current.x,dy=event.changedTouches[0].clientY-touchStart.current.y;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){swiped.current=true;step(dx<0?1:-1);}touchStart.current=null;}} aria-label={galleryZoom?pick('Zoom out','Уменьшить','Зменшити'):pick('Enlarge product photograph','Увеличить фотографию изделия','Збільшити фотографію виробу')}>
- <ProductImage key={images[index]} src={images[index]} alt={name} sizes={galleryZoom?'100vw':'(max-width: 767px) 100vw, (max-width: 1023px) 680px, 55vw'} loading="eager" className="product-main-image"/>
- </button>{images.length>1&&<><button type="button" className="gallery-arrow gallery-arrow--previous" onClick={()=>step(-1)} aria-label={pick('Previous image','Предыдущее фото','Попереднє фото')}><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="M7 1 1 6l6 5Z" fill="currentColor" /></svg></button><button type="button" className="gallery-arrow gallery-arrow--next" onClick={()=>step(1)} aria-label={pick('Next image','Следующее фото','Наступне фото')}><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="m1 1 6 5-6 5Z" fill="currentColor" /></svg></button><span className="sr-only" aria-live="polite">{index+1} / {images.length}</span></>}</>:<div className="product-image-empty"><span className="photo-unavailable">{pick("Photographs available on request","Фотографии — по запросу","Фотографії — за запитом")}</span><a className="text-button" href={`https://wa.me/421940600708?text=${encodeURIComponent(message+' '+pick('Please send photographs.','Пришлите, пожалуйста, фотографии.','Надішліть, будь ласка, фотографії.'))}`} target="_blank" rel="noopener noreferrer">{pick("Request photos","Запросить фото","Запитати фото")} ↗</a></div>}
- </div>
-
+ {images.length?<ProductGallery key={p.id} images={images} name={name}/>:<div className="product-gallery-stage product-photo product-gallery-stage--empty"><div className="product-image-empty"><span className="photo-unavailable">{pick("Photographs available on request","Фотографии — по запросу","Фотографії — за запитом")}</span><a className="text-button" href={`https://wa.me/421940600708?text=${encodeURIComponent(message+' '+pick('Please send photographs.','Пришлите, пожалуйста, фотографии.','Надішліть, будь ласка, фотографії.'))}`} target="_blank" rel="noopener noreferrer">{pick("Request photos","Запросить фото","Запитати фото")} ↗</a></div></div>}
  </div>
  <div className="product-information">
  <div className="stone-options" role="group" aria-label={t.product.stones}>

@@ -69,7 +69,7 @@
 .saved-comparison th span { display:block;font-size:15px;line-height:1.5;margin-top:16px; }
 .saved-comparison td { vertical-align:top;padding:18px 12px;border-top:1px solid #d6d9d9;font-size:14px;line-height:1.5;overflow-wrap:anywhere; }
 .saved-comparison td>span { display:block;color:#656868;font-size:12px;margin-bottom:8px; }
-.product-page .product-image-open { overflow:hidden;touch-action:pan-y; }
+.product-page .product-image-open { overflow:hidden;touch-action:pan-x pan-y pinch-zoom; }
 .product-page .product-image-open.is-zoomed { cursor:zoom-out; }
 .product-main-image { transition:transform .45s cubic-bezier(.2,.7,.2,1); }
 .product-image-open.is-zoomed .product-main-image { transform:scale(2); }
