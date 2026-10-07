@@ -3,7 +3,7 @@ import { Journal } from './components/Blogs';
 import {Seo} from './components/Seo';
 import {NotFound} from './components/NotFound';
 import { AtelierHero } from './previews/Atelier';
-import { useEffect, useSyncExternalStore } from 'react';
+import { useEffect } from 'react';
 import Atelier from './previews/Atelier';
 import HeroDirections from './previews/HeroDirections';
 import HeroActionStudies, { WhiteHeaderHeroPreview } from './previews/HeroActionStudies';
@@ -22,10 +22,6 @@ import { ProductSpotlight } from './components/ProductSpotlight';
 import { RouteScrollRestoration, useRestoredScroll } from './hooks/useRouteScroll';
 
 function SkipLink(){const {language}=useLanguage();return <a className="skip-link" href="#main-content">{language==='ru'?'Перейти к содержимому':language==='uk'?'Перейти до вмісту':'Skip to content'}</a>}
-
-const subscribeToLocalPreview = () => () => {};
-const localPreviewSnapshot = () => process.env.NODE_ENV !== 'production';
-const publishedPreviewSnapshot = () => false;
 
 export function LangSync() {
   const { language } = useLanguage();
@@ -78,8 +74,6 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotligh
 }
 
 export function SiteContent() {
-  // Keep pre-rendered production pages unchanged; enable the study in the dev browser only.
-  const localSpotlightFirst = useSyncExternalStore(subscribeToLocalPreview, localPreviewSnapshot, publishedPreviewSnapshot);
   return (
         <SavedPiecesProvider>
         <RouteScrollRestoration />
@@ -87,8 +81,7 @@ export function SiteContent() {
         <SkipLink/>
         <div className="animate-page-enter">
           <Routes>
-            {/* Local composition study; production retains the approved section order. */}
-            <Route path="/" element={<HomePage spotlightFirst={localSpotlightFirst} />} />
+            <Route path="/" element={<HomePage spotlightFirst />} />
             <Route path="/preview/atelier" element={<Atelier />} />
             <Route path="/preview/hero" element={<HeroDirections />} />
             <Route path="/preview/hero-wide" element={<HeroDirections wide />} />
