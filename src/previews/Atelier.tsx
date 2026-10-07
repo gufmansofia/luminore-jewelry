@@ -12,7 +12,7 @@ import { BackToTop } from '../components/BackToTop';
 import { SavedPiecesButton } from '../components/SavedPieces';
 import { useReveal } from '../hooks/useMotion';
 import { AtelierHeroMedia } from './AtelierHeroMedia';
-import { HeroLoopMedia } from './HeroLoopMedia';
+import { HeroLoopMedia, type HeroStudy } from './HeroLoopMedia';
 import { CategoryPreview } from '../components/CategoryPreview';
 
 const copy = {
@@ -40,7 +40,7 @@ export default function Atelier() {
   );
 }
 
-export type HeroDirection = 'minimal' | 'editorial' | 'cinema' | 'wide-immersive' | 'wide-caption' | 'wide-center';
+export type HeroDirection = 'minimal' | 'editorial' | 'cinema' | 'wide-immersive' | 'wide-caption' | 'wide-center' | 'sharp-macro' | 'sharp-triptych' | 'sharp-duo';
 
 export function AtelierHero({ homePath = "/preview/atelier", direction }: { homePath?: string; direction?: HeroDirection }) {
   const { language } = useLanguage();
@@ -49,8 +49,9 @@ export function AtelierHero({ homePath = "/preview/atelier", direction }: { home
   const [menuOpen,setMenuOpen]=useState(false);
   const wide = direction?.startsWith('wide-') ?? false;
   const dark = direction === 'cinema' || direction === 'wide-immersive' || direction === 'wide-center';
+  const study = direction?.startsWith('sharp-') ? direction.slice(6) as HeroStudy : undefined;
   return (
-    <div id="hero" className={`atelier${direction ? ` atelier--${direction}` : ''}${wide ? ' atelier--wide' : ''}`} data-theme={dark ? 'dark' : 'light'}>
+    <div id="hero" className={`atelier${direction ? ` atelier--${direction}` : ''}${wide ? ' atelier--wide' : ''}${study ? ' atelier--sharp' : ''}`} data-theme={dark ? 'dark' : 'light'}>
 
       <div className="atelier-header-bar">
       <header className="atelier-header">
@@ -85,7 +86,7 @@ export function AtelierHero({ homePath = "/preview/atelier", direction }: { home
             <p className="atelier-description">{t.description}<br />{t.description2}</p>
             {direction === 'editorial' && <p className="hero-direction-caption">{language === 'ru' ? 'Коллекция и индивидуальный дизайн' : language === 'uk' ? 'Колекція та індивідуальний дизайн' : 'The collection & your own creation'}</p>}
           </div>
-          {direction ? <HeroLoopMedia alt={t.imageAlt} wide={wide}
+          {direction ? <HeroLoopMedia alt={t.imageAlt} wide={wide} study={study}
             pauseLabel={language === 'ru' ? 'Приостановить видео' : language === 'uk' ? 'Призупинити відео' : 'Pause video'}
             resumeLabel={language === 'ru' ? 'Продолжить видео' : language === 'uk' ? 'Продовжити відео' : 'Resume video'} />
             : <AtelierHeroMedia alt={t.imageAlt} skipLabel={language === 'ru' ? 'Пропустить видео' : language === 'uk' ? 'Пропустити відео' : 'Skip video'} />}

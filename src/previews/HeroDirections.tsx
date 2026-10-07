@@ -6,6 +6,7 @@ import { useLanguage } from '../i18n';
 
 const originalDirections: HeroDirection[] = ['minimal', 'editorial', 'cinema'];
 const wideDirections: HeroDirection[] = ['wide-immersive', 'wide-caption', 'wide-center'];
+const freshDirections: HeroDirection[] = ['sharp-macro', 'sharp-triptych', 'sharp-duo'];
 const copy = {
   ru: {
     title: 'Три направления для первого впечатления',
@@ -40,11 +41,17 @@ const wideCopy = {
   en: { title: 'Film from edge to edge', intro: 'Three compositions with film across the entire screen. No side margins. Navigation sits over the film or just above it.', names: ['Immersive', 'Film + caption', 'Type over film'], descriptions: ['Film begins at the very top of the screen. Transparent navigation and copy on the left keep the jewellery in focus.', 'White navigation, then a full-width film. The headline and actions sit in a quiet light section below.', 'An immersive first screen with a centred headline and a restrained button. Soft shading brings it together.'] },
 };
 
-export default function HeroDirections({ wide = false }: { wide?: boolean }) {
+const freshCopy = {
+  ru: { title: 'Новые композиции', intro: 'Чистое видео, светлая шапка и текст за пределами кадра. Три способа заполнить экран без размытого фона.', names: ['Крупный план', 'Три кадра', 'Два ракурса'], descriptions: ['Бриллианты крупным планом, без лица модели. Спокойное движение, чистая белая полоса с заголовком и компактной кнопкой.', 'Три чётких кадра в одной широкой композиции: портрет и два приближения. Видео выглядит как разворот модного журнала.', 'Два крупных ракурса рядом. Асимметричная подпись и тонкие линии под видео создают впечатление лукбука.'] },
+  uk: { title: 'Нові композиції', intro: 'Чітке відео, світла шапка та текст за межами кадру. Без розмитого тла.', names: ['Крупний план', 'Три кадри', 'Два ракурси'], descriptions: ['Діаманти крупним планом, спокійний рух та біла смуга із заголовком.', 'Портрет і два наближення в одній широкій композиції.', 'Два великі ракурси та асиметричний підпис у стилі лукбука.'] },
+  en: { title: 'New compositions', intro: 'Sharp film, light navigation and copy outside the frame. Three ways to fill the screen without a blurred backdrop.', names: ['Diamond close-up', 'Three frames', 'Two perspectives'], descriptions: ['A quiet close-up of the diamonds. A clean white caption strip keeps the headline and compact action outside the film.', 'Three sharp views in one wide composition: a portrait and two closer perspectives. Like a fashion editorial spread.', 'Two large views side by side. Asymmetric copy and fine rules below the film give it a lookbook feel.'] },
+};
+
+export default function HeroDirections({ wide = false, fresh = false }: { wide?: boolean; fresh?: boolean }) {
   const [params, setParams] = useSearchParams();
   const { language } = useLanguage();
-  const t = wide ? { ...copy[language], ...wideCopy[language] } : copy[language];
-  const directions = wide ? wideDirections : originalDirections;
+  const t = fresh ? { ...copy[language], ...freshCopy[language] } : wide ? { ...copy[language], ...wideCopy[language] } : copy[language];
+  const directions = fresh ? freshDirections : wide ? wideDirections : originalDirections;
   const requested = params.get('variant');
   const selected = directions.includes(requested as HeroDirection) ? requested as HeroDirection : directions[0]!;
   const index = directions.indexOf(selected);

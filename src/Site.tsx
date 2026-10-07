@@ -85,6 +85,7 @@ export function SiteContent() {
             <Route path="/preview/atelier" element={<Atelier />} />
             <Route path="/preview/hero" element={<HeroDirections />} />
             <Route path="/preview/hero-wide" element={<HeroDirections wide />} />
+            <Route path="/preview/hero-new" element={<HeroDirections fresh />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/collection/*" element={<CollectionPage />} />

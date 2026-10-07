@@ -1,15 +1,23 @@
 import { useState } from 'react';
 import { useAutoplayFilm } from '../hooks/useAutoplayFilm';
 
-export function HeroLoopMedia({ alt, pauseLabel, resumeLabel, wide = false }: { alt: string; pauseLabel: string; resumeLabel: string; wide?: boolean }) {
+const studyAssets = {
+  macro: { video: '/optimized/atelier-study-macro.mp4', animation: '/optimized/atelier-study-macro.webp', poster: '/optimized/atelier-study-macro-poster.jpg' },
+  triptych: { video: '/optimized/atelier-study-triptych.mp4', animation: '/optimized/atelier-study-triptych.webp', poster: '/optimized/atelier-study-triptych-poster.jpg' },
+  duo: { video: '/optimized/atelier-study-duo.mp4', animation: '/optimized/atelier-study-duo.webp', poster: '/optimized/atelier-study-duo-poster.jpg' },
+};
+export type HeroStudy = keyof typeof studyAssets;
+
+export function HeroLoopMedia({ alt, pauseLabel, resumeLabel, wide = false, study }: { alt: string; pauseLabel: string; resumeLabel: string; wide?: boolean; study?: HeroStudy }) {
+  const assets = study ? studyAssets[study] : null;
   const [phase, setPhase] = useState<'loading' | 'video' | 'animation' | 'photo'>('loading');
   const media = useAutoplayFilm({
     loop: true,
     mobileQuery: '(max-width: 800px)',
-    mobileSrc: '/optimized/atelier-loop-720.mp4',
-    desktopSrc: wide ? '/optimized/atelier-loop-wide.mp4' : '/optimized/atelier-loop-1080.mp4',
-    mobileFallback: '/optimized/atelier-loop-motion-mobile.webp',
-    desktopFallback: wide ? '/optimized/atelier-loop-motion-wide.webp' : '/optimized/atelier-loop-motion-desktop.webp',
+    mobileSrc: assets ? assets.video + '?edit=3' : '/optimized/atelier-loop-720.mp4',
+    desktopSrc: (assets ? assets.video + '?edit=3' : null) ?? (wide ? '/optimized/atelier-loop-wide.mp4' : '/optimized/atelier-loop-1080.mp4'),
+    mobileFallback: assets ? assets.animation + '?edit=3' : '/optimized/atelier-loop-motion-mobile.webp',
+    desktopFallback: (assets ? assets.animation + '?edit=3' : null) ?? (wide ? '/optimized/atelier-loop-motion-wide.webp' : '/optimized/atelier-loop-motion-desktop.webp'),
     onPlaying: () => setPhase('video'),
   });
 
@@ -17,11 +25,11 @@ export function HeroLoopMedia({ alt, pauseLabel, resumeLabel, wide = false }: { 
     <div ref={media.containerRef} className="atelier-photo" data-phase={media.fallback && !media.animation ? 'photo' : phase}>
       <img
         className="atelier-hero-still"
-        src="/optimized/atelier-portrait-final-780.webp"
-        srcSet="/optimized/atelier-portrait-final-480.webp 480w, /optimized/atelier-portrait-final-780.webp 780w, /optimized/atelier-portrait-final-1200.webp 1200w"
+        src={(assets ? assets.poster + '?edit=3' : null) ?? '/optimized/atelier-portrait-final-780.webp'}
+        srcSet={assets ? undefined : '/optimized/atelier-portrait-final-480.webp 480w, /optimized/atelier-portrait-final-780.webp 780w, /optimized/atelier-portrait-final-1200.webp 1200w'}
         sizes="(max-width: 800px) 100vw, (min-width: 1600px) 770px, 55vw"
-        width={1200}
-        height={1800}
+        width={assets ? 1440 : 1200}
+        height={assets ? (study === 'duo' ? 600 : study === 'triptych' ? 400 : 720) : 1800}
         alt={alt}
         fetchPriority="high"
         decoding="async"

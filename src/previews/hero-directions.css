@@ -209,3 +209,69 @@
  .atelier.atelier--wide-center .atelier-action:last-child { font-size:10px; }
  .atelier.atelier--wide .atelier-header-bar { backdrop-filter:blur(5px); }
 }
+
+/* Sharp film studies: clean campaign, triptych and lookbook. Preview only. */
+.atelier.atelier--sharp { padding-top:86px; background:#fff; color:#171717; }
+.atelier.atelier--sharp .atelier-header-bar { background:#fff; color:#171717; }
+.atelier.atelier--sharp .atelier-header { border-bottom:0; }
+.atelier.atelier--sharp .atelier-hero { max-width:none; margin:0; padding:0; gap:0; grid-template-areas:'photo photo' 'story actions'; grid-template-columns:1.35fr 1fr; align-items:center; }
+.atelier.atelier--sharp .atelier-photo { width:100%; max-width:none; aspect-ratio:auto; height:clamp(360px,39vw,590px); align-self:stretch; background:#949e98; }
+.atelier.atelier--sharp .atelier-photo::after { display:none; }
+.atelier.atelier--sharp .atelier-hero-film,.atelier.atelier--sharp .atelier-hero-still { width:100%; height:100%; object-fit:cover; object-position:center; }
+.atelier.atelier--sharp .atelier-story { padding:34px 6vw 42px; text-align:left; }
+.atelier.atelier--sharp .hero-direction-eyebrow { font-size:9px; letter-spacing:.15em; margin-bottom:14px; color:#70706a; }
+.atelier.atelier--sharp h1 { text-transform:none; overflow-wrap:normal; font-size:clamp(29px,3vw,45px); letter-spacing:-.02em!important; line-height:1.15; }
+.atelier.atelier--sharp .atelier-description { font-size:12px!important; line-height:1.8!important; color:#696963; margin:18px 0 0; max-width:540px; }
+.atelier.atelier--sharp .atelier-actions { border:0; margin:0; padding:34px 6vw 42px 0; display:flex; flex-wrap:wrap; gap:22px; align-items:center; justify-content:flex-end; }
+.atelier.atelier--sharp .atelier-action { font-size:11px; padding:15px 18px; min-height:48px; gap:20px; border:0; color:#171717; }
+.atelier.atelier--sharp .atelier-action:first-child { background:#1b1b1b; color:white; }
+.atelier.atelier--sharp .atelier-action:first-child img { filter:invert(1); }
+.atelier.atelier--sharp .atelier-action:last-child { padding-inline:0; border-bottom:1px solid #b8b8b1; }
+.atelier.atelier--sharp .atelier-action img { width:20px; height:20px; }
+.atelier.atelier--sharp .atelier-film-control { bottom:20px; right:24px; }
+
+.atelier.atelier--sharp-macro .atelier-photo { height:clamp(320px,34vw,520px); }
+.atelier.atelier--sharp-macro .hero-line { display:inline; overflow:visible; margin:0; padding:0; }
+.atelier.atelier--sharp-macro .hero-line>* { display:inline; transform:none!important; animation:none!important; }
+.atelier.atelier--sharp-macro .hero-line+.hero-line::before { content:' '; }
+.atelier.atelier--sharp-macro h1 { font-size:clamp(27px,2.55vw,38px); }
+
+.atelier.atelier--sharp-triptych .atelier-photo { height:auto; aspect-ratio:3.6; }
+.atelier.atelier--sharp-triptych .atelier-photo::after { display:block; content:''; position:absolute; z-index:2; inset:0; pointer-events:none; background:linear-gradient(90deg,transparent calc(33.333% - 1px),#ffffffb0 calc(33.333% - 1px),#ffffffb0 calc(33.333% + 1px),transparent calc(33.333% + 1px),transparent calc(66.666% - 1px),#ffffffb0 calc(66.666% - 1px),#ffffffb0 calc(66.666% + 1px),transparent calc(66.666% + 1px)); }
+.atelier.atelier--sharp-triptych .atelier-story { padding-top:32px; }
+.atelier.atelier--sharp-triptych .atelier-description { max-width:440px; }
+.atelier.atelier--sharp-triptych h1 { font-size:clamp(30px,3.4vw,52px); }
+
+.atelier.atelier--sharp-duo { background:#f5f3ef; }
+.atelier.atelier--sharp-duo .atelier-header-bar { background:#f5f3ef; }
+.atelier.atelier--sharp-duo .atelier-hero { grid-template-columns:1.4fr 1fr; }
+.atelier.atelier--sharp-duo .atelier-photo { height:clamp(300px,29vw,430px); }
+.atelier.atelier--sharp-duo .atelier-photo::after { display:block; content:''; position:absolute; z-index:2; inset:0; pointer-events:none; background:linear-gradient(90deg,transparent calc(50% - 1px),#f5f3ef calc(50% - 1px),#f5f3ef calc(50% + 1px),transparent calc(50% + 1px)); }
+.atelier.atelier--sharp-duo .atelier-story { padding:28px 6vw 34px; }
+.atelier.atelier--sharp-duo h1 { font-size:clamp(32px,3.1vw,48px); }
+.atelier.atelier--sharp-duo .atelier-actions { display:block; padding:40px 6vw 50px 0; }
+.atelier.atelier--sharp-duo .atelier-action { background:transparent; color:#171717; border-top:1px solid #aaa99f; border-bottom:0; border-radius:0; min-height:60px; padding:17px 0; font-size:14px; }
+.atelier.atelier--sharp-duo .atelier-action:last-child { border-bottom:1px solid #aaa99f; }
+.atelier.atelier--sharp-duo .atelier-action:first-child img { filter:none; }
+
+@media(max-width:800px) {
+ .atelier.atelier--sharp { padding-top:56px; }
+ .atelier.atelier--sharp .atelier-hero { grid-template-columns:1fr; grid-template-areas:'photo' 'story' 'actions'; }
+ .atelier.atelier--sharp .atelier-photo { height:auto; aspect-ratio:1.12; }
+ .atelier.atelier--sharp .atelier-story { padding:26px 24px 22px; }
+ .atelier.atelier--sharp h1 { font-size:clamp(28px,7.5vw,45px); }
+ .atelier.atelier--sharp .atelier-description { font-size:12px!important; margin-top:18px; }
+ .atelier.atelier--sharp .atelier-actions { padding:0 24px 34px; justify-content:flex-start; gap:16px; }
+ .atelier.atelier--sharp .atelier-action { font-size:10px; padding:13px 14px; gap:14px; }
+ .atelier.atelier--sharp .atelier-film-control { right:14px; bottom:14px; }
+ .atelier.atelier--sharp-macro .hero-line { display:block; }
+ .atelier.atelier--sharp-macro .hero-line>* { display:block; }
+ .atelier.atelier--sharp-macro .hero-line+.hero-line::before { content:none; }
+ .atelier.atelier--sharp-triptych .atelier-photo::after,.atelier.atelier--sharp-duo .atelier-photo::after { display:none; }
+ .atelier.atelier--sharp-duo .atelier-actions { display:block; padding:0 24px 36px; }
+ .atelier.atelier--sharp-duo .atelier-action { font-size:13px; padding:16px 0; }
+}
+
+@media(max-width:800px) { .atelier.atelier--sharp-triptych .atelier-photo { height:auto; aspect-ratio:2.4; } .atelier.atelier--sharp-duo .atelier-photo { height:auto; aspect-ratio:1.5; } }
+
+.atelier.atelier--sharp-duo .atelier-action:first-child { background:transparent; color:#171717; }
