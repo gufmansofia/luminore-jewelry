@@ -168,7 +168,7 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
 .contact-direct { margin-top:36px; border-top:1px solid var(--gallery-rule); padding-top:26px; }
 .contact-direct h3 { font-size:15px; margin-bottom:14px; }
 .contact-direct > a { display:table; min-height:44px; line-height:44px; font-size:16px; }
-.contact-direct > .contact-phone { font-family:var(--font-editorial); font-size:30px; }
+.contact-direct > .contact-phone { font-family:var(--font-editorial); font-size:26px; }
 .contact-channels { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
 .contact-channels .contact-channel { flex:1 1 128px; min-width:0; padding-inline:12px; }
 .contact-channels .contact-channel--icon { display:inline-flex; align-items:center; justify-content:center; flex:0 0 44px; width:44px; height:44px; min-height:44px; padding:10px; border:0; background:transparent; }
