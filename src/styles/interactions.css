@@ -35,6 +35,9 @@
 .save-piece-button[aria-pressed="true"] svg { fill:currentColor; }
 .saved-trigger--text { padding-right:0; }
 .saved-count { font-size:11px;min-width:1ch; }
+.saved-trigger:not(.saved-trigger--text) { gap:4px; }
+.saved-trigger:not(.saved-trigger--text) svg { stroke-width:1.6; }
+.saved-trigger:not(.saved-trigger--text) .saved-count { font-weight:500; }
 .save-piece-button:hover svg { transform:scale(1.08); }
 .save-piece-button svg { transition:transform .2s; }
 .catalogue-card>.save-piece-button,.saved-photo>.save-piece-button { position:absolute;top:8px;right:8px;background:#fff;color:#242424; }
@@ -123,7 +126,7 @@
   .atelier-language { gap:4px; }
   .atelier-language>.language-select { min-width:44px; }
   .atelier-language>.saved-trigger,.detail-header-actions>.saved-trigger { position:relative;flex:0 0 44px;width:44px;padding:0; }
-  .atelier-language>.saved-trigger .saved-count,.detail-header-actions>.saved-trigger .saved-count { position:absolute;top:0;right:0;font-size:10px;line-height:12px;letter-spacing:0; }
+  .atelier-language>.saved-trigger .saved-count,.detail-header-actions>.saved-trigger .saved-count { position:absolute;top:0;right:4px;font-size:10px;line-height:12px;letter-spacing:0; }
   .detail-header.detail-header--light .detail-header-actions { gap:8px; }
   .detail-header.detail-header--light .language-select { min-width:44px; }
   .saved-panel { padding:28px; }
