@@ -80,6 +80,7 @@ body:has(.atelier--capture-layers) .animate-page-enter { animation: none !import
  .atelier-action img { width: 34px; height: 34px; }
  .atelier--quiet .atelier-story { display: none; }
  .atelier--quiet .atelier-hero { grid-template-areas: 'photo' 'actions'; gap: 0; }
+ .atelier--quiet .atelier-actions { border-top: 0; }
  .atelier--quiet .atelier-film-control { display: none; }
  .atelier--quiet .atelier-action { font-size: clamp(18px, 5.6vw, 22px); line-height: 1.2; letter-spacing: .02em; text-transform: uppercase; }
  .atelier--quiet .atelier-action-desktop-label { display: none; }
