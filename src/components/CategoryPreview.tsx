@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../i18n';
-import type { Language } from '../i18n/translations';
 import { products } from '../data/products';
 import { collectionPath } from '../data/collections';
 import { cataloguePhoto } from '../lib/catalogue-photo';
@@ -16,7 +15,6 @@ const categories = [
 ].map(item => ({
   ...item,
   cover: cataloguePhoto(products.find(product => product.id === item.productId)!),
-  count: products.filter(product => product.categoryEn === item.category).length,
 }));
 
 const copy = {
@@ -24,16 +22,6 @@ const copy = {
   ru: { title: 'Украшения по категориям', intro: 'Натуральные или лабораторные бриллианты.', browse: 'Смотреть всю коллекцию', categories: 'Категории украшений', swipe: 'Листайте, чтобы увидеть ещё' },
   uk: { title: 'Прикраси за категоріями', intro: 'Природні або лабораторні діаманти.', browse: 'Переглянути всю колекцію', categories: 'Категорії прикрас', swipe: 'Гортайте, щоб побачити ще' },
 };
-
-function pieceCount(count: number, language: Language) {
-  const plural = new Intl.PluralRules(language).select(count);
-  const noun = language === 'en'
-    ? count === 1 ? 'piece' : 'pieces'
-    : language === 'ru'
-      ? plural === 'one' ? 'изделие' : plural === 'few' ? 'изделия' : 'изделий'
-      : plural === 'one' ? 'виріб' : plural === 'few' ? 'вироби' : 'виробів';
-  return `${count} ${noun}`;
-}
 
 export function CategoryPreview() {
   const { language } = useLanguage();
@@ -53,7 +41,6 @@ export function CategoryPreview() {
               <ProductImage src={item.cover.src} alt="" loading="lazy" sizes={`(max-width: 700px) ${50 * item.cover.scale}vw, (min-width: 1280px) ${225 * item.cover.scale}px, ${18 * item.cover.scale}vw`} />
             </div>
             <h3>{item.names[language]}</h3>
-            <p>{pieceCount(item.count, language)}</p>
           </Link>
         </li>)}
       </ul>
