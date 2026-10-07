@@ -8,6 +8,6 @@ export function Contact() {
   return <section id="contact" data-theme="light" className="editorial-section contact-section" aria-labelledby="contact-title"><div className="editorial-container contact-layout">
     <div><header className="section-heading"><p className="section-eyebrow">{t.contact.eyebrow}</p><h2 id="contact-title">{t.contact.headline1} {t.contact.headline2}</h2><p>{t.contact.description}</p></header>
     <div className="contact-direct"><h3>{pick('Speak with us directly','Свяжитесь с нами напрямую','Зв’яжіться з нами напряму')}</h3><a className="contact-phone" href="tel:+421940600708">+421 940 600 708</a><a href="mailto:jewelry@luminore.eu">jewelry@luminore.eu</a><div className="contact-channels"><ContactChannel channel="WhatsApp" /><ContactChannel channel="Telegram" /><ContactChannel channel="Instagram" /></div></div></div>
-    <EnquiryForm />
+    <div className="contact-form-panel"><EnquiryForm /></div>
   </div></section>;
 }

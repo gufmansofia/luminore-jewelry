@@ -107,7 +107,9 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
  .guided-enquiry .guided-stage>h3 { min-height:0; }
  .enquiry-channels { grid-template-columns:1fr; }
  .journal-carousel-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:-8px 0 16px; color:#626262; font-size:12px; line-height:1.4; }
- .journal-carousel-controls .text-button { min-height:44px; font-size:12px; text-align:right; }
+ /* Keep pause available to keyboard and screen-reader users without a visible text control. */
+ .journal-carousel-controls .text-button { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+ .journal-carousel-controls .text-button:focus-visible { position:static; width:auto; height:auto; min-height:44px; padding:8px; clip-path:none; font-size:12px; }
  .article-hero .breadcrumbs>span:nth-last-child(-n+2) { display:none; }
  .article-hero .article-meta { display:flex; flex-wrap:wrap; gap:8px 14px; font-size:12px; line-height:1.4; }
  .article-toc summary { gap:10px; }

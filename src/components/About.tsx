@@ -34,7 +34,7 @@ const copy = {
 };
 
 function StoneDetail({ title, description }: { title: string; description: string }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const id = useId();
   return <article className="approach-stone">
     <h3><button type="button" className="approach-stone-toggle" id={`${id}-toggle`} aria-expanded={open} aria-controls={`${id}-answer`} onClick={() => setOpen(value => !value)}>

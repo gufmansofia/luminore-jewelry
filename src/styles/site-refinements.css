@@ -22,6 +22,11 @@
 .catalogue-page-links a{display:grid;place-items:center;min-width:44px;min-height:44px;border-bottom:1px solid transparent}
 .catalogue-page-links a[aria-current="page"]{border-bottom-color:currentColor;font-weight:600}
 @media(max-width:700px){.collection-page{padding-top:64px}.collection-page .catalogue-section{padding-top:34px}.catalogue-heading{margin-bottom:30px}.catalogue-filter-row{margin-bottom:28px}}
+@media(max-width:700px){
+ .collection-page main > .site-breadcrumbs:has(+ .catalogue-section){display:none}
+ .collection-page #products.catalogue-section{padding-top:24px}
+ .contact-section .contact-form-panel{display:none}
+}
 
 .atelier-closing.atelier-closing--divider{height:36px;min-height:0;padding:0;background:#26292b}
 .atelier-description{font-size:clamp(17px,1.5vw,23px)!important;line-height:1.55!important;max-width:480px}

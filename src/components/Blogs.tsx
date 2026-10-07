@@ -10,6 +10,10 @@ import { Footer } from './Footer';
 import { Reveal } from './Reveal';
 import { useRestoredScroll } from '../hooks/useRouteScroll';
 import { useJournalAutoplay } from '../hooks/useJournalAutoplay';
+const journalPosts = [...blogPosts].sort((a, b) => {
+  const priority = (id: number) => id === 2 ? 0 : id === 5 ? 1 : 2;
+  return priority(a.id) - priority(b.id);
+});
 export function Blogs({ all = false }: { all?: boolean }) {
   const { t, language:l } = useLanguage();
   const pick=(en:string,ru:string,uk:string)=>choose(l,en,ru,uk);
@@ -23,7 +27,7 @@ export function Blogs({ all = false }: { all?: boolean }) {
   return <section id="blog" data-theme="light" className={`editorial-section journal-section${all ? '' : ' journal-section--preview'}`} aria-labelledby="journal-title"><div className="editorial-container">
     <Reveal><header className="section-heading section-heading--split"><div>{all && <p className="section-eyebrow">{t.blog.eyebrow}</p>}<Heading id="journal-title">{t.blog.headline1} {t.blog.headline2}</Heading></div>{all?<p>{t.blog.description}</p>:<Link className="text-button" to="/journal">{pick('Explore the journal','Все статьи журнала','Усі статті журналу')}</Link>}</header></Reveal>
     {!all && <div className="journal-carousel-controls"><span>{pick('Swipe to explore','Листайте статьи','Гортайте статті')}</span><button type="button" className="text-button" aria-pressed={paused} onClick={()=>setPaused(value=>!value)}>{paused?pick('Resume autoplay','Продолжить автопрокрутку','Продовжити автопрокрутку'):pick('Pause autoplay','Остановить автопрокрутку','Зупинити автопрокрутку')}</button></div>}
-    <div ref={carousel} className="journal-grid">{blogPosts.map((article,index)=><Link key={article.id} className={`journal-card${!all && index >= 3 ? ' journal-card--mobile-extra' : ''}`} to={`/blog/${article.slug}`} state={{fromJournal:all}} aria-labelledby={`article-title-${article.id}`}>
+    <div ref={carousel} className="journal-grid">{journalPosts.map((article,index)=><Link key={article.id} className={`journal-card${!all && index >= 3 ? ' journal-card--mobile-extra' : ''}`} to={`/blog/${article.slug}`} state={{fromJournal:all}} aria-labelledby={`article-title-${article.id}`}>
       <div className="journal-card-image"><ProductImage src={article.image} className={article.imageClassName} alt="" loading="lazy" sizes="(max-width: 700px) 100vw, 33vw" /></div>
       <div className="journal-card-meta"><span>{pick(article.categoryEn,article.category,article.categoryUk)}</span><span>{pick(article.readTimeEn,article.readTime,article.readTimeUk)} {t.blog.readTime}</span></div>
       <CardHeading className="journal-card-title" id={`article-title-${article.id}`}>{pick(article.titleEn,article.title,article.titleUk)}</CardHeading><p>{pick(article.excerptEn,article.excerpt,article.excerptUk)}</p><span className="journal-card-read" aria-hidden="true">{t.blog.read}</span>
