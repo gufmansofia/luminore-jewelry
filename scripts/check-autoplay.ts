@@ -4,6 +4,9 @@ import { createFilmPlayback } from '../src/lib/autoplay-film';
 class Film extends EventTarget {
   paused = true;
   ended = false;
+  private time = 0;
+  get currentTime() { return this.time; }
+  set currentTime(value: number) { this.time = value; this.ended = false; }
   muted = false;
   defaultMuted = false;
   playsInline = false;
@@ -22,15 +25,32 @@ class Film extends EventTarget {
   }
 }
 const settle = async () => { await Promise.resolve(); await Promise.resolve(); };
-function fixture() {
+function fixture(loop = false) {
   const video = new Film();
   const state = { allowed: true, playing: 0, fallback: 0, ended: 0 };
   const playback = createFilmPlayback(video as unknown as HTMLVideoElement, {
+    loop,
     canPlay: () => state.allowed,
     onPlaying: () => state.playing++, onFallback: () => state.fallback++, onEnded: () => state.ended++,
   });
   return { video, state, playback };
 }
+
+test('a looping hero restarts at the boundary and still respects visibility pauses', async () => {
+  const { video, state, playback } = fixture(true);
+  playback.sync(); await settle();
+  video.currentTime = 7.2;
+  video.paused = true; video.ended = true;
+  video.dispatchEvent(new Event('ended')); await settle();
+  expect(video.currentTime).toBe(0);
+  expect(video.paused).toBe(false);
+  expect(state.ended).toBe(0);
+  state.allowed = false; playback.sync();
+  expect(video.paused).toBe(true);
+  state.allowed = true; playback.sync(); await settle();
+  expect(video.paused).toBe(false);
+  playback.destroy();
+});
 
 test('a visible film starts silently and resumes after the page becomes visible again', async () => {
   const { video, state, playback } = fixture();

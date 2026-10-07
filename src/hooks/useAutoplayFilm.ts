@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createFilmPlayback } from '../lib/autoplay-film';
 
 type FilmOptions = {
+  loop?: boolean;
   mobileQuery: string;
   mobileSrc: string;
   desktopSrc: string;
@@ -16,6 +17,9 @@ export function useAutoplayFilm(options: FilmOptions) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const playbackRef = useRef<ReturnType<typeof createFilmPlayback> | null>(null);
   const complete = useRef(false);
+  const userPaused = useRef(false);
+  const syncRef = useRef<(() => void) | null>(null);
+  const [paused, setPaused] = useState(false);
   const callbacks = useRef(options);
   callbacks.current = options;
   const [animation, setAnimation] = useState<string | null>(null);
@@ -29,23 +33,25 @@ export function useAutoplayFilm(options: FilmOptions) {
     let allowed = false;
     const sync = () => {
       const bounds = container.getBoundingClientRect();
-      allowed = !complete.current && !motion.matches && !document.hidden && bounds.bottom > 0 && bounds.top < window.innerHeight;
+      allowed = !complete.current && !userPaused.current && !motion.matches && !document.hidden && bounds.bottom > 0 && bounds.top < window.innerHeight;
       setActive(allowed);
       playbackRef.current?.sync();
     };
+    syncRef.current = sync;
     const selectSource = () => {
       if (complete.current) return;
       playbackRef.current?.destroy();
       setFallback(false);
       setAnimation(null);
       playbackRef.current = createFilmPlayback(video, {
+        loop: options.loop,
         canPlay: () => allowed && !complete.current,
         onPlaying: () => callbacks.current.onPlaying?.(),
         onFallback: () => {
           setFallback(true);
           setAnimation(mobile.matches ? options.mobileFallback : options.desktopFallback);
         },
-        onEnded: () => { complete.current = true; callbacks.current.onEnded?.(); },
+        onEnded: () => { if (!options.loop) complete.current = true; callbacks.current.onEnded?.(); },
       });
       video.src = mobile.matches ? options.mobileSrc : options.desktopSrc;
       sync();
@@ -75,12 +81,17 @@ export function useAutoplayFilm(options: FilmOptions) {
       window.removeEventListener('pageshow', sync);
       playbackRef.current?.destroy();
       playbackRef.current = null;
+      syncRef.current = null;
       video.removeAttribute('src');
       video.load();
     };
-  }, [options.mobileQuery, options.mobileSrc, options.desktopSrc, options.mobileFallback, options.desktopFallback]);
+  }, [options.loop, options.mobileQuery, options.mobileSrc, options.desktopSrc, options.mobileFallback, options.desktopFallback]);
 
-  return { containerRef, videoRef, animation: active ? animation : null, fallback, active, stop: () => {
+  return { containerRef, videoRef, animation: active ? animation : null, fallback, active, paused, togglePause: () => {
+    userPaused.current = !userPaused.current;
+    setPaused(userPaused.current);
+    syncRef.current?.();
+  }, stop: () => {
     complete.current = true;
     playbackRef.current?.stop();
   } };

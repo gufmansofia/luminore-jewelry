@@ -1,4 +1,5 @@
 type FilmPlaybackOptions = {
+  loop?: boolean;
   canPlay: () => boolean;
   onPlaying: () => void;
   onFallback: () => void;
@@ -58,7 +59,11 @@ export function createFilmPlayback(video: HTMLVideoElement, options: FilmPlaybac
     clearTimeout(retry);
     video.pause();
   };
-  const ended = () => { if (!disposed && !stopped) { stop(); options.onEnded(); } };
+  const ended = () => {
+    if (disposed || stopped) return;
+    if (options.loop) { video.currentTime = 0; sync(); }
+    else { stop(); options.onEnded(); }
+  };
   video.muted = true;
   video.defaultMuted = true;
   video.playsInline = true;

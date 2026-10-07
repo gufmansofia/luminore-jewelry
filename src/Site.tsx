@@ -5,6 +5,7 @@ import {NotFound} from './components/NotFound';
 import { AtelierHero } from './previews/Atelier';
 import { useEffect } from 'react';
 import Atelier from './previews/Atelier';
+import HeroDirections from './previews/HeroDirections';
 import {InformationPage} from './components/InformationPage';
 import { CollectionPage } from './components/CollectionPage';
 import { BespokePage } from './components/BespokePage';
@@ -82,6 +83,8 @@ export function SiteContent() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/preview/atelier" element={<Atelier />} />
+            <Route path="/preview/hero" element={<HeroDirections />} />
+            <Route path="/preview/hero-wide" element={<HeroDirections wide />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/collection/*" element={<CollectionPage />} />
