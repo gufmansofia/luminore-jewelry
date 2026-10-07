@@ -31,7 +31,7 @@ export function LangSync() {
 }
 
 
-function HomePage({ previewFilm = false }: { previewFilm?: boolean }) {
+function HomePage() {
   const location = useLocation();
   const restoredScroll = useRestoredScroll();
 
@@ -56,7 +56,7 @@ function HomePage({ previewFilm = false }: { previewFilm?: boolean }) {
 
   return (
     <>
-      <AtelierHero homePath="/" film={previewFilm ? 'hands' : undefined} />
+      <AtelierHero homePath="/" film="hands" />
       <main id="main-content" tabIndex={-1} className="atelier-content">
         <CategoryPreview />
         <ProductSpotlight />
@@ -86,7 +86,7 @@ export function SiteContent() {
             <Route path="/preview/hero" element={<HeroDirections />} />
             <Route path="/preview/hero-wide" element={<HeroDirections wide />} />
             <Route path="/preview/hero-new" element={<HeroDirections fresh />} />
-            <Route path="/preview/hero-current" element={<HomePage previewFilm />} />
+            <Route path="/preview/hero-current" element={<HomePage />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/collection/*" element={<CollectionPage />} />
