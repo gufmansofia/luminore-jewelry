@@ -95,6 +95,10 @@
 .guided-choice>span { flex:0 0 14px;height:14px;border:1px solid #727777;border-radius:50%; }
 .guided-choice[aria-pressed="true"]>span { background:#252727;box-shadow:inset 0 0 0 3px #f3f4f4;border-color:#252727; }
 .guided-choice[aria-pressed="true"] { border-bottom-color:#252727; }
+.guided-manager-contact { margin-top:28px; }
+.guided-manager-contact > p { font:300 18px/1.4 var(--font-site); letter-spacing:.015em; text-transform:uppercase; }
+.guided-manager-channels { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:16px; }
+.guided-manager-channels .contact-channel { min-width:0; padding-inline:8px; gap:8px; }
 .guided-controls { display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:38px; }
 .guided-controls .primary-button { margin-left:auto;gap:36px; }
 .guided-summary { margin-bottom:26px; }

@@ -5,6 +5,7 @@ import type { Enquiry } from '../lib/enquiry';
 import { ringShapes, ringShapeLabel, type RingShape } from '../lib/ring-shapes';
 import {RingShapeIcon} from './RingShapeIcon';
 import { EnquiryForm } from './EnquiryForm';
+import { ContactChannel } from './ContactChannel';
 
 type Step = 'piece' | 'shape' | 'stone' | 'direction' | 'contact';
 
@@ -61,7 +62,13 @@ export function GuidedEnquiry() {
           else setDirection(key as Enquiry['direction']);
         }}><span aria-hidden="true" />{step==='shape'&&<RingShapeIcon shape={key as RingShape}/>}<span className="guided-choice-label">{label}</span></button>)}
       </div>
-      {step==='piece'&&<button type="button" className="text-button guided-shortcut" onClick={()=>{setPiece('Other');setStone('undecided');setDirection('bespoke');go('contact');}}>{pick('Discuss my idea directly','Сразу обсудить мою идею','Одразу обговорити мою ідею')} →</button>}
+      {step === 'piece' && <div className="guided-manager-contact" role="group" aria-labelledby={`${id}-manager`}>
+        <p id={`${id}-manager`}>{pick('Contact our manager', 'Связаться с менеджером', 'Зв’язатися з менеджером')}</p>
+        <div className="guided-manager-channels">
+          <ContactChannel channel="Telegram" />
+          <ContactChannel channel="WhatsApp" />
+        </div>
+      </div>}
       <div className="guided-controls">{stepIndex > 0 && <button type="button" className="text-button" onClick={() => go(steps[stepIndex - 1])}>← {pick('Back', 'Назад', 'Назад')}</button>}<button type="button" className="primary-button" disabled={!selected} onClick={() => go(steps[stepIndex + 1])}>{pick('Next', 'Далее', 'Далі')} <span aria-hidden="true">→</span></button></div>
     </div>}
     <div ref={contact} hidden={step !== 'contact'}>{visitedContact && <>
