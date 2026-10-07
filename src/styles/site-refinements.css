@@ -78,7 +78,7 @@
 .atelier-content .catalogue-heading { margin-bottom:var(--home-content-gap); }
 .atelier-content .section-heading > p:not(.section-eyebrow),
 .atelier-content .approach-intro-copy { margin-top:var(--home-copy-gap); }
-.atelier-content .category-preview .category-preview-heading h2,
+.atelier-content .category-preview .category-preview-heading h2 { margin-bottom:8px; }
 .atelier-content #products .catalogue-heading h2 { margin-bottom:var(--home-copy-gap); }
 .atelier-content .catalogue-tools { margin-top:0; }
 .atelier-content .bespoke-sketch { margin-top:0; margin-bottom:var(--home-content-gap); }
