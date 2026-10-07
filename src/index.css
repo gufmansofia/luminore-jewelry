@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
-/* Approved pairing: Tenor Sans headings and Montserrat text/UI. */
+/* Approved pairing: Cormorant Garamond Regular accents and Montserrat text/UI. */
 :root {
   --font-site: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-editorial: 'Tenor Sans', 'Montserrat', sans-serif;
+  --font-editorial: 'Cormorant Garamond', Georgia, serif;
+  --font-editorial-weight: 400;
+  --font-editorial-spacing: 0;
 }
 
 .font-display, .font-body {
@@ -72,6 +74,8 @@ body {
   background: var(--color-ink);
   color: var(--color-silver);
   font-family: var(--font-site);
+  font-weight: 400;
+  font-synthesis: none;
 }
 
 /* Selection color */
@@ -126,17 +130,17 @@ body {
   }
 }
 
-/* Shared heading treatment from the first typography study. */
-h1:not(.wordmark), h2 { font-family: var(--font-editorial) !important; font-weight: 400 !important; letter-spacing: .015em !important; text-transform: uppercase; text-wrap: balance; overflow-wrap: break-word; }
+/* One regular, upright treatment for display headings in every language. */
+h1:not(.wordmark), h2 { font-family: var(--font-editorial) !important; font-weight: var(--font-editorial-weight) !important; letter-spacing: var(--font-editorial-spacing) !important; text-transform: none; text-wrap: balance; overflow-wrap: break-word; }
 h1 em, h2 em, h3 em { font-style: normal; }
 h3:not(.catalogue-card h3):not(.product-related-item h3), .manager-contact p {
   font-family: var(--font-editorial);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: .015em;
+  font-weight: var(--font-editorial-weight);
+  text-transform: none;
+  letter-spacing: var(--font-editorial-spacing);
 }
 .atelier-content h2 { font-size: clamp(34px, 4.2vw, 64px); }
-#blog h3 { font-family: var(--font-editorial); font-size: clamp(24px, 2vw, 30px); line-height: 1.2; letter-spacing: .015em !important; }
+#blog h3 { font-family: var(--font-editorial); font-size: clamp(24px, 2vw, 30px); line-height: 1.2; letter-spacing: var(--font-editorial-spacing) !important; }
 .product-title { font-family: var(--font-editorial); font-size: clamp(36px, 4vw, 56px); line-height: 1.08; }
 .wordmark { font-family: var(--font-site); font-size: 23px; letter-spacing: .2em; color: inherit; white-space: nowrap; }
 .header-logo { display: block; width: 6.5em; max-width: none; height: auto; }

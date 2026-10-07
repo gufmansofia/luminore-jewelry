@@ -1,20 +1,52 @@
-/* Tenor Sans has one weight. Use the paired Montserrat Light for large
-   display text, while preserving regular-weight body copy and small labels. */
+/* Shared roles for the approved two-font pairing. Keep display styling here
+   so component styles cannot vary the weight, tracking or case by language. */
 #root :is(
   h1:not(.wordmark),
   h2,
   .manager-contact p,
-  .contact-phone,
-  .approach-stone h3,
-  .journal-card-title,
-  .guided-stage > h3,
-  .form-heading h3,
-  .enquiry-review h3,
-  .article-related h3,
+  h3:not(.catalogue-card h3):not(.product-related-item h3):not(.category-preview-card h3),
   .testimonial-content blockquote,
-  .reviews-list blockquote p
+  .reviews-list blockquote p,
+  .approach-trust-number,
+  .approach-cert,
+  .approach-quality,
+  .approach-service,
+  .approach-availability,
+  .trust-years > strong,
+  .trust-commitments strong
 ):not(.site-footer *) {
-  font-family: var(--font-site) !important;
-  font-weight: 300 !important;
+  font-family: var(--font-editorial) !important;
+  font-weight: var(--font-editorial-weight) !important;
+  font-style: normal;
+  font-stretch: normal;
+  font-synthesis: none;
+  font-kerning: normal;
+  letter-spacing: var(--font-editorial-spacing) !important;
+  word-spacing: normal;
+  text-transform: none;
 }
-#root :is(h1, h2, h3) em { font-weight: inherit; }
+
+/* Both lines and any emphasis inside a display heading share its exact style. */
+#root :is(h1:not(.wordmark), h2, h3) :is(span, em, strong) {
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: normal;
+  font-stretch: inherit;
+  letter-spacing: inherit !important;
+}
+
+/* Small catalogue names and practical information use the readable body face. */
+#root :is(
+  .catalogue-card h3,
+  .product-related-item h3,
+  .category-preview-card h3,
+  .product-price,
+  .product-carat,
+  .contact-phone,
+  .guided-manager-contact > p
+) {
+  font-family: var(--font-site) !important;
+  font-weight: 400 !important;
+  font-style: normal;
+  letter-spacing: 0 !important;
+}
