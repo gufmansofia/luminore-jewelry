@@ -1,19 +1,21 @@
 .product-spotlight {
+  --spotlight-header:86px;
   position:relative;
   width:100%;
-  max-width:480px;
-  margin:0 auto;
+  max-width:none;
+  margin:0;
   color:#222529;
   background:#fff;
   font:400 13px/1.6 var(--font-site);
 }
+body:has(.atelier) section#spotlight { scroll-margin-top:var(--spotlight-header); }
 .spotlight-track {
   display:flex;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   scrollbar-width:none;
   overscroll-behavior-x:contain;
-  touch-action:pan-x pan-y;
+  touch-action:pan-x pan-y pinch-zoom;
 }
 .spotlight-track::-webkit-scrollbar { display:none; }
 .spotlight-slide {
@@ -21,7 +23,8 @@
   display:block;
   flex:0 0 100%;
   min-width:0;
-  padding-bottom:116px;
+  height:calc(100vh - var(--spotlight-header));
+  height:calc(100svh - var(--spotlight-header));
   scroll-snap-align:start;
   scroll-snap-stop:always;
   overflow:hidden;
@@ -36,11 +39,11 @@
 .spotlight-slide > img {
   display:block;
   width:100%;
-  height:auto;
-  aspect-ratio:3/4;
+  height:100%;
   object-fit:cover;
-  mask-image:linear-gradient(to bottom, transparent 0%, transparent 10%, #000 34%, #000 76%, transparent 100%);
-  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, transparent 10%, #000 34%, #000 76%, transparent 100%);
+  object-position:var(--spotlight-position,50% 50%);
+  mask-image:linear-gradient(to bottom, transparent, #000 22%, #000 68%, #0003 88%, transparent);
+  -webkit-mask-image:linear-gradient(to bottom, transparent, #000 22%, #000 68%, #0003 88%, transparent);
 }
 .spotlight-copy {
   position:absolute;
@@ -51,27 +54,47 @@
   flex-direction:column;
   align-items:flex-start;
   gap:10px;
-  padding:26px 24px;
+  padding:clamp(24px,5svh,52px) clamp(24px,5vw,80px);
 }
-.spotlight-slide--bottom .spotlight-copy { top:auto; bottom:0; align-items:center; text-align:center; }
+.spotlight-slide--bottom .spotlight-copy {
+  top:auto;
+  bottom:0;
+  align-items:flex-end;
+  justify-content:center;
+  text-align:right;
+}
 .product-spotlight .spotlight-slide .spotlight-copy h3 {
   margin:0;
-  max-width:265px;
-  font:300 20px/1.25 var(--font-site);
+  max-width:420px;
+  font:300 clamp(20px,2vw,28px)/1.25 var(--font-site);
   text-transform:uppercase;
   letter-spacing:.025em;
   text-wrap:balance;
   overflow-wrap:break-word;
 }
-.spotlight-view { font-size:11px; line-height:1.5; border-bottom:1px solid currentColor; padding-bottom:3px; }
+.spotlight-view { font-size:clamp(11px,1vw,13px); line-height:1.5; border-bottom:1px solid currentColor; padding-bottom:3px; }
 .spotlight-slide:focus-visible { outline:1px solid currentColor; outline-offset:-4px; }
 /* Keyboard users can stop motion without adding controls to the approved layout. */
 .spotlight-pause { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .spotlight-pause:focus { z-index:2; top:0; left:20px; width:auto; height:auto; padding:10px 14px; background:#fff; border:1px solid currentColor; clip-path:none; }
-@media(min-width:701px) {
-  .product-spotlight { max-width:clamp(320px, calc((100svh - 220px) * .75), 480px); }
+@media(max-width:800px) {
+  .product-spotlight { --spotlight-header:56px; }
+  .product-spotlight .spotlight-slide .spotlight-copy h3 { max-width:265px; }
 }
 @media(max-width:350px) {
   .spotlight-copy { padding:22px 20px; }
   .product-spotlight .spotlight-slide .spotlight-copy h3 { font-size:19px; }
+}
+@media(orientation:landscape) {
+  .spotlight-slide[data-wide-caption="top"] .spotlight-copy { top:0; bottom:auto; align-items:flex-start; text-align:left; }
+  .product-spotlight .spotlight-slide .spotlight-copy h3 { max-width:min(25vw,320px); }
+}
+@media(orientation:landscape) and (max-height:500px) {
+  .spotlight-copy { padding:16px max(16px,env(safe-area-inset-right)) 16px max(16px,env(safe-area-inset-left)); gap:6px; }
+  .product-spotlight .spotlight-slide .spotlight-copy h3 { max-width:25vw; font-size:clamp(14px,2vw,18px); }
+  .spotlight-slide[data-compact-caption="top"] .spotlight-copy { top:0; bottom:auto; align-items:flex-start; text-align:left; }
+}
+@media(orientation:portrait) and (max-height:650px) {
+  .spotlight-copy { padding:20px; gap:6px; }
+  .product-spotlight .spotlight-slide .spotlight-copy h3 { font-size:18px; }
 }

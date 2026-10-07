@@ -10,7 +10,8 @@ for source in paths:
  file=root/'public'/source.lstrip('/');digest=hashlib.sha256(file.read_bytes()).hexdigest()[:16]
  with Image.open(file) as raw:
   img=ImageOps.exif_transpose(raw).convert('RGB');width,height=img.size;variants=[]
-  for target in sorted(set([min(width,n) for n in [480,960,1600]])):
+  sizes=[480,960,1600,2560] if source.startswith('/Products/spotlight/') else [480,960,1600]
+  for target in sorted(set([min(width,n) for n in sizes])):
    name=f'{digest}-{target}.webp';dest=out/name
    if not dest.exists():
     copy=img.copy();copy.thumbnail((target,round(height*target/width)),Image.Resampling.LANCZOS);copy.save(dest,'WEBP',quality=88,method=6)

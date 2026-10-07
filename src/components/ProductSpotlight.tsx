@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { products } from '../data/products';
 import { spotlightPieces } from '../data/spotlight';
@@ -37,6 +37,7 @@ export function ProductSpotlight() {
     const canPlay = () => !paused && !reduced && visible && !document.hidden && !pointer && !keyboardFocused();
     const schedule = (restart = false) => {
       clearTimeout(timer);
+      track.dataset.playbackState = paused ? 'paused' : reduced ? 'reduced-motion' : !visible ? 'offscreen' : document.hidden ? 'background' : pointer ? 'dragging' : keyboardFocused() ? 'keyboard' : moving ? 'settling' : 'playing';
       if (restart) nextAt = performance.now() + 2000;
       if (canPlay() && !moving) timer = setTimeout(() => advance(1), Math.max(0, nextAt - performance.now()));
     };
@@ -119,7 +120,7 @@ export function ProductSpotlight() {
     const resize = new ResizeObserver(() => { jump(currentRef.current + 1); schedule(true); });
     resize.observe(track);
     const observer = new IntersectionObserver(([entry]) => { visible = entry!.intersectionRatio >= 0.3; schedule(true); }, { threshold: 0.3 });
-    observer.observe(track);
+    observer.observe(section);
     track.addEventListener('scroll', onScroll, { passive: true });
     track.addEventListener('pointerdown', onPointerDown);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -154,10 +155,12 @@ export function ProductSpotlight() {
         const name = productName(piece.product, language);
         return <Link key={`${index}-${piece.productId}`} to={`/product/${piece.productId}`}
           className={`spotlight-slide spotlight-slide--${piece.caption}${clone ? ' spotlight-slide--clone' : ''}`}
+          data-wide-caption={piece.wideCaption}
+          data-compact-caption={piece.productId === 47 ? 'top' : piece.wideCaption}
           data-slide-index={index} aria-hidden={clone || undefined} tabIndex={!clone && index === active + 1 ? 0 : -1}
           onDragStart={event => event.preventDefault()}
           onClick={event => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); } }}>
-          <ProductImage src={piece.image} alt="" loading="lazy" sizes="(max-width: 480px) 100vw, 480px" draggable={false} style={{ objectPosition: piece.position }} />
+          <ProductImage src={piece.image} alt="" loading="lazy" sizes="100vw" draggable={false} style={{ '--spotlight-position': piece.position } as CSSProperties} />
           <div className="spotlight-copy"><h3>{name}</h3><span className="spotlight-view">{t.view}</span></div>
         </Link>;
       })}
