@@ -73,7 +73,6 @@
 .product-page .product-image-open.is-zoomed { cursor:zoom-out; }
 .product-main-image { transition:transform .45s cubic-bezier(.2,.7,.2,1); }
 .product-image-open.is-zoomed .product-main-image { transform:scale(2); }
-.product-page .product-gallery-stage .gallery-arrow { border-radius:0;background:rgb(255 255 255 / .9); }
 .product-save-row { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 16px;margin-top:14px; }
 .save-piece-button--text { padding-left:0; }
 .save-piece-button--text:hover span { text-decoration:underline;text-underline-offset:5px; }

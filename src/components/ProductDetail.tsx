@@ -24,7 +24,7 @@ export function ProductDetail(){
  const [index,setIndex]=useState(0);const [natural,setNatural]=useState(false);
  const [galleryZoom,setGalleryZoom]=useState(false);
  const [showSticky,setShowSticky]=useState(false);
- const actionRef=useRef<HTMLAnchorElement>(null);
+ const actionRef=useRef<HTMLDivElement>(null);
  useEffect(()=>{const target=actionRef.current;if(!target)return;const observer=new IntersectionObserver(([entry])=>setShowSticky(!entry.isIntersecting&&entry.boundingClientRect.top<0));observer.observe(target);return()=>observer.disconnect();},[id]);
  const touchStart=useRef<{x:number;y:number}|null>(null);const swiped=useRef(false);
  const images=p?.images??[];
@@ -45,7 +45,6 @@ export function ProductDetail(){
  const whatsapp=`https://wa.me/421940600708?text=${encodeURIComponent(message)}`;
  const telegram=`https://t.me/luminore_jewelry?text=${encodeURIComponent(message)}`;
  const related=products.filter(other=>other.categoryEn===p.categoryEn&&other.id!==p.id).slice(0,3);
- const imageLabel=(i:number)=>pick(`View ${i+1} of ${images.length}`,`Фото ${i+1} из ${images.length}`,`Фото ${i+1} із ${images.length}`);
  return <div className="product-page" data-theme="light">
  <DetailHeader theme="light" back={pick('Back','Назад','Назад')} onBack={back}/>
  <main id="main-content" tabIndex={-1} className="product-main">
@@ -60,24 +59,19 @@ export function ProductDetail(){
  <div className={`product-gallery-stage product-photo${images.length?'':' product-gallery-stage--empty'}`}>
  {images.length?<><button type="button" className={`product-image-open${galleryZoom?' is-zoomed':''}`} aria-pressed={galleryZoom} onClick={event=>{if(swiped.current){swiped.current=false;return;}const img=event.currentTarget.querySelector('img');if(img){const rect=event.currentTarget.getBoundingClientRect();img.style.transformOrigin=event.detail===0?'50% 50%':`${(event.clientX-rect.left)/rect.width*100}% ${(event.clientY-rect.top)/rect.height*100}%`;}setGalleryZoom(value=>!value);}} onPointerMove={event=>{if(!galleryZoom||event.pointerType==='touch')return;const rect=event.currentTarget.getBoundingClientRect();const img=event.currentTarget.querySelector('img');if(img)img.style.transformOrigin=`${(event.clientX-rect.left)/rect.width*100}% ${(event.clientY-rect.top)/rect.height*100}%`;}} onPointerLeave={event=>{const img=event.currentTarget.querySelector('img');if(img)img.style.transformOrigin='50% 50%';}} onTouchStart={event=>{swiped.current=false;touchStart.current={x:event.touches[0].clientX,y:event.touches[0].clientY};}} onTouchEnd={event=>{if(!touchStart.current||galleryZoom||images.length<2)return;const dx=event.changedTouches[0].clientX-touchStart.current.x,dy=event.changedTouches[0].clientY-touchStart.current.y;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){swiped.current=true;step(dx<0?1:-1);}touchStart.current=null;}} aria-label={galleryZoom?pick('Zoom out','Уменьшить','Зменшити'):pick('Enlarge product photograph','Увеличить фотографию изделия','Збільшити фотографію виробу')}>
  <ProductImage key={images[index]} src={images[index]} alt={name} sizes={galleryZoom?'100vw':'(max-width: 767px) 100vw, (max-width: 1023px) 680px, 55vw'} loading="eager" className="product-main-image"/>
- </button>{images.length>1&&<><button className="gallery-arrow gallery-arrow--previous" onClick={()=>step(-1)} aria-label={pick('Previous image','Предыдущее фото','Попереднє фото')}>‹</button><button className="gallery-arrow gallery-arrow--next" onClick={()=>step(1)} aria-label={pick('Next image','Следующее фото','Наступне фото')}>›</button><span className="sr-only" aria-live="polite">{index+1} / {images.length}</span></>}</>:<div className="product-image-empty"><span className="photo-unavailable">{pick("Photographs available on request","Фотографии — по запросу","Фотографії — за запитом")}</span><a className="text-button" href={`https://wa.me/421940600708?text=${encodeURIComponent(message+' '+pick('Please send photographs.','Пришлите, пожалуйста, фотографии.','Надішліть, будь ласка, фотографії.'))}`} target="_blank" rel="noopener noreferrer">{pick("Request photos","Запросить фото","Запитати фото")} ↗</a></div>}
+ </button>{images.length>1&&<><button type="button" className="gallery-arrow gallery-arrow--previous" onClick={()=>step(-1)} aria-label={pick('Previous image','Предыдущее фото','Попереднє фото')}><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="M7 1 1 6l6 5Z" fill="currentColor" /></svg></button><button type="button" className="gallery-arrow gallery-arrow--next" onClick={()=>step(1)} aria-label={pick('Next image','Следующее фото','Наступне фото')}><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="m1 1 6 5-6 5Z" fill="currentColor" /></svg></button><span className="sr-only" aria-live="polite">{index+1} / {images.length}</span></>}</>:<div className="product-image-empty"><span className="photo-unavailable">{pick("Photographs available on request","Фотографии — по запросу","Фотографії — за запитом")}</span><a className="text-button" href={`https://wa.me/421940600708?text=${encodeURIComponent(message+' '+pick('Please send photographs.','Пришлите, пожалуйста, фотографии.','Надішліть, будь ласка, фотографії.'))}`} target="_blank" rel="noopener noreferrer">{pick("Request photos","Запросить фото","Запитати фото")} ↗</a></div>}
  </div>
 
- {images.length>1&&<div className="product-thumbnails" role="group" aria-label={pick('Product photographs','Фотографии изделия','Фотографії виробу')}>
- {images.map((src,i)=><button key={src} className={`product-thumbnail ${index===i?'is-selected':''}`} onClick={()=>{setIndex(i);setGalleryZoom(false);}} aria-label={imageLabel(i)} aria-pressed={index===i}><ProductImage src={src} alt="" sizes="(max-width: 767px) 84px, 132px" loading="lazy" className="w-full h-full object-contain"/></button>)}
- </div>}
  </div>
  <div className="product-information">
  <div className="stone-options" role="group" aria-label={t.product.stones}>
  <button aria-pressed={natural} className={natural?'selected':''} onClick={()=>setNatural(true)}><span>{t.product.naturalDiamond}</span><small>{t.product.priceOnEnquiry}</small></button>
  <button aria-pressed={!natural} className={!natural?'selected':''} onClick={()=>setNatural(false)}>{p.gemstoneType==='Lab-Grown Diamond'?t.product.labGrownDiamond:pick('Listed version','Версия в каталоге','Версія в каталозі')}</button>
  </div>
- {!natural&&(!p.gemstoneType||p.gemstoneType==='Not Specified')&&<p className="product-order-note">{pick("This price is for the catalogued version. We’ll confirm the stone’s origin and specifications before you order.","Цена указана для версии в каталоге. Происхождение и характеристики камня уточним до заказа.","Ціна вказана для версії в каталозі. Походження та характеристики каменю уточнимо до замовлення.")}</p>}
  <div className="stone-price-region" aria-live="polite" aria-atomic="true"><p key={String(natural)} className={`product-price stone-transition ${natural?'product-price--enquiry':''}`}>{price}</p></div>
- <a ref={actionRef} href="#product-enquiry" className="product-enquire-button" onClick={()=>requestAnimationFrame(()=>document.getElementById("product-enquiry")?.focus({preventScroll:true}))}>{pick('Enquire about this piece','Узнать об этом украшении','Дізнатися про цю прикрасу')}</a>
  <section id="product-enquiry" tabIndex={-1} className="product-details-section product-enquiry" aria-labelledby="enquiry-heading">
- <h2 id="enquiry-heading" >{pick('Let’s find your piece','Подберём ваше украшение','Доберемо вашу прикрасу')}</h2>
- <div className="product-contact-links"><ContactChannel channel="WhatsApp" href={whatsapp}/><ContactChannel channel="Telegram" href={telegram}/></div>
+ <h2 id="enquiry-heading" >{pick('Enquire about this piece','Узнать об этом украшении','Дізнатися про цю прикрасу')}</h2>
+ <div ref={actionRef} className="product-contact-links"><ContactChannel channel="WhatsApp" href={whatsapp}/><ContactChannel channel="Telegram" href={telegram}/></div>
  <p className="product-order-note">{pick("We’ll discuss availability, timing and delivery costs before you order.","До заказа обсудим наличие, сроки и стоимость доставки.","До замовлення обговоримо наявність, строки й вартість доставки.")} <Link to="/information/delivery" className="text-button">{pick("Delivery details","О доставке","Про доставку")}</Link></p>
  <p className="product-contact-phone">{t.product.orCall} <a href="tel:+421940600708" className="underline underline-offset-4">+421 940 600 708</a></p>
  </section>
