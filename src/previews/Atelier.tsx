@@ -21,6 +21,12 @@ const copy = {
   ru: { about: 'О нас', collection: 'Коллекция', journal: 'Журнал', contact: 'Контакты', line1: 'Украшения', line2: 'с бриллиантами.', description: 'Натуральные или лабораторные бриллианты.', description2: 'Выберите украшение из коллекции или создайте его вместе с нами.', discover: 'Выбрать украшение', create: 'Обсудить свой дизайн', imageAlt: 'Бриллиантовые кольца Luminore на руках модели', closing: 'Создано, чтобы стать ', yours: 'вашим' },
 };
 
+const mobileActions = {
+  ru: { collection: 'Вся коллекция', design: 'Создай свой дизайн' },
+  uk: { collection: 'Уся колекція', design: 'Створи свій дизайн' },
+  en: { collection: 'Full collection', design: 'Create your design' },
+};
+
 export default function Atelier() {
   return (
     <>
@@ -100,10 +106,14 @@ export function AtelierHero({ homePath = "/preview/atelier", direction, film, qu
             });
           }}>
             <Link className="atelier-action" to="/collection">
-              <span>{t.discover}</span><img src="/icons/arrow-right.svg" width={32} height={32} alt="" aria-hidden="true" />
+              <span className={quiet ? 'atelier-action-desktop-label' : undefined}>{t.discover}</span>
+              {quiet && <span className="atelier-action-mobile-label">{mobileActions[language].collection}</span>}
+              <img src="/icons/arrow-right.svg" width={32} height={32} alt="" aria-hidden="true" />
             </Link>
             <a className="atelier-action" href={direction ? localePath('/bespoke', language) : '#custom-order'}>
-              <span>{t.create}</span><img src="/icons/arrow-right.svg" width={32} height={32} alt="" aria-hidden="true" />
+              <span className={quiet ? 'atelier-action-desktop-label' : undefined}>{t.create}</span>
+              {quiet && <span className="atelier-action-mobile-label">{mobileActions[language].design}</span>}
+              <img src="/icons/arrow-right.svg" width={32} height={32} alt="" aria-hidden="true" />
             </a>
           </div>
         </section>

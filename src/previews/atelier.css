@@ -35,6 +35,7 @@ body:has(.atelier--capture-layers) .animate-page-enter { animation: none !import
 .atelier-actions { grid-area: actions; min-width: 0; border-top: 1px solid #aaa; }
 .atelier-action { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 94px; padding: 18px 2px; border-bottom: 1px solid #aaa; font-family: var(--font-site); font-size: clamp(22px, 2.1vw, 30px); line-height: 1.15; letter-spacing: .015em; }
 .atelier-action span { min-width: 0; }
+.atelier-action-mobile-label { display: none; }
 .atelier-action img { flex: none; width: 44px; height: 44px; transition: transform .2s ease; }
 .atelier-action:is(:hover, :focus-visible) span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .16em; }
 .atelier-action:is(:hover, :focus-visible) img { transform: translateX(4px); }
@@ -78,6 +79,9 @@ body:has(.atelier--capture-layers) .animate-page-enter { animation: none !import
  .atelier--quiet .atelier-story { display: none; }
  .atelier--quiet .atelier-hero { grid-template-areas: 'photo' 'actions'; gap: 0; }
  .atelier--quiet .atelier-film-control { display: none; }
+ .atelier--quiet .atelier-action { font-family: var(--font-editorial); font-size: clamp(18px, calc(10vw - 15px), 24px); font-weight: 400; line-height: 1.2; letter-spacing: .045em; text-transform: uppercase; }
+ .atelier--quiet .atelier-action-desktop-label { display: none; }
+ .atelier--quiet .atelier-action-mobile-label { display: block; }
  .atelier-closing { min-height: 148px; margin: 40px 0 0; padding: 32px 28px; }
  .atelier-closing h2 { max-width: 310px; font-size: 34px; line-height: 1.12; }
 }
