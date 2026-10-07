@@ -35,6 +35,23 @@
 .hero-action-studies .ha-cinema .ha-action { min-height: 58px; padding: 16px 24px; font-size: 14px; }
 .hero-action-studies .ha-cinema .ha-primary { background: #faf9f4; color: #22271f; }
 .hero-action-studies .ha-cinema .ha-secondary { border: 1px solid #ffffffb3; background: #10221724; }
+.hero-action-studies .ha-cinema-white .ha-header { background: #fff; color: #171b16; border-color: #c7c7c7; }
+.hero-action-studies .ha-cinema-white .ha-content { height: calc(100% - 76px); margin-top: 76px; }
+.hero-action-studies.ha-film-capture { --ha-selector-height: 0px; }
+.hero-action-studies.ha-layer-capture .ha-stage,
+.hero-action-studies.ha-layer-capture .ha-media,
+.hero-action-studies.ha-layer-capture .ha-header { background: white; color: black; }
+.hero-action-studies.ha-layer-capture .ha-poster,
+.hero-action-studies.ha-layer-capture .ha-media video,
+.hero-action-studies.ha-layer-capture .ha-animation,
+.hero-action-studies.ha-layer-capture .ha-shade { visibility: hidden; }
+.hero-action-studies.ha-layer-capture .ha-header { border-color: transparent; }
+.hero-action-studies.ha-layer-capture .header-logo { filter: none !important; }
+.hero-action-studies.ha-layer-capture .ha-action,
+.hero-action-studies.ha-layer-capture .ha-pause { color: black; background: transparent; }
+.hero-action-studies.ha-layer-capture .ha-secondary { border-color: transparent; }
+.hero-action-studies.ha-layer-capture .ha-pause { border-color: black; }
+.hero-action-studies.ha-film-capture .ha-selector { display: none; }
 
 /* Showcase: white navigation and a quiet, full-width caption rail. */
 .hero-action-studies .ha-showcase { background: #fff; }
@@ -111,6 +128,7 @@
  .hero-action-studies .ha-cinema .ha-actions { bottom: 26px; padding: 0 18px; flex-direction: column; gap: 10px; }
  .hero-action-studies .ha-cinema .ha-action { min-height: 54px; }
  .hero-action-studies .ha-cinema .ha-pause { bottom: 170px; }
+ .hero-action-studies .ha-cinema-white .ha-content { height: calc(100% - 62px); margin-top: 62px; }
  .hero-action-studies .ha-showcase .ha-content { grid-template-rows: minmax(0,1fr) 130px; }
  .hero-action-studies .ha-showcase .ha-actions { padding: 10px 22px; display: block; }
  .hero-action-studies .ha-showcase .ha-action { font-size: 15px; }
@@ -136,3 +154,4 @@
  .hero-action-studies .ha-options { gap: 2px; }
  .hero-action-studies .ha-options button { padding-inline: 8px; gap: 5px; font-size: 10px; min-height: 44px; }
 }
+.hero-action-studies.ha-film-capture { --ha-selector-height: 0px; }

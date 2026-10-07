@@ -22,7 +22,7 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   </svg>;
 }
 
-function Study({ variant }: { variant: Variant }) {
+function Study({ variant, whiteHeader = false }: { variant: Variant; whiteHeader?: boolean }) {
   const { language } = useLanguage();
   const t = copy[language];
   const portrait = variant === 'gallery';
@@ -38,10 +38,10 @@ function Study({ variant }: { variant: Variant }) {
     onPlaying: () => setPlaying(true),
   });
   const contact = `${localePath('/', language)}#contact`;
-  return <section className={`ha-stage ha-${variant}`} aria-labelledby="ha-title" data-theme={dark ? 'dark' : 'light'}>
+  return <section className={`ha-stage ha-${variant}${whiteHeader && variant === 'cinema' ? ' ha-cinema-white' : ''}`} aria-labelledby="ha-title" data-theme={dark ? 'dark' : 'light'}>
     <h1 id="ha-title" className="ha-sr">{t.title}</h1>
     <header className="ha-header">
-      <Link to="/" className="ha-logo" aria-label="Luminore"><HeaderLogo light={dark} /></Link>
+      <Link to="/" className="ha-logo" aria-label="Luminore"><HeaderLogo light={dark && !(whiteHeader && variant === 'cinema')} /></Link>
       <nav className="ha-navigation" aria-label={t.collection}>
         <Link to="/collection">{t.collection}</Link>
         <a href={`${localePath('/', language)}#about`}>{t.about}</a>
@@ -80,8 +80,11 @@ export default function HeroActionStudies() {
   const t = copy[language];
   const requested = params.get('variant') as Variant;
   const variant = variants.includes(requested) ? requested : variants[0];
-  return <main id="main-content" tabIndex={-1} className="hero-action-studies">
-    <Study key={variant} variant={variant} />
+  const whiteHeader = params.get('header') === 'white';
+  const capture = params.get('capture');
+  const filmOnly = capture === 'film' || capture === 'layers';
+  return <main id="main-content" tabIndex={-1} className={`hero-action-studies${filmOnly ? ' ha-film-capture' : ''}${capture === 'layers' ? ' ha-layer-capture' : ''}`}>
+    <Study key={`${variant}-${whiteHeader}`} variant={variant} whiteHeader={whiteHeader} />
     <nav className="ha-selector" aria-label={t.compare}>
       <span className="ha-preview-label">{t.preview}</span>
       <div className="ha-options">{variants.map((option, index) => <button type="button" key={option}
