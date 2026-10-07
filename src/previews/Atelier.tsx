@@ -42,7 +42,7 @@ export default function Atelier() {
 
 export type HeroDirection = 'minimal' | 'editorial' | 'cinema' | 'wide-immersive' | 'wide-caption' | 'wide-center' | 'sharp-macro' | 'sharp-triptych' | 'sharp-duo';
 
-export function AtelierHero({ homePath = "/preview/atelier", direction, film }: { homePath?: string; direction?: HeroDirection; film?: 'hands' }) {
+export function AtelierHero({ homePath = "/preview/atelier", direction, film, quiet = false, captureLayers = false }: { homePath?: string; direction?: HeroDirection; film?: 'hands'; quiet?: boolean; captureLayers?: boolean }) {
   const { language } = useLanguage();
   const t = copy[language];
   const heroMotion = useReveal<HTMLElement>();
@@ -51,7 +51,7 @@ export function AtelierHero({ homePath = "/preview/atelier", direction, film }: 
   const dark = direction === 'cinema' || direction === 'wide-immersive' || direction === 'wide-center';
   const study = direction?.startsWith('sharp-') ? direction.slice(6) as HeroStudy : undefined;
   return (
-    <div id="hero" className={`atelier${direction ? ` atelier--${direction}` : ''}${wide ? ' atelier--wide' : ''}${study ? ' atelier--sharp' : ''}`} data-theme={dark ? 'dark' : 'light'}>
+    <div id="hero" className={`atelier${direction ? ` atelier--${direction}` : ''}${wide ? ' atelier--wide' : ''}${study ? ' atelier--sharp' : ''}${quiet ? ' atelier--quiet' : ''}${captureLayers ? ' atelier--capture-layers' : ''}`} data-theme={dark ? 'dark' : 'light'}>
 
       <div className="atelier-header-bar">
       <header className="atelier-header">
@@ -79,14 +79,15 @@ export function AtelierHero({ homePath = "/preview/atelier", direction, film }: 
       </header>
       </div>
       <div>
-        <section ref={heroMotion.ref} data-reveal={heroMotion.phase} className="atelier-hero" aria-labelledby="atelier-title">
-          <div className="atelier-story">
+        <section ref={heroMotion.ref} data-reveal={heroMotion.phase} className="atelier-hero" aria-labelledby={quiet ? undefined : 'atelier-title'} aria-label={quiet ? t.discover : undefined}>
+          <div className="atelier-story" aria-hidden={quiet || undefined}>
             {direction && <p className="hero-direction-eyebrow">{language === 'ru' ? 'Luminore · Ювелирное ателье' : language === 'uk' ? 'Luminore · Ювелірне ательє' : 'Luminore · Jewellery atelier'}</p>}
             <h1 id="atelier-title"><span className="hero-line"><span>{t.line1}</span></span><span className="hero-line"><em>{t.line2}</em></span></h1>
             <p className="atelier-description">{t.description}<br />{t.description2}</p>
             {direction === 'editorial' && <p className="hero-direction-caption">{language === 'ru' ? 'Коллекция и индивидуальный дизайн' : language === 'uk' ? 'Колекція та індивідуальний дизайн' : 'The collection & your own creation'}</p>}
           </div>
           {direction || film ? <HeroLoopMedia alt={t.imageAlt} wide={wide} study={study} film={film}
+            showControl={!quiet} highQuality={quiet}
             pauseLabel={language === 'ru' ? 'Приостановить видео' : language === 'uk' ? 'Призупинити відео' : 'Pause video'}
             resumeLabel={language === 'ru' ? 'Продолжить видео' : language === 'uk' ? 'Продовжити відео' : 'Resume video'} />
             : <AtelierHeroMedia alt={t.imageAlt} skipLabel={language === 'ru' ? 'Пропустить видео' : language === 'uk' ? 'Пропустити відео' : 'Skip video'} />}

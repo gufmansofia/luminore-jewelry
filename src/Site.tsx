@@ -32,7 +32,7 @@ export function LangSync() {
 }
 
 
-function HomePage({ previewWhiteHero = false }: { previewWhiteHero?: boolean }) {
+function HomePage({ previewWhiteHero = false, previewQuietHero = false }: { previewWhiteHero?: boolean; previewQuietHero?: boolean }) {
   const location = useLocation();
   const restoredScroll = useRestoredScroll();
 
@@ -57,7 +57,7 @@ function HomePage({ previewWhiteHero = false }: { previewWhiteHero?: boolean }) 
 
   return (
     <>
-      {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath="/" film="hands" />}
+      {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath={previewQuietHero ? '/preview/hero-quiet' : '/'} film="hands" quiet={previewQuietHero} captureLayers={previewQuietHero && new URLSearchParams(location.search).get('capture') === 'layers'} />}
       <main id="main-content" tabIndex={-1} className="atelier-content">
         <CategoryPreview />
         <ProductSpotlight />
@@ -89,6 +89,7 @@ export function SiteContent() {
             <Route path="/preview/hero-new" element={<HeroDirections fresh />} />
             <Route path="/preview/hero-current" element={<HomePage />} />
             <Route path="/preview/hero-white" element={<HomePage previewWhiteHero />} />
+            <Route path="/preview/hero-quiet" element={<HomePage previewQuietHero />} />
             <Route path="/preview/hero-actions" element={<HeroActionStudies />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/journal" element={<Journal />} />

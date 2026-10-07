@@ -22,7 +22,7 @@ export function pageMetadata(path:string,l:Language='en'){
  path=basePath(path).replace(/\/$/,'')||'/';
  const product=products.find(p=>path===`/product/${p.id}`);
  const post=blogPosts.find(p=>path===`/blog/${p.slug}`);
- const home=path==='/'||['/preview/atelier','/preview/hero','/preview/hero-wide','/preview/hero-new','/preview/hero-current','/preview/hero-actions','/preview/hero-white'].includes(path),journal=path==='/journal',bespoke=path==='/bespoke';
+ const home=path==='/'||['/preview/atelier','/preview/hero','/preview/hero-wide','/preview/hero-new','/preview/hero-current','/preview/hero-actions','/preview/hero-white','/preview/hero-quiet'].includes(path),journal=path==='/journal',bespoke=path==='/bespoke';
  const info=path.startsWith('/information/')?information[path.split('/')[2]]?.[l]:undefined;
  const collection=collectionRoute(path);
  const validCollection=collection && collection.page<=Math.ceil(products.filter(p=>!collection.collection||p.categoryEn===collection.collection.category).length/PAGE_SIZE);

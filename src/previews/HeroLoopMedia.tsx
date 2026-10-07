@@ -8,14 +8,14 @@ const studyAssets = {
 };
 export type HeroStudy = keyof typeof studyAssets;
 
-export function HeroLoopMedia({ alt, pauseLabel, resumeLabel, wide = false, study, film }: { alt: string; pauseLabel: string; resumeLabel: string; wide?: boolean; study?: HeroStudy; film?: 'hands' }) {
+export function HeroLoopMedia({ alt, pauseLabel, resumeLabel, wide = false, study, film, showControl = true, highQuality = false }: { alt: string; pauseLabel: string; resumeLabel: string; wide?: boolean; study?: HeroStudy; film?: 'hands'; showControl?: boolean; highQuality?: boolean }) {
   const assets = study ? studyAssets[study] : null;
   const hands = film === 'hands';
   const [phase, setPhase] = useState<'loading' | 'video' | 'animation' | 'photo'>('loading');
   const media = useAutoplayFilm({
     loop: true,
     mobileQuery: '(max-width: 800px)',
-    mobileSrc: hands ? '/optimized/atelier-hands-720.mp4' : assets ? assets.video + '?edit=3' : '/optimized/atelier-loop-720.mp4',
+    mobileSrc: hands ? (highQuality ? '/optimized/atelier-hands-1080.mp4' : '/optimized/atelier-hands-720.mp4') : assets ? assets.video + '?edit=3' : '/optimized/atelier-loop-720.mp4',
     desktopSrc: hands ? '/optimized/atelier-hands-1080.mp4' : (assets ? assets.video + '?edit=3' : null) ?? (wide ? '/optimized/atelier-loop-wide.mp4' : '/optimized/atelier-loop-1080.mp4'),
     mobileFallback: hands ? '/optimized/atelier-hands-motion-mobile.webp' : assets ? assets.animation + '?edit=3' : '/optimized/atelier-loop-motion-mobile.webp',
     desktopFallback: hands ? '/optimized/atelier-hands-motion-desktop.webp' : (assets ? assets.animation + '?edit=3' : null) ?? (wide ? '/optimized/atelier-loop-motion-wide.webp' : '/optimized/atelier-loop-motion-desktop.webp'),
@@ -56,7 +56,7 @@ export function HeroLoopMedia({ alt, pauseLabel, resumeLabel, wide = false, stud
         onLoad={() => setPhase('animation')}
         onError={() => setPhase('photo')}
       />}
-      {(media.active || media.paused) && phase !== 'photo' && (
+      {showControl && (media.active || media.paused) && phase !== 'photo' && (
         <button type="button" className="atelier-film-control" onClick={media.togglePause}
           aria-label={media.paused ? resumeLabel : pauseLabel} aria-pressed={media.paused}>
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
