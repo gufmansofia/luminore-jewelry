@@ -94,12 +94,13 @@ body:has(.editorial-section), body:has(.article-page), body:has(.journal-page) {
 .bespoke-film-intro .section-heading { max-width:640px; margin-bottom:28px; }
 .bespoke-film-intro .section-heading :is(h1,h2) { font-size:54px; line-height:1.08; }
 .bespoke-film-media { width:100%; overflow:hidden; background:#202927; }
-.bespoke-film-media video { display:block; width:100%; aspect-ratio:16/6; object-fit:cover; }
+.bespoke-film-media :is(video,img) { display:block; width:100%; aspect-ratio:16/6; object-fit:cover; }
+.bespoke-film-media video[hidden] { display:none; }
 .bespoke-film-caption { margin:14px 0 24px; font-size:12px; line-height:1.5; color:var(--gallery-muted); }
 @media(max-width:700px) {
  .bespoke-film-copy { padding-inline:20px; }
  .bespoke-film-intro .section-heading :is(h1,h2) { font-size:38px; }
- .bespoke-film-media video { aspect-ratio:16/9; }
+ .bespoke-film-media :is(video,img) { aspect-ratio:16/9; }
 }
 .bespoke-story { min-width:0; }
 .bespoke-story .section-heading { margin-bottom:24px; }

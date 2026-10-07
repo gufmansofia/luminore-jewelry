@@ -15,7 +15,8 @@
     "test:seo": "bun test ./scripts/check-seo.ts",
     "test:interactions": "bun test ./scripts/check-interactions.ts",
     "preview": "bun scripts/serve-built.ts",
-    "test:mobile": "bun test ./scripts/check-mobile-improvements.ts"
+    "test:mobile": "bun test ./scripts/check-mobile-improvements.ts",
+    "test:video": "bun test ./scripts/check-video.ts ./scripts/check-autoplay.ts"
   },
   "dependencies": {
     "bun-plugin-tailwind": "^0.0.14",

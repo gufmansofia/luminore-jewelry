@@ -1,75 +1,45 @@
 import { useEffect, useRef, useState } from 'react';
+import { useAutoplayFilm } from '../hooks/useAutoplayFilm';
 
-type Phase = 'photo' | 'loading' | 'video' | 'dissolving';
+type Phase = 'photo' | 'loading' | 'video' | 'animation' | 'dissolving';
 
 export function AtelierHeroMedia({ alt, skipLabel }: { alt: string; skipLabel: string }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const skipRef = useRef<() => void>(() => {});
-  const [phase, setPhase] = useState<Phase>('photo');
-
+  const [phase, setPhase] = useState<Phase>('loading');
+  const finished = useRef(false);
+  const animationTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const finish = (immediate = false) => {
+    if (finished.current) return;
+    finished.current = true;
+    clearTimeout(animationTimer.current);
+    media.stop();
+    setPhase(immediate ? 'photo' : 'dissolving');
+  };
+  const media = useAutoplayFilm({
+    mobileQuery: '(max-width: 800px)',
+    mobileSrc: '/optimized/atelier-intro-720.mp4',
+    desktopSrc: '/optimized/atelier-intro-1080.mp4',
+    mobileFallback: '/optimized/atelier-intro-motion-mobile.webp',
+    desktopFallback: '/optimized/atelier-intro-motion-desktop.webp',
+    onPlaying: () => { if (!finished.current) setPhase('video'); },
+    onEnded: () => finish(),
+  });
   useEffect(() => {
-    const video = videoRef.current;
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    // The server-rendered photo remains usable without JavaScript or video playback.
-    if (!video || motion.matches || connection?.saveData || document.hidden) return;
-
-    let finished = false;
-    let watchdog: ReturnType<typeof setTimeout>;
-    const finish = (immediate = false) => {
-      if (finished) return;
-      finished = true;
-      clearTimeout(watchdog);
-      video.pause();
-      setPhase(immediate ? 'photo' : 'dissolving');
-    };
-    const playing = () => {
-      if (finished) return;
-      clearTimeout(watchdog);
-      setPhase('video');
-    };
-    const ended = () => finish();
-    const failed = () => finish(true);
-    const waiting = () => {
-      clearTimeout(watchdog);
-      watchdog = setTimeout(() => finish(), 4000);
-    };
-    const motionChanged = () => { if (motion.matches) failed(); };
-    const visibilityChanged = () => { if (document.hidden) failed(); };
-    skipRef.current = failed;
-    video.addEventListener('playing', playing);
-    video.addEventListener('ended', ended);
-    video.addEventListener('error', failed);
-    video.addEventListener('waiting', waiting);
-    motion.addEventListener('change', motionChanged);
-    document.addEventListener('visibilitychange', visibilityChanged);
-
-    setPhase('loading');
-    video.muted = true;
-    video.src = window.matchMedia('(max-width: 800px)').matches
-      ? '/optimized/atelier-intro-720.mp4'
-      : '/optimized/atelier-intro-1080.mp4';
-    watchdog = setTimeout(failed, 8000);
-    void video.play().catch(failed);
-
-    return () => {
-      finished = true;
-      clearTimeout(watchdog);
-      video.removeEventListener('playing', playing);
-      video.removeEventListener('ended', ended);
-      video.removeEventListener('error', failed);
-      video.removeEventListener('waiting', waiting);
-      motion.removeEventListener('change', motionChanged);
-      document.removeEventListener('visibilitychange', visibilityChanged);
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
-      skipRef.current = () => {};
-    };
-  }, []);
+    if (!media.active) clearTimeout(animationTimer.current);
+    return () => clearTimeout(animationTimer.current);
+  }, [media.active]);
+  const animationLoaded = () => {
+    if (finished.current) return;
+    setPhase('animation');
+    clearTimeout(animationTimer.current);
+    // The image copy contains the complete 5.65-second intro, played once.
+    animationTimer.current = setTimeout(() => finish(), 5650);
+  };
 
   return (
-    <div className="atelier-photo" data-phase={phase}>
+    <div ref={media.containerRef} className="atelier-photo" data-phase={phase}
+      onTransitionEnd={event => {
+        if (event.propertyName === 'opacity' && phase === 'dissolving') setPhase('photo');
+      }}>
       <img
         className="atelier-hero-still"
         src="/optimized/atelier-portrait-final-780.webp"
@@ -82,19 +52,27 @@ export function AtelierHeroMedia({ alt, skipLabel }: { alt: string; skipLabel: s
         decoding="async"
       />
       <video
-        ref={videoRef}
+        ref={media.videoRef}
         className="atelier-hero-film"
+        hidden={media.fallback}
+        autoPlay
         muted
         playsInline
-        preload="none"
+        preload="auto"
+        disablePictureInPicture
         aria-hidden="true"
         tabIndex={-1}
-        onTransitionEnd={event => {
-          if (event.propertyName === 'opacity' && phase === 'dissolving') setPhase('photo');
-        }}
       />
-      {(phase === 'loading' || phase === 'video') && (
-        <button type="button" className="atelier-film-skip" onClick={() => skipRef.current()}>{skipLabel}</button>
+      {media.animation && phase !== 'photo' && <img
+        className="atelier-hero-film atelier-hero-animation"
+        src={media.animation}
+        alt=""
+        aria-hidden="true"
+        onLoad={animationLoaded}
+        onError={() => finish(true)}
+      />}
+      {phase !== 'photo' && phase !== 'dissolving' && media.active && (
+        <button type="button" className="atelier-film-skip" onClick={() => finish(true)}>{skipLabel}</button>
       )}
     </div>
   );
