@@ -5,6 +5,7 @@ import {useLanguage} from '../i18n';
 import {Footer} from './Footer';
 import {DetailHeader} from './DetailHeader';
 import {ProductImage} from './ProductImage';
+import {ContactChannel} from './ContactChannel';
 import {choose,catalogueWeight,productName,productTitle,productDescription,productSpecGroups,requestDetail} from '../lib/product-copy';
 import {formatCarat} from '../lib/carat';
 import {NotFound} from './NotFound';
@@ -76,7 +77,7 @@ export function ProductDetail(){
  <a ref={actionRef} href="#product-enquiry" className="product-enquire-button" onClick={()=>requestAnimationFrame(()=>document.getElementById("product-enquiry")?.focus({preventScroll:true}))}>{pick('Enquire about this piece','Узнать об этом украшении','Дізнатися про цю прикрасу')}</a>
  <section id="product-enquiry" tabIndex={-1} className="product-details-section product-enquiry" aria-labelledby="enquiry-heading">
  <h2 id="enquiry-heading" >{pick('Let’s find your piece','Подберём ваше украшение','Доберемо вашу прикрасу')}</h2>
- <div className="product-contact-links"><a href={whatsapp} target="_blank" rel="noopener noreferrer" className="product-contact-primary">{t.product.whatsapp}</a><a href={telegram} target="_blank" rel="noopener noreferrer" className="product-contact-secondary">{t.product.telegram}</a></div>
+ <div className="product-contact-links"><ContactChannel channel="WhatsApp" href={whatsapp}/><ContactChannel channel="Telegram" href={telegram}/></div>
  <p className="product-order-note">{pick("We’ll discuss availability, timing and delivery costs before you order.","До заказа обсудим наличие, сроки и стоимость доставки.","До замовлення обговоримо наявність, строки й вартість доставки.")} <Link to="/information/delivery" className="text-button">{pick("Delivery details","О доставке","Про доставку")}</Link></p>
  <p className="product-contact-phone">{t.product.orCall} <a href="tel:+421940600708" className="underline underline-offset-4">+421 940 600 708</a></p>
  </section>

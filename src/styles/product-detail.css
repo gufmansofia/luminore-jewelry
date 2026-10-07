@@ -46,7 +46,7 @@ body:has(.product-page) { background: #fff; }
 .product-price { margin: 38px 0 46px; font: 400 48px/1.12 var(--font-editorial); font-variant-numeric: lining-nums tabular-nums; }
 .product-price--enquiry { font-size: 40px; }
 .product-enquire-button { display: inline-flex; align-items: center; justify-content: center; min-width: min(100%, 370px); min-height: 64px; padding: 16px 48px; background: var(--product-ink); color: white; font-size: 16px; line-height: 1.45; text-align: center; transition: background-color .2s ease; }
-.product-enquire-button:hover, .product-contact-primary:hover { background: #444440; }
+.product-enquire-button:hover { background: #444440; }
 .product-description { margin-top: 34px; font-size: 16px; line-height: 1.8; color: #42423f; }
 .product-details-section { margin-top: 42px; padding-top: 24px; border-top: 1px solid #cececa; }
 .product-details-section h2 { margin: 0 0 22px; font-size: 28px; line-height: 1.25; color: var(--product-ink); }
@@ -55,9 +55,7 @@ body:has(.product-page) { background: #fff; }
 .product-page .product-specs dd { color: var(--product-ink); }
 .product-enquiry { scroll-margin-top: 120px; }
 .product-contact-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.product-contact-links a { display: flex; align-items: center; justify-content: center; min-height: 52px; padding: 12px; border: 1px solid #b9b9b4; font-size: 14px; text-align: center; }
-.product-contact-links .product-contact-primary { background: var(--product-ink); border-color: var(--product-ink); color: white; }
-.product-contact-links a:not(.product-contact-primary):hover { background: #f5f5f3; }
+.product-contact-links .contact-channel { min-width: 0; padding-inline: 12px; }
 .product-enquiry > p { margin-top: 22px; color: #51514d; font-size: 14px; }
 .product-enquiry > p a { text-decoration: underline; text-underline-offset: 4px; }
 .product-related { max-width: 1520px; margin-inline: auto; padding: 48px clamp(24px, 2.35vw, 40px) 72px; border-top: 1px solid var(--product-rule); }
