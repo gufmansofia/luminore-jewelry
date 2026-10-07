@@ -57,7 +57,7 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false }: { prev
 
   return (
     <>
-      {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath={previewQuietHero ? '/preview/hero-quiet' : '/'} film="hands" quiet={previewQuietHero} captureLayers={previewQuietHero && new URLSearchParams(location.search).get('capture') === 'layers'} />}
+      {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath={previewQuietHero ? '/preview/hero-quiet' : '/'} film="hands" quiet captureLayers={previewQuietHero && new URLSearchParams(location.search).get('capture') === 'layers'} />}
       <main id="main-content" tabIndex={-1} className="atelier-content">
         <CategoryPreview />
         <ProductSpotlight />
