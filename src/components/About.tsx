@@ -3,6 +3,7 @@ import { useLanguage } from '../i18n';
 import { useReveal } from '../hooks/useMotion';
 import { choose } from '../lib/product-copy';
 import { ServiceStrip } from './ServiceStrip';
+import { ContactChannel } from './ContactChannel';
 import '../styles/about.css';
 
 const copy = {
@@ -74,14 +75,8 @@ export function About() {
       <div className="manager-contact">
         <p>{choose(language,'Contact our manager','Связаться с менеджером','Зв’язатися з менеджером')}</p>
         <div>
-          <a className="outline-button manager-channel" href="https://t.me/luminore_jewelry" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m21 3-4 18-6-7-8-3 18-8Z" /><path d="m11 14 5-6M11 14l-1 5 4-2" /></svg>
-            <span>Telegram</span>
-          </a>
-          <a className="outline-button manager-channel" href="https://wa.me/421940600708" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.5 11.8a8.5 8.5 0 0 1-12.7 7.4L3 20.5l1.3-4.7a8.5 8.5 0 1 1 16.2-4Z" /><path d="m8.4 7.6 1.5 2.5-1 1.1a9.4 9.4 0 0 0 3.9 3.9l1.1-1 2.5 1.5c-.4 1.5-1.4 2-2.7 1.5-3.5-1.2-6.7-4.4-7.1-7.3-.2-1.1.5-2 1.8-2.2Z" /></svg>
-            <span>WhatsApp</span>
-          </a>
+          <ContactChannel channel="Telegram" className="manager-channel" />
+          <ContactChannel channel="WhatsApp" className="manager-channel" />
         </div>
       </div>
     </div>

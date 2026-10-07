@@ -31,11 +31,7 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
 .manager-contact { width:min(100%,880px); margin:auto; display:flex; align-items:center; justify-content:space-between; gap:24px; }
 .manager-contact p { font-family:var(--font-editorial); font-size:32px; line-height:1.2; }
 .manager-contact>div { display:flex; gap:12px; }
-.manager-contact .manager-channel { flex:none; min-width:150px; min-height:52px; padding:12px 20px; gap:10px; border-radius:0; white-space:nowrap; transition:background .2s,color .2s,border-color .2s; }
-.manager-channel svg { flex:none; width:20px; height:20px; }
-.manager-contact .manager-channel:hover { background:var(--gallery-ink); color:#fff; border-color:var(--gallery-ink); }
-.manager-contact .manager-channel:focus-visible { outline:2px solid currentColor; outline-offset:4px; }
-@media(prefers-reduced-motion:reduce) { .manager-contact .manager-channel { transition:none; } }
+.manager-contact .manager-channel { flex:none; min-width:150px; }
 .bespoke-start { margin:0 0 28px; }
 .bespoke-start+* { margin-top:0; }
 .form-error { display:block; margin-top:6px; color:#9a2929; font-size:13px; line-height:1.5; }
