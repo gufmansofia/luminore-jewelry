@@ -151,8 +151,12 @@ body:has(.product-page) { background: #fff; }
 .product-spec-group:last-child .product-specs > div { border-bottom:0; }
 .product-specifications > summary { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:44px; list-style:none; cursor:pointer; }
 .product-specifications > summary::-webkit-details-marker { display:none; }
-.product-specifications > summary h2 { margin:0; }
+.product-specifications > summary h2 { margin:0; font-size:24px; }
 .product-specifications > summary svg { flex:none; }
 .product-specifications[open] > summary { margin-bottom:22px; }
 .product-specifications[open] > summary svg { transform:rotate(180deg); }
 .product-specifications > summary:focus-visible { outline:1px solid currentColor; outline-offset:5px; }
+
+@media (max-width: 767px) {
+  .product-specifications > summary h2 { font-size:20px; }
+}
