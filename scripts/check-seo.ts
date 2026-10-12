@@ -37,6 +37,22 @@ test('sitemap and robots use the production domain',()=>{
  for(const match of sitemap.matchAll(/(?:<loc>|href=")(https?:\/\/[^<"]+)/g))expect(new URL(match[1]).origin).toBe(origin);
  expect(readFileSync('dist/robots.txt','utf8')).toContain(`Sitemap: ${origin}/sitemap.xml`);
 });
+test('alternative sitemap index covers every public URL once across language sitemaps',()=>{
+ const index=readFileSync('dist/sitemap-index.xml','utf8');
+ expect(index).toContain('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+ expect([...index.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>match[1])).toEqual(languages.map(language=>`${SITE}/sitemap-${language}.xml`));
+ const allUrls:string[]=[];
+ for(const language of languages){
+  const sitemap=readFileSync(`dist/sitemap-${language}.xml`,'utf8');
+  const urls=[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>match[1]);
+  expect(urls).toEqual(publicRoutes().map(route=>SITE+localePath(route,language)));
+  expect((sitemap.match(/<xhtml:link /g)||[]).length).toBe(urls.length*4);
+  allUrls.push(...urls);
+ }
+ const original=[...readFileSync('dist/sitemap.xml','utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>match[1]);
+ expect(allUrls).toEqual(original);
+ expect(new Set(allUrls).size).toBe(allUrls.length);
+});
 test('search titles and descriptions distinguish public pages within each language',()=>{
  for(const language of languages){
   const pages=publicRoutes().map(route=>pageMetadata(route,language));

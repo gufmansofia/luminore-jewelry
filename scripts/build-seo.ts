@@ -16,8 +16,12 @@ export async function buildSeo(outdir:string){
   const file=localized==='/'?'index.html':localized.slice(1)+'.html';
   await mkdir(path.dirname(path.join(outdir,file)),{recursive:true});await writeFile(path.join(outdir,file),html);
  }
- const entries=languages.flatMap(language=>publicPaths.map(route=>({url:SITE+localePath(route,language),alternates:pageMetadata(route,language).alternates,lastModified:blogPosts.find(post=>route===`/blog/${post.slug}`)?.updatedAt})));
- await writeFile(path.join(outdir,'sitemap.xml'),'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'+entries.map(entry=>`<url><loc>${escape(entry.url)}</loc>${entry.lastModified?`<lastmod>${entry.lastModified}</lastmod>`:''}${entry.alternates.map(a=>`<xhtml:link rel="alternate" hreflang="${a.language}" href="${escape(a.url)}"/>`).join('')}</url>`).join('')+'</urlset>');
+ const localizedEntries=languages.map(language=>({language,entries:publicPaths.map(route=>({url:SITE+localePath(route,language),alternates:pageMetadata(route,language).alternates,lastModified:blogPosts.find(post=>route===`/blog/${post.slug}`)?.updatedAt}))}));
+ const entries=localizedEntries.flatMap(sitemap=>sitemap.entries);
+ const renderSitemap=(items:typeof entries)=>'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'+items.map(entry=>`<url><loc>${escape(entry.url)}</loc>${entry.lastModified?`<lastmod>${entry.lastModified}</lastmod>`:''}${entry.alternates.map(a=>`<xhtml:link rel="alternate" hreflang="${a.language}" href="${escape(a.url)}"/>`).join('')}</url>`).join('')+'</urlset>';
+ await writeFile(path.join(outdir,'sitemap.xml'),renderSitemap(entries));
+ for(const sitemap of localizedEntries)await writeFile(path.join(outdir,`sitemap-${sitemap.language}.xml`),renderSitemap(sitemap.entries));
+ await writeFile(path.join(outdir,'sitemap-index.xml'),'<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+languages.map(language=>`<sitemap><loc>${escape(`${SITE}/sitemap-${language}.xml`)}</loc></sitemap>`).join('')+'</sitemapindex>');
  await writeFile(path.join(outdir,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
  console.log(`Pre-rendered ${routes.length*languages.length} complete pages; ${entries.length} localized sitemap URLs.`);
 }
