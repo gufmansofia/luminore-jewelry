@@ -5,6 +5,7 @@ import { existsSync } from "fs";
 import { rm, cp } from "fs/promises";
 import path from "path";
 import { buildSeo } from "./scripts/build-seo";
+import { checkFonts } from "./scripts/check-fonts";
 
 // Print help text if requested
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
@@ -156,6 +157,15 @@ const result = await build({
   ...cliConfig, // Merge in any CLI-provided options
 });
 
+// Bun's HTML resolver treats absolute local font preloads as filesystem imports.
+// Add the public URLs after bundling so preloads and CSS request the same files.
+const fontPreloads = ["montserrat-latin", "cormorant-garamond-latin"]
+  .map(font => `<link rel="preload" href="/fonts/${font}.woff2" as="font" type="font/woff2" crossorigin>`)
+  .join("");
+for (const output of result.outputs.filter(output => output.path.endsWith(".html"))) {
+  await Bun.write(output.path, (await output.text()).replace("</head>", `${fontPreloads}</head>`));
+}
+
 // Print the results
 const end = performance.now();
 
@@ -190,6 +200,7 @@ if (existsSync(vercelJsonPath)) {
 }
 
 await buildSeo(outdir);
+await checkFonts(outdir);
 
 console.table(outputTable);
 const buildTime = (end - start).toFixed(2);

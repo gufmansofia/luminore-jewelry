@@ -1,6 +1,11 @@
 import {test,expect} from 'bun:test';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {StaticRouter} from 'react-router-dom';
 import {existsSync,readFileSync} from 'node:fs';
-import {publicRoutes,pageMetadata,SITE} from '../src/lib/seo';
+import {publicRoutes,pageMetadata,SITE,SITE_NAME} from '../src/lib/seo';
+import {LanguageProvider} from '../src/i18n';
+import {LanguageSelect} from '../src/components/LanguageSelect';
 import {languages,localePath} from '../src/lib/locale-path';
 import {products} from '../src/data/products';
 import {filterCatalogue,PAGE_SIZE} from '../src/lib/catalogue';
@@ -8,6 +13,31 @@ import {collectionRoute} from '../src/data/collections';
 import {productName,productDescription,productSpecs,requestDetail} from '../src/lib/product-copy';
 import {blogPosts} from '../src/data/blogs';
 const file=(route:string)=>`dist/${route==='/'?'index':route.slice(1)}.html`;
+test('language links expose localized destinations with the current path, query and section',()=>{
+ for(const language of languages)for(const route of ['/','/collection/page/2','/product/85']){
+  const html=renderToStaticMarkup(createElement(LanguageProvider,{defaultLanguage:language},
+   createElement(StaticRouter,{basename:language==='en'?'/':`/${language}`,location:localePath(route,language)+'?sort=price&lang=ru&view=grid#details'},
+    createElement(LanguageSelect))));
+  const links=[...html.matchAll(/<a\b[^>]*class="language-option"[^>]*>/g)].map(match=>match[0]);
+  expect(links).toHaveLength(3);
+  for(const destination of languages){
+   const link=links.find(tag=>tag.includes(`lang="${destination}"`))!;
+   expect(link).toContain(`href="${localePath(route,destination)}?sort=price&amp;view=grid#details"`);
+   expect(link).toMatch(new RegExp(`hrefLang="${destination}"`,'i'));
+   expect(link).toContain(`aria-checked="${destination===language}"`);
+  }
+ }
+});
+test('preferred site name identifies Luminore Jewelry without changing the organization identity',()=>{
+ expect(SITE_NAME).toBe('Luminore Jewelry');
+ for(const language of languages)for(const route of ['/','/collection','/product/85']){
+  const meta=pageMetadata(route,language);
+  expect(meta.siteName).toBe('Luminore Jewelry');
+  const graph=meta.schema['@graph'] as Record<string,any>[];
+  expect(graph.find(item=>item['@type']==='WebSite')).toMatchObject({name:'Luminore Jewelry',alternateName:['Luminore','Luminore Fine Jewelry'],url:SITE+'/'});
+  expect(graph.find(item=>item['@type']==='Organization')).toMatchObject({name:'Luminore',alternateName:['Luminore Jewelry','Luminore Fine Jewelry']});
+ }
+});
 test('all public language pages contain content, reciprocal alternates and one canonical before JavaScript',()=>{
  const routes=publicRoutes();
  for(const l of languages)for(const route of routes){
@@ -24,6 +54,11 @@ test('all public language pages contain content, reciprocal alternates and one c
   for(const alternate of meta.alternates)expect(html).toContain(`hreflang="${alternate.language}" href="${alternate.url}"`);
   const schema=JSON.parse(html.match(/id="page-schema"[^>]*>([\s\S]*?)<\/script>/)![1]);
   expect(schema['@context']).toBe('https://schema.org');
+  expect(schema['@graph'].find((entity:any)=>entity['@type']==='WebSite')).toMatchObject({name:SITE_NAME,alternateName:['Luminore','Luminore Fine Jewelry']});
+  expect(html).toContain(`<meta property="og:site_name" content="${SITE_NAME}">`);
+  const languageLinks=[...html.matchAll(/<a\b[^>]*class="language-option"[^>]*>/g)].map(match=>match[0]);
+  expect(languageLinks).toHaveLength(3);
+  for(const language of languages)expect(languageLinks.some(tag=>tag.includes(`href="${localePath(route,language)}"`))).toBe(true);
   for(const match of html.matchAll(/href="(\/(?!\/)[^"?#]*)(?:[?#][^"]*)?"/g)){
    const href=match[1].replaceAll('&amp;','&');
    expect(existsSync(file(href))||existsSync('dist'+href)).toBe(true);
@@ -64,7 +99,7 @@ test('search titles and descriptions distinguish public pages within each langua
 test('structured data matches visible products, catalogue order and article dates',()=>{
  for(const language of languages){
   const home=pageMetadata('/',language).schema['@graph'] as Record<string,any>[];
-  expect(home.find(item=>item['@type']==='WebSite')).toMatchObject({name:'Luminore',url:SITE+'/'});
+  expect(home.find(item=>item['@type']==='WebSite')).toMatchObject({name:SITE_NAME,url:SITE+'/'});
   expect(home.find(item=>item['@type']==='Organization')).toMatchObject({telephone:'+421940600708',email:'jewelry@luminore.eu'});
   for(const product of products){
    const meta=pageMetadata(`/product/${product.id}`,language);

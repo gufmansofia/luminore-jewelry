@@ -85,7 +85,7 @@ export const information:Record<string,Record<Language,{title:string;paragraphs:
         "The enquiry form prepares a message in your browser. It is not sent to Luminore when you preview it. You choose whether to open Telegram or WhatsApp and send the message there. Those services process the message under their own privacy policies.",
         "The form asks for your name and enquiry. Phone, email and budget fields are optional where shown. Please include only the information needed to discuss your jewellery.",
         "Saved pieces and language preferences are stored in this browser. Catalogue position and filter choices may be kept for the browsing session. Removing saved pieces or clearing browser site data removes those local choices. They are not an account synced across devices.",
-        "Fonts are loaded from Google Fonts and Fontshare; those providers receive the network requests needed to display the fonts. The current site does not include a third-party advertising or analytics tracker.",
+        "Fonts are served from this website's own domain. The current site does not include a third-party advertising or analytics tracker.",
         "For questions about information you have shared with Luminore, or to request access, correction or deletion, contact jewelry@luminore.eu. This page describes the current website flow; ask us for the information relevant to processing an order."
       ]
     },
@@ -95,7 +95,7 @@ export const information:Record<string,Record<Language,{title:string;paragraphs:
         "Форма готовит сообщение в вашем браузере. При просмотре заявки оно не отправляется в Luminore. Вы сами решаете, открыть ли Telegram или WhatsApp и отправить сообщение там. Эти сервисы обрабатывают сообщения по собственным правилам конфиденциальности.",
         "В форме нужны имя и запрос. Телефон, email и бюджет необязательны там, где это указано. Сообщайте только информацию, необходимую для обсуждения украшения.",
         "Избранное и выбранный язык хранятся в этом браузере. Положение в каталоге и фильтры могут сохраняться на время сеанса. Удаление избранного или очистка данных сайта удаляет эти локальные настройки. Они не синхронизируются между устройствами через аккаунт.",
-        "Шрифты загружаются из Google Fonts и Fontshare; эти сервисы получают сетевые запросы, необходимые для отображения шрифтов. На текущем сайте нет стороннего рекламного или аналитического трекера.",
+        "Шрифты загружаются с домена этого сайта. На текущем сайте нет стороннего рекламного или аналитического трекера.",
         "По вопросам о переданной Luminore информации, а также для запроса доступа, исправления или удаления данных напишите на jewelry@luminore.eu. Здесь описана работа текущего сайта; информацию об обработке заказа можно запросить у нас."
       ]
     },
@@ -105,7 +105,7 @@ export const information:Record<string,Record<Language,{title:string;paragraphs:
         "Форма готує повідомлення у вашому браузері. Під час перегляду заявки воно не надсилається до Luminore. Ви самі вирішуєте, чи відкрити Telegram або WhatsApp і надіслати повідомлення там. Ці сервіси обробляють повідомлення за власними правилами конфіденційності.",
         "У формі потрібні ім’я та запит. Телефон, email і бюджет необов’язкові там, де це зазначено. Повідомляйте лише інформацію, необхідну для обговорення прикраси.",
         "Обране та вибрана мова зберігаються у цьому браузері. Положення в каталозі й фільтри можуть зберігатися протягом сеансу. Видалення обраного або очищення даних сайту видаляє ці локальні налаштування. Вони не синхронізуються між пристроями через обліковий запис.",
-        "Шрифти завантажуються з Google Fonts і Fontshare; ці сервіси отримують мережеві запити, необхідні для відображення шрифтів. На поточному сайті немає стороннього рекламного чи аналітичного трекера.",
+        "Шрифти завантажуються з домену цього сайту. На поточному сайті немає стороннього рекламного чи аналітичного трекера.",
         "З питань щодо переданої Luminore інформації, а також для запиту доступу, виправлення чи видалення даних напишіть на jewelry@luminore.eu. Тут описано роботу поточного сайту; інформацію щодо обробки замовлення можна запитати у нас."
       ]
     }

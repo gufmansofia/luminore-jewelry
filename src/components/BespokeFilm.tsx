@@ -11,6 +11,7 @@ export function BespokeFilm() {
     desktopSrc: '/optimized/bespoke-film-desktop.mp4',
     mobileFallback: '/optimized/bespoke-film-motion-mobile.webp',
     desktopFallback: '/optimized/bespoke-film-motion-desktop.webp',
+    preloadMargin: 400,
   });
 
   return <div ref={media.containerRef} className="bespoke-film-media" data-playback={media.fallback ? (media.animation ? 'animation' : 'poster') : 'video'}>

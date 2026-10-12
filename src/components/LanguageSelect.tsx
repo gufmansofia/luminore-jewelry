@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useLanguage, type Language } from '../i18n';
 import { choose } from '../lib/product-copy';
+import { localePath } from '../lib/locale-path';
 
 const languages: { value: Language; code: string; name: string }[] = [
   { value: 'en', code: 'EN', name: 'English' },
@@ -10,13 +12,18 @@ const languages: { value: Language; code: string; name: string }[] = [
 
 export function LanguageSelect() {
   const { language, setLanguage } = useLanguage();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const id = useId();
   const root = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
-  const options = useRef<(HTMLButtonElement | null)[]>([]);
+  const options = useRef<(HTMLAnchorElement | null)[]>([]);
   const selected = languages.findIndex(option => option.value === language);
   const label = choose(language, 'Language', 'Язык', 'Мова');
+  const search = new URLSearchParams(location.search);
+  search.delete('lang');
+  const query = search.toString();
+  const languageHref = (value: Language) => localePath(location.pathname, value) + (query ? `?${query}` : '') + location.hash;
 
   useEffect(() => {
     if (!open) return;
@@ -84,16 +91,23 @@ export function LanguageSelect() {
           options.current[next]?.focus();
         }
       }}>
-      {languages.map((option, index) => <button key={option.value} ref={element => { options.current[index] = element; }}
-        type="button" className="language-option" role="menuitemradio" aria-checked={language === option.value} tabIndex={-1}
-        lang={option.value} onClick={() => {
+      {languages.map((option, index) => <a key={option.value} ref={element => { options.current[index] = element; }}
+        href={languageHref(option.value)} hrefLang={option.value} className="language-option" role="menuitemradio" aria-checked={language === option.value} tabIndex={-1}
+        lang={option.value} onClick={event => {
+          if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          closeAndFocus();
+          if (option.value !== language) setLanguage(option.value);
+        }} onKeyDown={event => {
+          if (event.key !== ' ') return;
+          event.preventDefault();
           closeAndFocus();
           if (option.value !== language) setLanguage(option.value);
         }}>
         <span className="language-option-code" aria-hidden="true">{option.code}</span>
         <span>{option.name}</span>
         <svg className="language-option-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m5 12 4 4 10-10" /></svg>
-      </button>)}
+      </a>)}
     </div>
   </div>;
 }

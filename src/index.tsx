@@ -17,6 +17,7 @@ const mimeTypes: Record<string, string> = {
   '.json': 'application/json',
   '.pdf': 'application/pdf',
   '.mp4': 'video/mp4',
+  '.woff2': 'font/woff2',
   '.glb': 'model/gltf-binary',
   '.usdz': 'model/vnd.usdz+zip',
 };
@@ -81,6 +82,7 @@ const server = serve({
       return await serveStatic(pathname) || new Response("Not found", {status:404});
     },
     "/bespoke-art/*": async (req) => await serveStatic(new URL(req.url).pathname) || new Response("Not found", {status:404}),
+    "/fonts/*": async (req) => await serveStatic(new URL(req.url).pathname) || new Response("Not found", {status:404}),
 
     // Serve blog images from public/blog-images/ folder
     "/blog-images/*": async (req) => {
