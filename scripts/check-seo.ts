@@ -16,7 +16,8 @@ test('all public language pages contain content, reciprocal alternates and one c
   expect(html).toContain('<main');
   expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
   expect(html.match(/rel="canonical"/g)).toHaveLength(1);
-  expect(html).toContain(`href="${SITE+local}"`);
+  expect(html).toContain(`rel="canonical" href="https://www.luminorejewelry.com${local}"`);
+  expect(html).not.toContain('https://luminore.eu/');
   expect(meta.alternates).toHaveLength(4);
   for(const alternate of meta.alternates)expect(html).toContain(`hreflang="${alternate.language}" href="${alternate.url}"`);
   const schema=JSON.parse(html.match(/id="page-schema"[^>]*>([\s\S]*?)<\/script>/)![1]);
@@ -26,6 +27,13 @@ test('all public language pages contain content, reciprocal alternates and one c
    expect(existsSync(file(href))||existsSync('dist'+href)).toBe(true);
   }
  }
+});
+test('sitemap and robots use the production domain',()=>{
+ const origin='https://www.luminorejewelry.com';
+ expect(SITE).toBe(origin);
+ const sitemap=readFileSync('dist/sitemap.xml','utf8');
+ for(const match of sitemap.matchAll(/(?:<loc>|href=")(https?:\/\/[^<"]+)/g))expect(new URL(match[1]).origin).toBe(origin);
+ expect(readFileSync('dist/robots.txt','utf8')).toContain(`Sitemap: ${origin}/sitemap.xml`);
 });
 test('pagination exposes all 113 products as crawlable links and preserves the approved first 12',()=>{
  expect(filterCatalogue(products,'','all','all').slice(0,12).map(p=>p.id)).toEqual([85,103,55,112,79,99,6,108,89,71,13,86]);

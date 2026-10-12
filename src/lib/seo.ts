@@ -7,7 +7,7 @@ import type {Language} from '../i18n/translations';
 import {imageSources} from './images';
 import {basePath,localePath,languages} from './locale-path';
 import {PAGE_SIZE} from './catalogue';
-export const SITE='https://luminore.eu';
+export const SITE='https://www.luminorejewelry.com';
 export const organization={'@type':'Organization',name:'Luminore',url:SITE,telephone:'+421940600708',email:'jewelry@luminore.eu',sameAs:['https://www.instagram.com/luminore_jewelry/']};
 export function publicRoutes() {
  const categoryRoutes=['all',...collections.map(c=>c.category)].flatMap(category=>{

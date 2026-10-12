@@ -83,7 +83,7 @@ test('all image originals are preserved and delivery copies exist',()=>{
  }
 });
 test('product and journal metadata is unique, absolute and noindex on unknown pages',()=>{
- for(const p of products){const m=pageMetadata(`/product/${p.id}`);expect(m.title).toContain(productName(p,'en'));expect(m.image).toStartWith('https://luminore.eu/');expect(schemaProduct(p.id)['@type']).toBe('Product');}
+ for(const p of products){const m=pageMetadata(`/product/${p.id}`);expect(m.title).toContain(productName(p,'en'));expect(m.image).toStartWith('https://www.luminorejewelry.com/');expect(schemaProduct(p.id)['@type']).toBe('Product');}
  for(const p of blogPosts)expect(pageMetadata(`/blog/${p.slug}`).title).toContain(p.titleEn);
  expect(pageMetadata('/does-not-exist').robots).toContain('noindex');
 });
