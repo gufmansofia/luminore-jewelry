@@ -9,8 +9,18 @@ import {imageSources} from './images';
 import {basePath,localePath,languages} from './locale-path';
 import {PAGE_SIZE,filterCatalogue} from './catalogue';
 export const SITE='https://www.luminorejewelry.com';
-export const organization={'@type':'Organization','@id':`${SITE}/#organization`,name:'Luminore',url:`${SITE}/`,telephone:'+421940600708',email:'jewelry@luminore.eu',sameAs:['https://www.instagram.com/luminore_jewelry/']};
-const website={'@type':'WebSite','@id':`${SITE}/#website`,name:'Luminore',url:`${SITE}/`,inLanguage:languages,publisher:{'@id':organization['@id']}};
+const brandAlternateNames=['Luminore Jewelry','Luminore Fine Jewelry'];
+const brandLogo={
+ '@type':'ImageObject',
+ '@id':`${SITE}/#logo`,
+ url:`${SITE}/luminore-jewelry-logo.png`,
+ contentUrl:`${SITE}/luminore-jewelry-logo.png`,
+ width:1254,
+ height:1254,
+ caption:'Luminore Jewelry'
+};
+export const organization={'@type':'Organization','@id':`${SITE}/#organization`,name:'Luminore',alternateName:brandAlternateNames,url:`${SITE}/`,logo:brandLogo,telephone:'+421940600708',email:'jewelry@luminore.eu',sameAs:['https://www.instagram.com/luminore_jewelry/']};
+const website={'@type':'WebSite','@id':`${SITE}/#website`,name:'Luminore',alternateName:brandAlternateNames,url:`${SITE}/`,inLanguage:languages,publisher:{'@id':organization['@id']}};
 export const socialLocale=(language:Language)=>language==='en'?'en_GB':language==='ru'?'ru_RU':'uk_UA';
 export function publicRoutes() {
  const categoryRoutes=['all',...collections.map(c=>c.category)].flatMap(category=>{
