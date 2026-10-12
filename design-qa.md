@@ -1,68 +1,63 @@
-# Bespoke pencil sketches — design QA
+# Approved About Luminore Jewelry introduction — design QA
 
-Date: 2026-10-04
+Date: 2026-10-12
 
 final result: passed
 
 ## Scope and visual truth
 
-Adapt two jewelry illustrations to the existing bespoke section and guided enquiry. The references are illustration assets, not complete interface mockups. Surrounding typography and form behavior follow the existing site. Prior About-section QA is preserved in `output/verification/bespoke-sketches/before/design-qa.md`.
+Update the white introduction in `#about` with the approved heading and two paragraphs in English, Russian and Ukrainian. Preserve the diamond accordions, the single mobile services row, and the current Contact our manager title and outlined Telegram/WhatsApp text buttons.
 
-Source visual truth:
-- `public/bespoke-art/desktop-pencil.png`: 1672 × 941 pixels.
-- `public/bespoke-art/mobile-pencil.png`: 1254 × 1254 pixels.
-- User photographs: `/Users/sofia.personal/Desktop/d1cc5fa9faec958b-1600.webp` and `/Users/sofia.personal/Desktop/ec5404264ed6d4a0-1500.webp`.
+Source: `output/verification/about-brand/approved-preview.png`, 1536 × 1024 pixels. Existing styles are authoritative for the lower components, as explicitly requested. Previous report: `output/verification/about-brand/before/design-qa.md`.
 
-Implementation: `http://localhost:3000/ru/bespoke` and the shared section on `/ru`.
+## Captures and comparison
 
-## Captures and normalization
+Implementation: built site at `http://127.0.0.1:3073/#about`. Actual responsive pages are embedded in the ignored verification surface at `http://127.0.0.1:3074/`. These local test files are not deployed.
 
-Evidence directory: `output/verification/bespoke-sketches/`.
+Captures: `output/verification/about-brand/local-desktop.jpg` (1280px wide), `local-mobile.jpg` (390 × 1054), and `local-mobile-320.jpg` (320 × 1085). Actual-site iframe viewports are 1280/390/320 × 1400 CSS pixels so the complete section can be captured. Captures have one image pixel per CSS pixel. These are responsive browser captures, not physical devices.
 
-Desktop uses a 1440 × 1000 CSS viewport. Full-page initial-selection capture `desktop-piece.jpg` is 1440 × 1617 pixels. Illustration measures 566.664 × 318.914 CSS pixels. `desktop-contact.jpg` shows the contact state.
+Full comparison: `output/verification/about-brand/comparison.jpg` places the approved desktop/mobile image and actual captures together in one opened comparison input. Compare interior content with proportional scaling; the concept presentation frame is not website chrome. Unscaled 390 and 320 captures were also opened for focused review of typography, complete copy, service labels and contact buttons. No asset crop is needed because this change adds no image assets.
 
-Mobile uses the actual page in a 390 × 844 CSS-pixel iframe. Surrounding verification canvas was removed from `mobile-review-full.jpg` to produce `mobile-intro.jpg`, 390 × 844 pixels. Illustration measures 330 × 330 CSS pixels and loads the mobile source. `mobile-shape.jpg`, `mobile-contact.jpg`, and `mobile-contact-bottom.jpg` show the other states.
+## Findings and required fidelity surfaces
 
-Narrow mobile uses a 320 × 844 CSS-pixel iframe. Content-only captures are `mobile-320.jpg` and `mobile-320-contact.jpg`. Illustration measures 280 × 280 CSS pixels. DOM scroll width equals viewport width at both mobile sizes.
+No actionable P0/P1/P2 difference within the approved change.
 
-Screenshots have one image pixel per CSS pixel. Assets were scaled to their measured slots for focused comparison, without artwork edits. `desktop-asset-comparison.jpg` and `mobile-asset-comparison.jpg` place the normalized source beside its browser crop. Both comparisons were opened with the source assets and rendered full-page views before this report. `responsive-preview.jpg` combines the desktop and mobile captures for presentation; unscaled captures were used to assess text and controls. `homepage-bespoke.jpg` records the shared homepage section and its lazy-loaded art.
+Fonts: Cormorant Garamond heading and Montserrat body, weight 400. Heading is 48px desktop/36px mobile; body remains 17px/15px. Consistent tracking and weight, clean two-line mobile title, complete paragraphs at 390 and 320px. Existing graphite text styling is retained.
 
-## Findings
+Layout: centered white introduction, existing 670px text width and side padding, 16px between paragraphs. Section height grows naturally. All four services have equal y-coordinates. At 390px their x-coordinates are 12, 103.5, 195 and 286.5; at 320px they are 6, 83, 160 and 237. scrollWidth equals viewport width. Contact buttons retain 1px borders, 52px height and 12px horizontal gap.
 
-No actionable P0/P1/P2 differences remain within this change.
+Colors: existing white, #191b1d heading, #52565b body and #25282b graphite. No new color, radius, shadow or gradient.
 
-Fonts and typography: existing Cormorant Garamond display type and site body font remain in use. Bespoke heading is limited to 38–54 px with 1.08 line height, balancing the left column against the selection form. Russian heading wraps cleanly at 390 and 320 px. Labels remain legible without truncation.
+Assets: existing wordmark and service SVGs are reused. No generated replacement icons or mockup pixels become site assets.
 
-Spacing and layout: desktop retains two columns with a 90 px gap. Illustration sits between the introduction and two-column process steps. Mobile stacks story, illustration, steps, and enquiry; artwork is capped at 330 px. White space separates drawings and controls. Art does not overlap fields or buttons. No horizontal overflow at either mobile width.
-
-Colors and tokens: white drawing backgrounds blend with the existing section. Graphite pencil lines complement charcoal headings, muted body text, and pale gray enquiry surface. No new decorative colors or effects.
-
-Image quality and fidelity: generated raster illustrations are used directly. Normalized comparison crops retain full subjects, construction lines, shading, and enlarged connectors. Mobile top stones are recognizable and fastening details have sufficient scale. No cropping, stretching, opacity reduction, or code-drawn replacements. Images are decorative and hidden from assistive technology; form controls retain their labels.
-
-Copy and content: existing localized copy, process explanations, selection labels, and form instructions are retained. No tiny illustration labels compete with the interface.
+Copy: approved localized headings and paragraphs display correctly. Existing stone/service/contact copy is retained. No city, address or unconfirmed legal claim. Mobile services use their existing lowercase site style even though the raster concept used capitals; the user's requirement to preserve the actual site takes precedence.
 
 ## Interactions and validation
 
-Desktop: earrings → laboratory diamonds → custom piece → contact form. Summary and focused name field inspected.
+- Actual language menu switched English → Russian → Ukrainian; About content checked.
+- Natural-diamond accordion opened with aria-expanded=true.
+- Product 85 navigation and image zoom/zoom-out worked.
+- Diamond-care article opened with its title, image and chapter links.
+- Mobile bespoke film loaded bespoke-film-mobile.mp4, readyState=4, paused=false.
+- Actual local-site console error log was empty.
+- Asset validation: 813 references passed.
+- Production build: 468 prerendered pages, 447 localized sitemap URLs.
+- SEO suite: 8 tests passed, 25,830 assertions.
 
-Mobile 390: rings → pear cut → natural diamonds → custom piece → contact form → locally prepared message. Jewelry, cut, and stone choices appear correctly in the message. No external message sent.
-
-Mobile 320: direct discussion shortcut opens contact form; inputs remain inside viewport. Initial Next button is disabled before selection. Selection controls, shape icons, summary, focus state, fields, consent, and prepared-message state inspected. Desktop and mobile console error logs: none captured.
-
-Asset check passed: 757 references. Experience tests: 6 passed, 2092 assertions. Interaction tests: 5 passed, 369 assertions. Isolated production build passed, prerendering 453 pages.
+Browser viewport overrides did not change the direct tab's measured viewport, so responsive layout used actual-site iframes; core interaction checks used the direct tab. No physical-device keyboard flow is involved in this change.
 
 ## Comparison history
 
-The first source-to-rendered comparison found no actionable mismatch after matching illustration-slot size and removing verification canvas. No visual fixes were made after the comparison. Browser viewport-control timeouts were resolved using measured responsive iframes containing the actual site. This verifies responsive layout, not a physical device or its keyboard.
+First normalized comparison found no actionable P0/P1/P2 issue; no implementation fixes followed that comparison. Captures during viewport changes were replaced by aligned captures after navigation settled. This was capture normalization, not a design-fix iteration.
 
 ## Implementation checklist
 
-- [x] Drawings saved as production assets and served locally.
-- [x] Responsive source selection, intrinsic dimensions, and loading behavior set.
-- [x] Desktop and mobile visually compared with source assets.
-- [x] Selection and enquiry exercised in browser.
-- [x] Build and relevant existing checks passed.
+- [x] Approved copy in three languages and consistent regular fonts.
+- [x] Existing accordions, services row and manager buttons preserved.
+- [x] Desktop, 390px and 320px layouts checked.
+- [x] Relevant interactions, build, assets and SEO checks passed.
+- [x] Source and actual implementation compared together.
 
 ## Follow-up polish
 
-No blocking polish issues. Physical-device keyboard behavior was outside this illustration and layout change.
+No blocking polish items. Physical-device testing and Search Console indexing speed are outside this copy change.

@@ -8,24 +8,33 @@ import '../styles/about.css';
 
 const copy = {
   ru: {
-    title: 'Наш подход',
-    intro: 'Расскажите, что для вас важно. Мы поможем разобраться в камнях, выбрать металл и согласовать детали.',
+    title: 'О Luminore Jewelry',
+    intro: [
+      'Украшения с натуральными и лабораторными бриллиантами — из коллекции или по индивидуальному заказу.',
+      'Помогаем выбрать камни, металл и дизайн. Консультируем онлайн; личный подбор — по предварительной договорённости.',
+    ],
     availability: 'Все модели можно заказать с натуральными или лабораторными бриллиантами.',
     natural: 'Натуральные бриллианты', naturalDescription: 'Подберём камень с учётом ваших пожеланий и бюджета.',
     lab: 'Лабораторные бриллианты', labDescription: 'Поможем сравнить характеристики и выбрать подходящий вариант.',
     discuss: 'Обсудить украшение',
   },
   en: {
-    title: 'Our approach',
-    intro: 'Tell us what matters to you. We’ll help you understand the stones, choose a metal and agree on the details.',
+    title: 'About Luminore Jewelry',
+    intro: [
+      'Jewellery with natural and lab-grown diamonds, available from our collection or made to order.',
+      'We help you choose the stones, metal and design. Consultations are available online, with in-person appointments by prior arrangement.',
+    ],
     availability: 'Every design can be ordered with natural or lab-grown diamonds.',
     natural: 'Natural diamonds', naturalDescription: 'We’ll help you choose a stone that suits your preferences and budget.',
     lab: 'Lab-grown diamonds', labDescription: 'We’ll help you compare the specifications and find the right option.',
     discuss: 'Discuss a piece',
   },
   uk: {
-    title: 'Наш підхід',
-    intro: 'Розкажіть, що для вас важливо. Ми допоможемо розібратися в каменях, обрати метал і узгодити деталі.',
+    title: 'Про Luminore Jewelry',
+    intro: [
+      'Прикраси з природними та лабораторними діамантами — з колекції або за індивідуальним замовленням.',
+      'Допомагаємо обрати камені, метал і дизайн. Консультуємо онлайн; особистий підбір — за попередньою домовленістю.',
+    ],
     availability: 'Усі моделі можна замовити з природними або лабораторними діамантами.',
     natural: 'Природні діаманти', naturalDescription: 'Підберемо камінь з урахуванням ваших побажань і бюджету.',
     lab: 'Лабораторні діаманти', labDescription: 'Допоможемо порівняти характеристики й обрати відповідний варіант.',
@@ -59,7 +68,7 @@ export function About() {
   return <section id="about" data-theme="light" className="editorial-section about-section about-chapter" aria-labelledby="about-title">
     <header className="approach-intro approach-shell" ref={intro.ref} data-reveal={intro.phase}>
       <h2 className="approach-title" id="about-title">{t.title.split(' ').map((word, index) => <span key={index}><span className="approach-title-mask"><span className="approach-title-word" style={{ transitionDelay: `${index * 100}ms` }}>{word}</span></span>{' '}</span>)}</h2>
-      <p className="approach-intro-copy">{t.intro}</p>
+      <div className="approach-intro-copy">{t.intro.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div>
     </header>
     <div className="approach-diamond-stage" ref={stones.ref} data-reveal={stones.phase}>
       <div className="approach-diamonds">
