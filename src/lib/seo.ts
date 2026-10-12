@@ -48,5 +48,6 @@ export function pageMetadata(path:string,l:Language='en'){
  else if(bespoke||info||journal)crumbs.push({name:title,path});
  if(crumbs.length>1)graph.push({'@type':'BreadcrumbList',itemListElement:crumbs.map((crumb,i)=>({'@type':'ListItem',position:i+1,name:crumb.name,item:SITE+localePath(crumb.path,l)}))});
  const schema={'@context':'https://schema.org','@graph':graph};
- return {title:`${title} | Luminore`,description,canonical,image:imageUrl,type:post?'article':'website',locale:socialLocale(l),robots:missing||path.startsWith('/preview/')?'noindex, follow':'index, follow, max-image-preview:large',schema,missing,alternates:missing||path.startsWith('/preview/')?[]:alternateUrls(path)};
+ const searchTitle=home?pick('Luminore Jewelry | Natural & Lab-Grown Diamonds','Luminore Jewelry | Украшения с бриллиантами','Luminore Jewelry | Прикраси з діамантами'):`${title} | Luminore`;
+ return {title:searchTitle,description,canonical,image:imageUrl,type:post?'article':'website',locale:socialLocale(l),robots:missing||path.startsWith('/preview/')?'noindex, follow':'index, follow, max-image-preview:large',schema,missing,alternates:missing||path.startsWith('/preview/')?[]:alternateUrls(path)};
 }
