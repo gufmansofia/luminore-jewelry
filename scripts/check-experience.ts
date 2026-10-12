@@ -55,5 +55,5 @@ test('WhatsApp draft preserves customer details, Unicode and punctuation without
 });
 test('journal index is a real discoverable route',()=>{
  expect(pageMetadata('/journal').missing).toBe(false);
- expect(pageMetadata('/journal').robots).toBe('index, follow');
+ expect(pageMetadata('/journal').robots).toMatch(/^index, follow(?:,|$)/);
 });

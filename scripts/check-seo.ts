@@ -3,7 +3,9 @@ import {existsSync,readFileSync} from 'node:fs';
 import {publicRoutes,pageMetadata,SITE} from '../src/lib/seo';
 import {languages,localePath} from '../src/lib/locale-path';
 import {products} from '../src/data/products';
-import {filterCatalogue} from '../src/lib/catalogue';
+import {filterCatalogue,PAGE_SIZE} from '../src/lib/catalogue';
+import {collectionRoute} from '../src/data/collections';
+import {productName,productDescription,productSpecs,requestDetail} from '../src/lib/product-copy';
 import {blogPosts} from '../src/data/blogs';
 const file=(route:string)=>`dist/${route==='/'?'index':route.slice(1)}.html`;
 test('all public language pages contain content, reciprocal alternates and one canonical before JavaScript',()=>{
@@ -34,6 +36,51 @@ test('sitemap and robots use the production domain',()=>{
  const sitemap=readFileSync('dist/sitemap.xml','utf8');
  for(const match of sitemap.matchAll(/(?:<loc>|href=")(https?:\/\/[^<"]+)/g))expect(new URL(match[1]).origin).toBe(origin);
  expect(readFileSync('dist/robots.txt','utf8')).toContain(`Sitemap: ${origin}/sitemap.xml`);
+});
+test('search titles and descriptions distinguish public pages within each language',()=>{
+ for(const language of languages){
+  const pages=publicRoutes().map(route=>pageMetadata(route,language));
+  expect(new Set(pages.map(page=>page.title)).size).toBe(pages.length);
+  expect(new Set(pages.map(page=>page.description)).size).toBe(pages.length);
+  for(const page of pages){expect(page.description.length).toBeGreaterThan(50);expect(page.description.length).toBeLessThanOrEqual(170);}
+ }
+});
+test('structured data matches visible products, catalogue order and article dates',()=>{
+ for(const language of languages){
+  const home=pageMetadata('/',language).schema['@graph'] as Record<string,any>[];
+  expect(home.find(item=>item['@type']==='WebSite')).toMatchObject({name:'Luminore',url:SITE+'/'});
+  expect(home.find(item=>item['@type']==='Organization')).toMatchObject({telephone:'+421940600708',email:'jewelry@luminore.eu'});
+  for(const product of products){
+   const meta=pageMetadata(`/product/${product.id}`,language);
+   const graph=meta.schema['@graph'] as Record<string,any>[];
+   const entity=graph.find(item=>item['@type']==='Product')!;
+   expect(entity.name).toBe(productName(product,language));
+   expect(entity.description).toBe(productDescription(product,language));
+   expect(entity.additionalProperty.map((spec:any)=>({label:spec.name,value:spec.value}))).toEqual(productSpecs(product,language).filter(spec=>spec.value!==requestDetail(language)));
+   expect(entity.aggregateRating).toBeUndefined();
+   if(product.priceUsd===null)expect(entity.offers).toBeUndefined();
+   else {expect(entity.offers.price).toBe(product.priceUsd);expect(entity.offers.priceCurrency).toBe('USD');expect(entity.offers.availability).toBeUndefined();}
+   const html=readFileSync(file(localePath(`/product/${product.id}`,language)),'utf8');
+   expect(html).toContain('max-image-preview:large');
+   for(const image of html.matchAll(/<img\b[^>]*class="[^"]*(?:product-main-image|object-contain)[^"]*"[^>]*>/g))expect(image[0]).not.toContain('alt=""');
+  }
+  for(const route of publicRoutes()){
+   const collection=collectionRoute(route);if(!collection)continue;
+   const graph=pageMetadata(route,language).schema['@graph'] as Record<string,any>[];
+   const list=graph.find(item=>item['@type']==='CollectionPage')!.mainEntity.itemListElement;
+   const expected=filterCatalogue(products,'',collection.collection?.category??'all','all').slice((collection.page-1)*PAGE_SIZE,collection.page*PAGE_SIZE);
+   expect(list.map((item:any)=>item.url)).toEqual(expected.map(product=>SITE+localePath(`/product/${product.id}`,language)));
+   expect(list.map((item:any)=>item.position)).toEqual(expected.map((_,i)=>i+1));
+   const html=readFileSync(file(localePath(route,language)),'utf8');
+   for(const image of html.matchAll(/<img\b[^>]*class="catalogue-cover-image"[^>]*>/g))expect(image[0]).not.toContain('alt=""');
+  }
+  for(const post of blogPosts){
+   const graph=pageMetadata(`/blog/${post.slug}`,language).schema['@graph'] as Record<string,any>[];
+   expect(graph.find(item=>item['@type']==='Article')).toMatchObject({dateModified:post.updatedAt,inLanguage:language});
+   const sitemap=readFileSync('dist/sitemap.xml','utf8');
+   expect(sitemap).toContain(`<loc>${SITE+localePath(`/blog/${post.slug}`,language)}</loc><lastmod>${post.updatedAt}</lastmod>`);
+  }
+ }
 });
 test('pagination exposes all 113 products as crawlable links and preserves the approved first 12',()=>{
  expect(filterCatalogue(products,'','all','all').slice(0,12).map(p=>p.id)).toEqual([85,103,55,112,79,99,6,108,89,71,13,86]);

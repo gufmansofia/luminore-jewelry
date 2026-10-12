@@ -53,6 +53,18 @@ Enquiry forms prepare a message for the customer to review and send through Tele
 
 ## Publication
 
-The existing Vercel project builds the GitHub `main` branch and serves `https://luminore-jewelry.vercel.app`. Push the complete approved working website, including its `src/`, `public/`, build scripts and lockfile. Vercel installs the locked dependencies and builds `dist/` from those sources.
+The existing Vercel project builds the GitHub `main` branch and serves `https://www.luminorejewelry.com`. The Vercel project address is `https://luminore-jewelry.vercel.app`. Push the complete approved working website, including its `src/`, `public/`, build scripts and lockfile. Vercel installs the locked dependencies and builds `dist/` from those sources.
 
 Before publishing, run the asset check, build and relevant tests. After deployment, verify that the deployment commit matches the pushed commit and compare its JavaScript, CSS and media with the local build. Check the current desktop and mobile homepage; do not use an older branch or design preview as the source. Local review output, rollback copies and source video edits remain outside Git.
+
+## SEO
+
+English, Russian and Ukrainian use separate crawlable URLs with reciprocal `hreflang` links. Canonicals, sitemap entries, social URLs and structured data use the production origin in `src/lib/seo.ts`. Each public page is rendered to HTML before JavaScript runs; pagination keeps its own canonical. Preview and missing pages are excluded from the sitemap and marked `noindex`.
+
+Search titles and descriptions are unique within each language. Products with matching names use their visible listed weights to distinguish search titles; page headings retain the approved product names. Product schema uses the listed USD price and specifications. Availability, review ratings, shipping prices and return deadlines must only be added when confirmed and reflected on the page. Article sitemap modification dates come from the recorded article revision date.
+
+Run `bun run check:assets`, `bun run build`, `bun run test:seo` and `bun run test:catalogue` when changing SEO metadata or catalogue data. The SEO tests verify all public localized pages, canonical origin, unique metadata, product facts, catalogue order, article dates and crawlable links.
+
+Search Console setup remains an account task: add the Domain property `luminorejewelry.com`, verify ownership with the TXT record Google supplies, and submit `https://www.luminorejewelry.com/sitemap.xml`. Do not replace existing DNS records. Use URL Inspection on the homepage, language variants, a category and a product; then review indexing, search queries and Core Web Vitals after data becomes available. Search Console ownership and sitemap submission have not been completed by the website build.
+
+The initial search topics follow the real catalogue: diamond jewellery; diamond rings, earrings, bracelets, pendants and necklaces; custom diamond jewellery; and the existing guides to care, certification and natural versus lab-grown diamonds, in all three languages. No search-volume estimates or country-specific claims have been assumed. Refine topics and content using Search Console data once the domain is verified.
