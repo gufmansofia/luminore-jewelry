@@ -9,7 +9,7 @@ import {imageSources} from './images';
 import {basePath,localePath,languages} from './locale-path';
 import {PAGE_SIZE,filterCatalogue} from './catalogue';
 export const SITE='https://www.luminorejewelry.com';
-export const SITE_NAME='Luminore Jewelry';
+export const SITE_NAME='Luminore';
 const brandAlternateNames=['Luminore Jewelry','Luminore Fine Jewelry'];
 const brandLogo={
  '@type':'ImageObject',
@@ -18,10 +18,10 @@ const brandLogo={
  contentUrl:`${SITE}/luminore-jewelry-logo.png`,
  width:1254,
  height:1254,
- caption:'Luminore Jewelry'
+ caption:SITE_NAME
 };
-export const organization={'@type':'Organization','@id':`${SITE}/#organization`,name:'Luminore',alternateName:brandAlternateNames,url:`${SITE}/`,logo:brandLogo,telephone:'+421940600708',email:'jewelry@luminore.eu',sameAs:['https://www.instagram.com/luminore_jewelry/']};
-const website={'@type':'WebSite','@id':`${SITE}/#website`,name:SITE_NAME,alternateName:['Luminore','Luminore Fine Jewelry'],url:`${SITE}/`,inLanguage:languages,publisher:{'@id':organization['@id']}};
+export const organization={'@type':'Organization','@id':`${SITE}/#organization`,name:SITE_NAME,alternateName:brandAlternateNames,url:`${SITE}/`,logo:brandLogo,telephone:'+421940600708',email:'jewelry@luminore.eu',sameAs:['https://www.instagram.com/luminore_jewelry/']};
+const website={'@type':'WebSite','@id':`${SITE}/#website`,name:SITE_NAME,alternateName:brandAlternateNames,url:`${SITE}/`,inLanguage:languages,publisher:{'@id':organization['@id']}};
 export const socialLocale=(language:Language)=>language==='en'?'en_GB':language==='ru'?'ru_RU':'uk_UA';
 export function publicRoutes() {
  const categoryRoutes=['all',...collections.map(c=>c.category)].flatMap(category=>{
@@ -59,6 +59,6 @@ export function pageMetadata(path:string,l:Language='en'){
  else if(bespoke||info||journal)crumbs.push({name:title,path});
  if(crumbs.length>1)graph.push({'@type':'BreadcrumbList',itemListElement:crumbs.map((crumb,i)=>({'@type':'ListItem',position:i+1,name:crumb.name,item:SITE+localePath(crumb.path,l)}))});
  const schema={'@context':'https://schema.org','@graph':graph};
- const searchTitle=home?pick('Luminore Jewelry | Natural & Lab-Grown Diamonds','Luminore Jewelry | Украшения с бриллиантами','Luminore Jewelry | Прикраси з діамантами'):`${title} | Luminore`;
+ const searchTitle=home?pick('Luminore | Natural & Lab-Grown Diamond Jewelry','Luminore | Украшения с бриллиантами','Luminore | Прикраси з діамантами'):`${title} | Luminore`;
  return {title:searchTitle,description,canonical,image:imageUrl,siteName:SITE_NAME,type:post?'article':'website',locale:socialLocale(l),robots:missing||path.startsWith('/preview/')?'noindex, follow':'index, follow, max-image-preview:large',schema,missing,alternates:missing||path.startsWith('/preview/')?[]:alternateUrls(path)};
 }

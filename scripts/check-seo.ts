@@ -28,13 +28,13 @@ test('language links expose localized destinations with the current path, query 
   }
  }
 });
-test('preferred site name identifies Luminore Jewelry without changing the organization identity',()=>{
- expect(SITE_NAME).toBe('Luminore Jewelry');
+test('website and organization identify Luminore with matching descriptive alternate names',()=>{
+ expect(SITE_NAME).toBe('Luminore');
  for(const language of languages)for(const route of ['/','/collection','/product/85']){
   const meta=pageMetadata(route,language);
-  expect(meta.siteName).toBe('Luminore Jewelry');
+  expect(meta.siteName).toBe('Luminore');
   const graph=meta.schema['@graph'] as Record<string,any>[];
-  expect(graph.find(item=>item['@type']==='WebSite')).toMatchObject({name:'Luminore Jewelry',alternateName:['Luminore','Luminore Fine Jewelry'],url:SITE+'/'});
+  expect(graph.find(item=>item['@type']==='WebSite')).toMatchObject({name:'Luminore',alternateName:['Luminore Jewelry','Luminore Fine Jewelry'],url:SITE+'/'});
   expect(graph.find(item=>item['@type']==='Organization')).toMatchObject({name:'Luminore',alternateName:['Luminore Jewelry','Luminore Fine Jewelry']});
  }
 });
@@ -54,7 +54,7 @@ test('all public language pages contain content, reciprocal alternates and one c
   for(const alternate of meta.alternates)expect(html).toContain(`hreflang="${alternate.language}" href="${alternate.url}"`);
   const schema=JSON.parse(html.match(/id="page-schema"[^>]*>([\s\S]*?)<\/script>/)![1]);
   expect(schema['@context']).toBe('https://schema.org');
-  expect(schema['@graph'].find((entity:any)=>entity['@type']==='WebSite')).toMatchObject({name:SITE_NAME,alternateName:['Luminore','Luminore Fine Jewelry']});
+  expect(schema['@graph'].find((entity:any)=>entity['@type']==='WebSite')).toMatchObject({name:SITE_NAME,alternateName:['Luminore Jewelry','Luminore Fine Jewelry']});
   expect(html).toContain(`<meta property="og:site_name" content="${SITE_NAME}">`);
   const languageLinks=[...html.matchAll(/<a\b[^>]*class="language-option"[^>]*>/g)].map(match=>match[0]);
   expect(languageLinks).toHaveLength(3);

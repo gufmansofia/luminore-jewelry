@@ -8,7 +8,7 @@ import '../styles/about.css';
 
 const copy = {
   ru: {
-    title: 'О Luminore Jewelry',
+    title: 'О Luminore',
     intro: [
       'Украшения с натуральными и лабораторными бриллиантами — из коллекции или по индивидуальному заказу.',
       'Помогаем выбрать камни, металл и дизайн. Консультируем онлайн; личный подбор — по предварительной договорённости.',
@@ -19,7 +19,7 @@ const copy = {
     discuss: 'Обсудить украшение',
   },
   en: {
-    title: 'About Luminore Jewelry',
+    title: 'About Luminore',
     intro: [
       'Jewellery with natural and lab-grown diamonds, available from our collection or made to order.',
       'We help you choose the stones, metal and design. Consultations are available online, with in-person appointments by prior arrangement.',
@@ -30,7 +30,7 @@ const copy = {
     discuss: 'Discuss a piece',
   },
   uk: {
-    title: 'Про Luminore Jewelry',
+    title: 'Про Luminore',
     intro: [
       'Прикраси з природними та лабораторними діамантами — з колекції або за індивідуальним замовленням.',
       'Допомагаємо обрати камені, метал і дизайн. Консультуємо онлайн; особистий підбір — за попередньою домовленістю.',
