@@ -50,17 +50,17 @@ export function ProductDetail(){
  <div className="product-layout">
  <header className="product-overview"> <p className="product-category">{pick(p.categoryEn,p.category,p.categoryUk)}</p>
  <h1 className={`product-title ${title.length>55?'product-title--long':''}`}>{title}</h1>
- {p.totalCarat!==null&&<p className="product-carat">{natural&&pick("Listed version: ","Версия в каталоге: ","Версія в каталозі: ")}{catalogueWeight(p,l)}</p>}
+ {catalogueWeight(p,l)&&<p className="product-carat">{natural&&pick("Listed version: ","Версия в каталоге: ","Версія в каталозі: ")}{catalogueWeight(p,l)}</p>}
  <p className="product-mobile-price" aria-live="polite">{price}</p>
  </header>
  <div className="product-gallery">
  {images.length?<ProductGallery key={p.id} images={images} name={name}/>:<div className="product-gallery-stage product-photo product-gallery-stage--empty"><div className="product-image-empty"><span className="photo-unavailable">{pick("Photographs available on request","Фотографии — по запросу","Фотографії — за запитом")}</span><a className="text-button" href={`https://wa.me/421940600708?text=${encodeURIComponent(message+' '+pick('Please send photographs.','Пришлите, пожалуйста, фотографии.','Надішліть, будь ласка, фотографії.'))}`} target="_blank" rel="noopener noreferrer">{pick("Request photos","Запросить фото","Запитати фото")} ↗</a></div></div>}
  </div>
  <div className="product-information">
- <div className="stone-options" role="group" aria-label={t.product.stones}>
+ {p.allowNaturalOption!==false&&<div className="stone-options" role="group" aria-label={t.product.stones}>
  <button aria-pressed={natural} className={natural?'selected':''} onClick={()=>setNatural(true)}><span>{t.product.naturalDiamond}</span><small>{t.product.priceOnEnquiry}</small></button>
  <button aria-pressed={!natural} className={!natural?'selected':''} onClick={()=>setNatural(false)}>{p.gemstoneType==='Lab-Grown Diamond'?t.product.labGrownDiamond:pick('Listed version','Версия в каталоге','Версія в каталозі')}</button>
- </div>
+ </div>}
  <div className="stone-price-region" aria-live="polite" aria-atomic="true"><p key={String(natural)} className={`product-price stone-transition ${natural?'product-price--enquiry':''}`}>{price}</p></div>
  <section id="product-enquiry" tabIndex={-1} className="product-details-section product-enquiry" aria-labelledby="enquiry-heading">
  <h2 id="enquiry-heading" >{pick('Enquire about this piece','Узнать об этом украшении','Дізнатися про цю прикрасу')}</h2>

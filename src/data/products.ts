@@ -2,8 +2,12 @@ import stockFacts from "./stock-facts.json";
 import { approvedPrices } from "./approved-prices";
 import { stockProducts } from "./stock-products";
 import { spotlightPieces } from "./spotlight";
+import { luminoreProducts } from "./luminore-products";
 
 export interface Product {
+  sourceSheetRow?: number;
+  listedCarat?: string;
+  listedWeight?: number | null;
   sourceCode?: string;
   size?: string;
   sizeKind?: string;
@@ -665,7 +669,7 @@ export const categoriesEn = ['All', 'Rings', 'Earrings', 'Pendants', 'Bracelets'
 
 // Reconcile confirmed stock facts while retaining product URLs and original photographs.
 const existingStockCodes: Record<number, string> = {"1": "EAR-001", "3": "EAR-002", "5": "RNG-002", "7": "RNG-034", "14": "PND-002"};
-export const products: Product[] = [
+const legacyProducts: Product[] = [
   ...existingProducts.map(product => ({ ...product, sourceCode: existingStockCodes[product.id] })),
   ...stockProducts,
 ].map(product => {
@@ -677,3 +681,10 @@ export const products: Product[] = [
   const images = updated.images.length ? updated.images : spotlight ? [spotlight.image] : [];
   return { ...updated, images, priceUsd: approvedPrices[product.id] ?? updated.priceUsd, name: cleanName(updated.name), nameEn: cleanName(updated.nameEn), nameUk: cleanName(updated.nameUk) };
 });
+
+// Replace the entire historical Luminore selection with the latest owner catalogue.
+// RNG-034 is the original Zoke oval ring, retained with every other Zoke record.
+export const products: Product[] = [
+  ...luminoreProducts,
+  ...legacyProducts.filter(product => product.sourceBrand === 'Zoke' || product.sourceCode === 'RNG-034'),
+];

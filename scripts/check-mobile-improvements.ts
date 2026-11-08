@@ -18,7 +18,7 @@ test('budget bands have no gaps or double-counted boundaries and exclude unprice
 test('card weights are separate from names and do not invent an unconfirmed pair basis',()=>{
  for(const l of ['en','ru','uk'] as const) for(const p of products){
   expect(catalogueName(p,l)).not.toMatch(/\d+(?:[.,]\d+)?\s*(?:ct\b|кар\.)/i);
-  if(p.totalCarat===null)expect(catalogueWeight(p,l)).toBe('');
+  if(p.totalCarat===null&&!p.listedCarat)expect(catalogueWeight(p,l)).toBe('');
   if(p.caratBasis==='unconfirmed')expect(catalogueWeight(p,l)).not.toMatch(/pair|пара/);
  }
 });

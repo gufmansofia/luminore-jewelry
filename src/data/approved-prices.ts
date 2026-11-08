@@ -1,15 +1,7 @@
-// Selling prices approved by Sofia on 2026-10-02 after reviewing the complete list.
-// Keep the imported sheet facts unchanged so their original values remain traceable.
+// Zoke selling prices approved on 2026-10-02. Luminore now reads SELL COST
+// directly from its current curated snapshot in luminore-catalogue.json.
 export const approvedPrices: Record<number, number> = {
   7: 1800,
-  12: 2000,
-  16: 5300,
-  23: 2800,
-  32: 2500,
-  33: 4000,
-  39: 2800,
-  47: 3000,
-  48: 2700,
   49: 2900,
   50: 2900,
   53: 3900,

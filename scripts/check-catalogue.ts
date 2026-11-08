@@ -1,5 +1,6 @@
 import {test,expect} from 'bun:test';
 import {products} from '../src/data/products';
+import {luminoreProducts,luminoreCatalogue} from '../src/data/luminore-products';
 import facts from '../src/data/stock-facts.json';
 import {approvedPrices} from '../src/data/approved-prices';
 import {productName,productTitle,productDescription,productSpecs} from '../src/lib/product-copy';
@@ -13,8 +14,24 @@ import {createHash} from 'node:crypto';
 const schemaProduct=(id:number)=>{const schema=pageMetadata(`/product/${id}`).schema;return (schema['@graph'] as Record<string,unknown>[])?.find(item=>item['@type']==='Product')??schema;};
 test('stock uses recorded facts and explicitly approved selling prices',()=>{
  for(const p of products){const row=facts[p.sourceCode as keyof typeof facts];if(!row)continue;expect(p.priceUsd).toBe(approvedPrices[p.id]??row.price);expect(p.totalCarat).toBe(row.carat);expect(p.metalType).toBe(row.metal);}
- expect(products).toHaveLength(113);
- expect(products.find(p=>p.sourceCode==='BRC-002')!.nameEn).toContain('0.5 ct stones');
+ expect(products).toHaveLength(109);
+ expect(luminoreProducts).toHaveLength(43);
+ expect(products.filter(p=>p.sourceBrand!=='Luminore')).toHaveLength(66);
+ expect(new Set(products.map(p=>p.id)).size).toBe(products.length);
+});
+test('current Luminore catalogue replaces legacy records and uses only filled SELL COST rows',()=>{
+ expect(products.filter(p=>p.sourceBrand==='Luminore')).toEqual(luminoreProducts);
+ for(const row of luminoreCatalogue.products){
+  const p=products.find(p=>p.sourceSheetRow===row.row)!;
+  expect(p).toMatchObject({priceUsd:row.price,nameEn:row.nameEn,metalType:row.metal,certificateNumber:row.certificateNumber});
+  expect(p.priceUsd).toBeGreaterThan(0);
+  expect(p.images).toEqual(row.images);
+ }
+ expect(luminoreProducts.some(p=>[21,23,25,26,52,71,72,77].includes(p.sourceSheetRow!))).toBe(false);
+ expect(luminoreProducts.filter(p=>p.sourceName==='Solitaire Ring')).toHaveLength(1);
+ expect(products.find(p=>p.id===12)).toBeUndefined();
+ expect(products.find(p=>p.id===37)).toMatchObject({totalCarat:10.09,priceUsd:14600});
+ expect(products.find(p=>p.id===19)).toMatchObject({certificateNumber:'LG747596117',totalCarat:1.05});
 });
 test('carat display rounds decimal ties once and keeps exact data separate',()=>{
  for(const [weight,display] of [[0.5,'0.5'],[1,'1.0'],[12,'12.0'],[1.04,'1.0'],[1.05,'1.1'],[1.049,'1.0'],[2.05,'2.1'],[9.95,'10.0'],[4.423,'4.4'],[12.31,'12.3'],[58.76,'58.8']] as const) expect(formatCarat(weight)).toBe(display);
@@ -42,7 +59,7 @@ test('approved Marquise earring weight is 0.5 ct each and 1.0 ct for the pair',(
  }
 });
 test('catalogue copy uses tenths across all languages and rounded weights remain searchable',()=>{
- for(const p of products)for(const l of ['en','ru','uk'] as const){
+ for(const p of products.filter(p=>p.sourceBrand!=='Luminore'))for(const l of ['en','ru','uk'] as const){
   const copy=[productName(p,l),productDescription(p,l),...productSpecs(p,l).map(s=>s.value)].join(' ');
   const weights=[...copy.matchAll(/(\d+(?:\.\d+)?)\s*(?:ct\b|кар\.)/g)];
   expect(weights.length).toBeGreaterThan(0);
@@ -54,15 +71,23 @@ test('catalogue copy uses tenths across all languages and rounded weights remain
  expect(matchesProduct(laurel,'кольцо 4.4')).toBe(true);
  expect(matchesProduct(laurel,'4.423')).toBe(true);
  expect(matchesProduct(products.find(p=>p.sourceCode==='EAR-023')!,'Marquise 1.0 ct')).toBe(true);
- const pear=products.find(p=>p.id===11)!;
- expect(productTitle(pear,'en')).toBe('Three-stone Pear Diamond Ring');
- expect(productTitle(pear,'ru')).toBe('Кольцо три камня груша');
- expect(productTitle(products.find(p=>p.id===46)!,'en')).toBe('Transformer halo stud earrings');
+ expect(productTitle(products.find(p=>p.id===46)!,'en')).toBe('Convertible Halo Stud Earrings');
 });
-test('approved rounded prices are shared by catalogue data and product offers',()=>{
- expect(Object.keys(approvedPrices)).toHaveLength(19);
+test('Luminore displays exact listed weights, paired stone weights and report numbers',()=>{
+ const cushion=products.find(p=>p.sourceSheetRow===10)!;
+ expect(productSpecs(cushion,'en')).toContainEqual({label:'Listed carat weight',value:'3.05 ct'});
+ const studs=products.find(p=>p.sourceSheetRow===33)!;
+ expect(productSpecs(studs,'en')).toContainEqual({label:'Total stone weight · pair',value:'2.07 ct'});
+ expect(productSpecs(studs,'en')).toContainEqual({label:'Individual stone weights',value:'1.04 + 1.03 ct'});
+ const emerald=products.find(p=>p.sourceSheetRow===24)!;
+ expect(emerald.totalCarat).toBeNull();
+ expect(productSpecs(emerald,'en')).toContainEqual({label:'Listed carat weight',value:'5.00*0.46 ct'});
+ for(const p of luminoreProducts)if(p.certificateNumber)expect(productSpecs(p,'en')).toContainEqual({label:'Report number',value:p.certificateNumber.replace(/\n/g,'; ')});
+ expect(products.find(p=>p.sourceSheetRow===17)).toMatchObject({gemstoneType:'Natural Diamond',allowNaturalOption:false});
+});
+test('approved selling prices preserve cents and match product offers',()=>{
  for(const p of products){
-  expect(p.priceUsd! % 100).toBe(0);
+  expect(Math.round(p.priceUsd! * 100) / 100).toBe(p.priceUsd);
   expect(schemaProduct(p.id)).toMatchObject({offers:{price:p.priceUsd}});
  }
  expect(products.find(p=>p.id===49)!.priceUsd).toBe(2900);
@@ -72,7 +97,7 @@ test('natural options do not inherit lab descriptions, grades or report numbers'
  for(const p of products)for(const l of ['en','ru','uk'] as const){
   expect(productDescription(p,l,true)).not.toMatch(/lab-grown|лаборатор/i);
   expect(productSpecs(p,l,true)).toHaveLength(2);
-  expect(JSON.stringify(productSpecs(p,l))).not.toMatch(/772671095|781611480|LG707553522|Report number|Номер отч/);
+  expect(JSON.stringify(productSpecs(p,l,true))).not.toMatch(/772671095|781611480|LG707553522|Report number|Номер отч/);
   expect(productName(p,l)).toBeTruthy();
  }
 });

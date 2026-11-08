@@ -86,6 +86,10 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
   const [sort, setSort] = useState('all');
   const [openFilter, setOpenFilter] = useState<'category' | 'price' | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  useEffect(() => {
+    const query = new URLSearchParams(location.search).get('search');
+    if (query !== null) { setSearch(query); setVisibleCount(PAGE_SIZE); }
+  }, [location.search]);
   const searchRef = useRef<HTMLInputElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);

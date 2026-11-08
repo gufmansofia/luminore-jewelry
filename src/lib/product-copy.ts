@@ -2,6 +2,11 @@ import type { Product } from '../data/products';
 import type { Language } from '../i18n/translations';
 import { formatCarat, formatStoneWeights } from './carat';
 export const choose = (language: Language, en: string, ru: string, uk: string) => language === 'ru' ? ru : language === 'uk' ? uk : en;
+const isCurrentLuminore = (p: Product) => p.sourceBrand === 'Luminore' && p.sourceSheetRow !== undefined;
+export const productCaratNumber = (p: Product, value: number) => isCurrentLuminore(p)
+ ? new Intl.NumberFormat('en-US', {maximumFractionDigits: 3, useGrouping: false}).format(value)
+ : formatCarat(value);
+const listedCaratText = (p: Product, l: Language) => `${p.listedCarat?.replace(/\s*ct\b/gi, '').trim()} ${choose(l,'ct','кар.','кар.')}`;
 const shortEnglishNames: Record<number,string> = {
  51:'Marquise & heart diamond ring · 1.54 ct', 54:'Round & pear three-stone diamond ring · 1.49 ct',
  57:'Oval & heart diamond ring · 1.57 ct',58:'Emerald-cut & baguette diamond ring · 1.2 ct',
@@ -9,7 +14,7 @@ const shortEnglishNames: Record<number,string> = {
  47:'Vivid green halo earrings · 6 ct',48:'Vivid green halo ring · 4.5 ct',
 };
 export const productName = (p: Product, l: Language) => {
- const name=p.id===7?choose(l,p.nameEn,'Кольцо-солитер с овальным бриллиантом 2 ct','Каблучка-солітер з овальним діамантом 2 ct'):choose(l,shortEnglishNames[p.id]??p.nameEn,p.name,p.nameUk);
+ const name=p.id===7?choose(l,p.nameEn,'Кольцо-солитер с овальным бриллиантом 2 ct','Каблучка-солітер з овальним діамантом 2 ct'):choose(l,isCurrentLuminore(p)?p.nameEn:shortEnglishNames[p.id]??p.nameEn,p.name,p.nameUk);
  // Keep weights in descriptions/specifications, not in customer-facing names.
  return name.replace(/\s*(?:[·,]\s*)?\d+(?:[.,]\d+)?\s*(?:ct\b|кар\.)(?:\s+(?:total|stones)\b)?/gi,'')
   .replace(/\s*The /g,' ').replaceAll('Three Stones','Three-stone').trim();
@@ -22,13 +27,14 @@ export function catalogueName(p: Product, l: Language) {
   .replace(/с лабораторными бриллиантами/gi,'').replace(/з лабораторними діамантами/gi,'').replace(/\s+/g,' ').trim();
 }
 export function catalogueWeight(p: Product, l: Language) {
- if(p.totalCarat===null) return '';
- const weight=`${formatCarat(p.totalCarat)} ${choose(l,'ct','кар.','кар.')}`;
- return p.categoryEn==='Earrings' && p.caratBasis!=='unconfirmed' ? `${weight} ${choose(l,'/ pair','/ пара','/ пара')}` : weight;
+ if(p.totalCarat===null) return isCurrentLuminore(p)&&p.listedCarat?listedCaratText(p,l):'';
+ const weight=`${productCaratNumber(p,p.totalCarat)} ${choose(l,'ct','кар.','кар.')}`;
+ return p.categoryEn==='Earrings' && p.caratBasis!=='unconfirmed' && p.caratBasis!=='listed' ? `${weight} ${choose(l,'/ pair','/ пара','/ пара')}` : weight;
 }
 export const requestDetail = (l: Language) => choose(l, 'Available on request', 'Уточняется по запросу', 'Уточнюється за запитом');
 const words: Record<string, [string, string]> = {
  'Lab-Grown Diamond':['Лабораторный бриллиант','Лабораторний діамант'],
+ 'Natural Diamond':['Натуральный бриллиант','Природний діамант'], 'Diamond':['Бриллиант','Діамант'],
  'White Gold':['Белое золото','Біле золото'], 'Rose Gold':['Розовое золото','Рожеве золото'],
  'White + Yellow Gold':['Белое и жёлтое золото','Біле та жовте золото'], 'White + Rose Gold':['Белое и розовое золото','Біле та рожеве золото'],
  '18K White Gold':['Белое золото 18K','Біле золото 18K'], '18K Rose Gold':['Розовое золото 18K','Рожеве золото 18K'],
@@ -39,12 +45,14 @@ const words: Record<string, [string, string]> = {
  'Fancy Intense Orangy Pink':['Насыщенный оранжево-розовый','Насичений помаранчево-рожевий'],
  'Fancy Intense Pink':['Насыщенный розовый','Насичений рожевий'], 'Fancy Vivid Pink':['Яркий розовый','Яскравий рожевий'],
  'Fancy Vivid Yellow':['Яркий жёлтый','Яскравий жовтий'], 'Vivid Green':['Яркий зелёный','Яскравий зелений'],
+ 'Fancy Yellow':['Фантазийный жёлтый','Фантазійний жовтий'],
  'Fancy Green':['Фантазийный зелёный','Фантазійний зелений'], 'Fancy Pink':['Фантазийный розовый','Фантазійний рожевий'],
  'Pink':['Розовый','Рожевий'], 'Long Pear':['Удлинённая груша','Подовжена груша'], 'Step Pear':['Ступенчатая груша','Ступінчаста груша'],
  'Square Cushion':['Квадратный кушон','Квадратний кушон'], 'Tapered Baguette':['Сужающийся багет','Звужений багет'],
  'Fancy Radiant':['Фантазийный радиант','Фантазійний радіант'], 'Multi-Shape':['Разные огранки','Різні огранювання'],
  'Round':['Круглая','Кругла'], 'Emerald':['Изумрудная','Смарагдова'], 'Marquise':['Маркиз','Маркіз'],
  'Pear':['Груша','Груша'], 'Heart':['Сердце','Серце'], 'Oval':['Овал','Овал'], 'Cushion':['Кушон','Кушон'],
+ 'Baguette':['Багет','Багет'],
  'Shield':['Щит','Щит'], 'Radiant':['Радиант','Радіант'], 'Trilliant':['Триллиант','Триліант'], 'Excellent':['Отличная','Відмінна'],
  'Medium':['Средний','Середній'], 'Not Specified':['Уточняется по запросу','Уточнюється за запитом'],
 };
@@ -62,7 +70,9 @@ export function productDescription(p: Product, l: Language, natural = false, inc
   'Цей дизайн можна замовити з природними діамантами. Камені, метал, розміри та остаточну вартість узгодимо індивідуально перед замовленням.');
  const n=p.nameEn.toLowerCase();
  let design: [string,string,string] = [productName(p,'en')+'.', productName(p,'ru')+'.',productName(p,'uk')+'.'];
- if(p.categoryEn==='Rings') {
+ if(isCurrentLuminore(p)) {
+  design=[p.descriptionEn,p.description,p.descriptionUk];
+ } else if(p.categoryEn==='Rings') {
   if(/three.stone|three stone|three stones/.test(n)) design=['A three-stone ring with a central stone framed by a pair of side stones.','Кольцо с тремя камнями: центральный камень обрамлён парой боковых.','Каблучка з трьома каменями: центральний камінь обрамлений парою бічних.'];
   else if(/eternity/.test(n)) design=['An eternity ring with a line of stones along the setting.','Кольцо-дорожка с рядом камней вдоль оправы.','Каблучка-доріжка з рядом каменів уздовж оправи.'];
   else if(/open/.test(n)) design=['An open ring design with space between the ends of the setting.','Открытое кольцо с промежутком между концами оправы.','Відкрита каблучка з проміжком між кінцями оправи.'];
@@ -83,7 +93,9 @@ export function productDescription(p: Product, l: Language, natural = false, inc
  }
  const sentences=[choose(l,...design as [string,string,string])];
  if (!includeSpecifications) return sentences[0];
- if(p.totalCarat!==null) sentences.push(choose(l,p.caratBasis==='unconfirmed'?'Listed stone weight: ':p.categoryEn==='Earrings'?'Total stone weight for the pair: ':'Total stone weight: ',p.caratBasis==='unconfirmed'?'Указанный вес камней: ':p.categoryEn==='Earrings'?'Общий вес камней в паре: ':'Общий вес камней: ',p.caratBasis==='unconfirmed'?'Зазначена вага каменів: ':p.categoryEn==='Earrings'?'Загальна вага каменів у парі: ':'Загальна вага каменів: ')+formatCarat(p.totalCarat)+choose(l,' ct.',' кар.',' кар.'));
+ const listed=p.caratBasis==='unconfirmed'||p.caratBasis==='listed';
+ if(p.totalCarat!==null) sentences.push(choose(l,listed?'Listed stone weight: ':p.categoryEn==='Earrings'?'Total stone weight for the pair: ':'Total stone weight: ',listed?'Указанный вес камней: ':p.categoryEn==='Earrings'?'Общий вес камней в паре: ':'Общий вес камней: ',listed?'Зазначена вага каменів: ':p.categoryEn==='Earrings'?'Загальна вага каменів у парі: ':'Загальна вага каменів: ')+productCaratNumber(p,p.totalCarat)+choose(l,' ct.',' кар.',' кар.'));
+ else if(isCurrentLuminore(p)&&p.listedCarat)sentences.push(choose(l,'Listed stone weights: ','Указанные веса камней: ','Зазначені ваги каменів: ')+listedCaratText(p,l)+'.');
  if(p.diamondCut) sentences.push(choose(l,'Cut: ','Огранка: ','Огранювання: ')+localizeSpec(p.diamondCut,l)+'.');
  if(p.metalType) sentences.push(choose(l,'Metal: ','Металл: ','Метал: ')+localizeSpec(p.metalType,l)+'.');
  if(p.gemstoneType) sentences.push(choose(l,'Stones: ','Камни: ','Камені: ')+localizeSpec(p.gemstoneType,l)+'.');
@@ -96,9 +108,9 @@ export function productSpecs(p: Product,l: Language,natural=false) {
  const result=[
  {label:pick('Metal','Металл','Метал'),value:localizeSpec(p.metalType,l)},
  {label:pick('Stone type','Тип камня','Тип каменю'),value:localizeSpec(p.gemstoneType,l)},
- {label:p.caratBasis==='unconfirmed'?pick('Listed carat weight','Указанный вес камней','Зазначена вага каменів'):p.categoryEn==='Earrings'?pick('Total stone weight · pair','Общий вес камней · пара','Загальна вага каменів · пара'):pick('Total stone weight','Общий вес камней','Загальна вага каменів'),value:p.totalCarat===null?requestDetail(l):`${formatCarat(p.totalCarat)} ${ct}`},
+ {label:p.caratBasis==='unconfirmed'||p.caratBasis==='listed'?pick('Listed carat weight','Указанный вес камней','Зазначена вага каменів'):p.categoryEn==='Earrings'?pick('Total stone weight · pair','Общий вес камней · пара','Загальна вага каменів · пара'):pick('Total stone weight','Общий вес камней','Загальна вага каменів'),value:p.totalCarat===null?(isCurrentLuminore(p)&&p.listedCarat?listedCaratText(p,l):requestDetail(l)):`${productCaratNumber(p,p.totalCarat)} ${ct}`},
  ];
- if(p.perEarring)result.push({label:p.perEarring.includes('+')?pick('Individual stone weights','Вес отдельных камней','Вага окремих каменів'):pick('Stone weight · one earring','Вес камней · одна серьга','Вага каменів · одна сережка'),value:`${formatStoneWeights(p.perEarring)} ${ct}`});
+ if(p.perEarring)result.push({label:p.perEarring.includes('+')?pick('Individual stone weights','Вес отдельных камней','Вага окремих каменів'):pick('Stone weight · one earring','Вес камней · одна серьга','Вага каменів · одна сережка'),value:`${isCurrentLuminore(p)?p.perEarring.split('+').map(w=>productCaratNumber(p,Number(w.trim()))).join(' + '):formatStoneWeights(p.perEarring)} ${ct}`});
  if(p.caratBasis==='unconfirmed')result.push({label:pick('Weight basis','Вес за штуку или пару','Вага за одиницю чи пару'),value:requestDetail(l)});
  if(!p.sourceCode&&p.mainStoneCarat)result.push({label:pick('Main stone','Основной камень','Основний камінь'),value:`${formatCarat(p.mainStoneCarat)} ${ct}`});
  if(p.diamondCut)result.push({label:pick('Cut','Огранка','Огранювання'),value:localizeSpec(p.diamondCut,l)});
@@ -106,10 +118,12 @@ export function productSpecs(p: Product,l: Language,natural=false) {
  if(p.diamondClarity)result.push({label:pick('Clarity','Чистота','Чистота'),value:p.diamondClarity});
  const weight=p.grossWeight??(!p.sourceCode?p.goldWeight:null);
  if(weight)result.push({label:p.grossWeight?pick('Total jewellery weight','Общий вес изделия','Загальна вага виробу'):pick('Gold weight','Вес золота','Вага золота'),value:weight+pick(' g',' г',' г')});
+ if(isCurrentLuminore(p)&&p.listedWeight)result.push({label:pick('Weight','Вес','Вага'),value:p.listedWeight+pick(' g',' г',' г')});
  result.push({label:p.categoryEn==='Rings'?pick('Ring size','Размер кольца','Розмір каблучки'):pick('Dimensions / length','Размеры / длина','Розміри / довжина'),value:p.size?localizeSpec(p.size,l)+(p.sizeKind==='length'?pick(' cm',' см',' см'):''):requestDetail(l)});
  if(p.categoryEn==='Pendants')result.push({label:pick('Chain included','Цепочка в комплекте','Ланцюжок у комплекті'),value:requestDetail(l)});
  const cert=p.certificateType?.match(/\b(?:GIA|IGI)\b/g);
  result.push({label:pick('Certification','Сертификация','Сертифікація'),value:cert?.length?[...new Set(cert)].join(' & ')+pick(' certified',' — сертифицировано',' — сертифіковано'):requestDetail(l)});
+ if(isCurrentLuminore(p)&&p.certificateNumber)result.push({label:pick('Report number','Номер отчёта','Номер звіту'),value:p.certificateNumber.replace(/\n/g,'; ')});
  return result;
 }
 
@@ -119,11 +133,12 @@ export function productSpecGroups(p: Product, l: Language, natural = false) {
  if(natural)return [{title:pick('Natural diamonds','Натуральные бриллианты','Природні діаманти'),specs}];
  const sizeLabel=p.categoryEn==='Rings'?pick('Ring size','Размер кольца','Розмір каблучки'):pick('Dimensions / length','Размеры / длина','Розміри / довжина');
  const sizeLabels=[sizeLabel,pick('Chain included','Цепочка в комплекте','Ланцюжок у комплекті')];
- const metalLabels=[pick('Metal','Металл','Метал'),pick('Total jewellery weight','Общий вес изделия','Загальна вага виробу'),pick('Gold weight','Вес золота','Вага золота')];
+ const metalLabels=[pick('Metal','Металл','Метал'),pick('Weight','Вес','Вага'),pick('Total jewellery weight','Общий вес изделия','Загальна вага виробу'),pick('Gold weight','Вес золота','Вага золота')];
  const certification=pick('Certification','Сертификация','Сертифікація');
+ const certificationLabels=[certification,pick('Report number','Номер отчёта','Номер звіту')];
  return [
-  {title:pick('Stones','Камни','Камені'),specs:specs.filter(s=>!sizeLabels.includes(s.label)&&!metalLabels.includes(s.label)&&s.label!==certification)},
+  {title:pick('Stones','Камни','Камені'),specs:specs.filter(s=>!sizeLabels.includes(s.label)&&!metalLabels.includes(s.label)&&!certificationLabels.includes(s.label))},
   {title:pick('Metal & dimensions','Металл и размеры','Метал і розміри'),specs:specs.filter(s=>metalLabels.includes(s.label)||sizeLabels.includes(s.label))},
-  {title:certification,specs:specs.filter(s=>s.label===certification)},
+  {title:certification,specs:specs.filter(s=>certificationLabels.includes(s.label))},
  ].filter(group=>group.specs.length);
 }

@@ -39,6 +39,8 @@ Before committing, inspect `git diff --check`, `git diff --stat`, and `git statu
 
 `src/data/products.ts` is the curated source of truth. The legacy Python importer requires `openpyxl` and the original spreadsheet schema. It produces a draft for manual comparison; it must not overwrite curated content directly.
 
+The current local Luminore selection comes from `src/data/luminore-catalogue.json`, a curated snapshot of the supplied `Последнее` sheet. It includes 43 jewellery entries with a positive `SELL COST` in column L. The owner-confirmed duplicate `1ct Solitaire Ring`, unpriced entries, loose stones and tasbih are excluded. `luminore-products.ts` supplies the English, Russian and Ukrainian records, exact listed stone weights, report numbers and photographs extracted from the matching sheet rows. Historical Luminore records remain available as reference data but are excluded from the active catalogue; all 66 Zoke records are retained. Refresh this snapshot from the current sheet before any later publication.
+
 ```sh
 python3 scripts/convert_excel_to_ts.py source-materials/inventory/Jewelry_Inventory_Final11.xlsx /tmp/products-draft.ts
 ```

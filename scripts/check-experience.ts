@@ -8,10 +8,10 @@ import { pageMetadata } from '../src/lib/seo';
 test('category queries find rings in each language without matching earrings', () => {
  for(const query of ['кольцо','КОЛЬЦА','ring','rings','каблучка','каблучки']) {
   const found=filterCatalogue(products,query,'all','all');
-  expect(found).toHaveLength(44);expect(found.every(p=>p.categoryEn==='Rings')).toBe(true);
+  expect(found).toHaveLength(products.filter(p=>p.categoryEn==='Rings').length);expect(found.every(p=>p.categoryEn==='Rings')).toBe(true);
  }
  expect(filterCatalogue(products,'кольцо','Earrings','all')).toHaveLength(0);
- expect(filterCatalogue(products,'','Серьги','all')).toHaveLength(26);
+ expect(filterCatalogue(products,'','Серьги','all')).toHaveLength(products.filter(p=>p.categoryEn==='Earrings').length);
 });
 test('search supports source codes, partial names, reordered words and unknown queries',()=>{
  expect(products.filter(p=>matchesProduct(p,'RNG-016')).map(p=>p.id)).toEqual([49]);

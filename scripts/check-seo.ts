@@ -133,8 +133,8 @@ test('structured data matches visible products, catalogue order and article date
   }
  }
 });
-test('pagination exposes all 113 products as crawlable links and preserves the approved first 12',()=>{
- expect(filterCatalogue(products,'','all','all').slice(0,12).map(p=>p.id)).toEqual([85,103,55,112,79,99,6,108,89,71,13,86]);
+test('pagination exposes every current product and keeps the opening selection valid',()=>{
+ expect(filterCatalogue(products,'','all','all').slice(0,12).map(p=>p.id)).toEqual([85,103,55,112,79,99,35,108,89,71,14,86]);
  for(const l of languages){
   const catalogue=publicRoutes().filter(route=>/^\/collection(?:\/page\/\d+)?$/.test(route)).map(route=>readFileSync(file(localePath(route,l)),'utf8')).join('');
   for(const p of products)expect(catalogue).toContain(`href="${localePath(`/product/${p.id}`,l)}"`);

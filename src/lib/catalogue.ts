@@ -4,7 +4,7 @@ import { formatCarat } from './carat';
 
 export const PAGE_SIZE = 12;
 // Opening selection approved from the collection preview on 3 October 2026.
-const featuredProductIds = [85, 103, 55, 112, 79, 99, 6, 108, 89, 71, 13, 86];
+const featuredProductIds = [85, 103, 55, 112, 79, 99, 35, 108, 89, 71, 14, 86];
 const featuredRanks = new Map(featuredProductIds.map((id, index) => [id, index]));
 const aliases: Record<string, string[]> = {
   Rings: ['ring', 'rings', 'кольцо', 'кольца', 'каблучка', 'каблучки'],
@@ -23,7 +23,7 @@ export function matchesProduct(p: Product, search: string) {
   if (!query) return true;
   const category = catalogueCategory(query);
   if (category !== 'all') return p.categoryEn === category;
-  const words = tokens([p.name, p.nameEn, p.nameUk, p.sourceName, p.sourceCode, p.sku, ...aliases[p.categoryEn] ?? [],
+ const words = tokens([p.name, p.nameEn, p.nameUk, p.sourceName, p.sourceCode, p.sourceBrand, p.sourceBrand==='Luminore'?'Luminor люминор люминар':'',p.listedCarat,p.sku, ...aliases[p.categoryEn] ?? [],
     p.totalCarat===null?'':`${formatCarat(p.totalCarat)} ct кар. карат карата каратів`,
     ...(['en', 'ru', 'uk'] as const).flatMap(l => [productName(p,l),localizeSpec(p.metalType, l), localizeSpec(p.diamondCut, l)])].join(' '));
   return tokens(query).every(part => words.some(word => /^\d/.test(part) ? word === part : word.startsWith(part)));

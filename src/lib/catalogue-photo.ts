@@ -13,7 +13,7 @@ const framing: Record<number, [number, string]> = {
 };
 
 export function cataloguePhoto(p: Product) {
-  const index = closeUpIndex[p.id] ?? 0;
+  const index = p.sourceSheetRow !== undefined ? 0 : closeUpIndex[p.id] ?? 0;
   const [scale, origin] = framing[p.id] ?? [1, '50% 50%'];
   return {
     src: p.images[index] ?? p.images[0],
