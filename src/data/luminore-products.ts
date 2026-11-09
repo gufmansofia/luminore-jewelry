@@ -8,7 +8,7 @@ const categoryNames: Record<string, [string, string]> = {
 };
 
 // Curated snapshot of the supplied latest catalogue. Only SELL COST is a price.
-// Zero/unfilled prices and the owner-confirmed duplicate row 26 are excluded.
+// Zero/unfilled prices, duplicate row 26 and owner-excluded stud rows 32, 33, 34, 36 are excluded.
 export const luminoreProducts: Product[] = catalogue.products.map(row => ({
   id: row.id, sku: `P${String(row.id).padStart(3, '0')}`,
   sourceCode: row.code, sourceName: row.sourceName, sourceBrand: 'Luminore',

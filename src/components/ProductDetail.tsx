@@ -7,7 +7,7 @@ import {DetailHeader} from './DetailHeader';
 import {ProductImage} from './ProductImage';
 import {ProductGallery} from './ProductGallery';
 import {ContactChannel} from './ContactChannel';
-import {choose,catalogueWeight,productName,productTitle,productDescription,productSpecGroups,requestDetail} from '../lib/product-copy';
+import {choose,catalogueWeight,hasLuminoreEarringTotal,stoneWeightValue,totalStoneWeightLabel,productName,productTitle,productDescription,productSpecGroups,requestDetail} from '../lib/product-copy';
 import {formatCarat} from '../lib/carat';
 import {NotFound} from './NotFound';
 import {collectionPath,collectionRoute} from '../data/collections';
@@ -50,7 +50,7 @@ export function ProductDetail(){
  <div className="product-layout">
  <header className="product-overview"> <p className="product-category">{pick(p.categoryEn,p.category,p.categoryUk)}</p>
  <h1 className={`product-title ${title.length>55?'product-title--long':''}`}>{title}</h1>
- {catalogueWeight(p,l)&&<p className="product-carat">{natural&&pick("Listed version: ","Версия в каталоге: ","Версія в каталозі: ")}{catalogueWeight(p,l)}</p>}
+ {catalogueWeight(p,l)&&<p className="product-carat">{natural&&pick("Listed version: ","Версия в каталоге: ","Версія в каталозі: ")}{hasLuminoreEarringTotal(p)?<><span className="product-carat-label">{totalStoneWeightLabel(l)}:</span>{' '}{stoneWeightValue(p,l)}</>:catalogueWeight(p,l)}</p>}
  <p className="product-mobile-price" aria-live="polite">{price}</p>
  </header>
  <div className="product-gallery">

@@ -3,7 +3,7 @@ import {products} from '../src/data/products';
 import {luminoreProducts,luminoreCatalogue} from '../src/data/luminore-products';
 import facts from '../src/data/stock-facts.json';
 import {approvedPrices} from '../src/data/approved-prices';
-import {productName,productTitle,productDescription,productSpecs} from '../src/lib/product-copy';
+import {productName,productTitle,productDescription,productSpecs,catalogueWeight,totalStoneWeightLabel} from '../src/lib/product-copy';
 import {formatCarat,formatCaratText,formatStoneWeights} from '../src/lib/carat';
 import {matchesProduct} from '../src/lib/catalogue';
 import {pageMetadata} from '../src/lib/seo';
@@ -14,8 +14,8 @@ import {createHash} from 'node:crypto';
 const schemaProduct=(id:number)=>{const schema=pageMetadata(`/product/${id}`).schema;return (schema['@graph'] as Record<string,unknown>[])?.find(item=>item['@type']==='Product')??schema;};
 test('stock uses recorded facts and explicitly approved selling prices',()=>{
  for(const p of products){const row=facts[p.sourceCode as keyof typeof facts];if(!row)continue;expect(p.priceUsd).toBe(approvedPrices[p.id]??row.price);expect(p.totalCarat).toBe(row.carat);expect(p.metalType).toBe(row.metal);}
- expect(products).toHaveLength(109);
- expect(luminoreProducts).toHaveLength(43);
+ expect(products).toHaveLength(105);
+ expect(luminoreProducts).toHaveLength(39);
  expect(products.filter(p=>p.sourceBrand!=='Luminore')).toHaveLength(66);
  expect(new Set(products.map(p=>p.id)).size).toBe(products.length);
 });
@@ -73,17 +73,30 @@ test('catalogue copy uses tenths across all languages and rounded weights remain
  expect(matchesProduct(products.find(p=>p.sourceCode==='EAR-023')!,'Marquise 1.0 ct')).toBe(true);
  expect(productTitle(products.find(p=>p.id===46)!,'en')).toBe('Convertible Halo Stud Earrings');
 });
-test('Luminore displays exact listed weights, paired stone weights and report numbers',()=>{
+test('Luminore displays exact weights, earring totals and report numbers',()=>{
  const cushion=products.find(p=>p.sourceSheetRow===10)!;
  expect(productSpecs(cushion,'en')).toContainEqual({label:'Listed carat weight',value:'3.05 ct'});
- const studs=products.find(p=>p.sourceSheetRow===33)!;
- expect(productSpecs(studs,'en')).toContainEqual({label:'Total stone weight · pair',value:'2.07 ct'});
- expect(productSpecs(studs,'en')).toContainEqual({label:'Individual stone weights',value:'1.04 + 1.03 ct'});
+ const studs=products.find(p=>p.sourceSheetRow===31)!;
+ expect(productSpecs(studs,'en')).toContainEqual({label:'Total stone weight',value:'2 ct'});
  const emerald=products.find(p=>p.sourceSheetRow===24)!;
  expect(emerald.totalCarat).toBeNull();
  expect(productSpecs(emerald,'en')).toContainEqual({label:'Listed carat weight',value:'5.00*0.46 ct'});
  for(const p of luminoreProducts)if(p.certificateNumber)expect(productSpecs(p,'en')).toContainEqual({label:'Report number',value:p.certificateNumber.replace(/\n/g,'; ')});
  expect(products.find(p=>p.sourceSheetRow===17)).toMatchObject({gemstoneType:'Natural Diamond',allowNaturalOption:false});
+});
+test('latest Luminore one-carat studs retain one $1700 pair without changing Zoke',()=>{
+ const retained=luminoreProducts.filter(p=>p.categoryEn==='Earrings'&&p.priceUsd===1700);
+ expect(retained).toHaveLength(1);
+ expect(retained[0]).toMatchObject({id:1,totalCarat:2,listedCarat:'1ct 1ct',perEarring:'1 + 1',priceUsd:1700});
+ for(const id of [119,120,121,123])expect(products.find(p=>p.id===id)).toBeUndefined();
+ for(const id of [93,94,95,96])expect(products.find(p=>p.id===id)).toMatchObject({sourceBrand:'Zoke',priceUsd:1700,totalCarat:1});
+ expect(products.find(p=>p.id===126)).toMatchObject({totalCarat:10.05,perEarring:'5.02 + 5.03'});
+ for(const l of ['en','ru','uk'] as const)for(const p of luminoreProducts.filter(p=>p.categoryEn==='Earrings'&&p.totalCarat!==null)){
+  expect(catalogueWeight(p,l)).toStartWith(totalStoneWeightLabel(l)+': ');
+  expect(catalogueWeight(p,l)).not.toMatch(/\/\s*(?:pair|пара)|\d\s*\+\s*\d/);
+  expect(productSpecs(p,l).some(s=>/Individual stone weights|one earring|отдельных камней|одна серьга|окремих каменів|одна сережка/.test(s.label))).toBe(false);
+ }
+ expect(catalogueWeight(retained[0]!,'en')).toBe('Total stone weight: 2 ct');
 });
 test('approved selling prices preserve cents and match product offers',()=>{
  for(const p of products){

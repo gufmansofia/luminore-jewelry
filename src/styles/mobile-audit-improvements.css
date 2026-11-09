@@ -61,6 +61,7 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
  .product-page .product-category { margin-bottom:8px; }
  .product-page .product-title,.product-page .product-title--long { font-size:32px; line-height:1.12; }
  .product-page .product-carat { display:inline; margin:0; font-family:var(--font-site); font-size:14px; line-height:1.4; }
+ .product-page .product-carat-label { display:inline; margin:0; font-size:14px; }
  .product-page .product-mobile-price { display:block; margin-top:10px; font-size:26px; line-height:1.2; }
  .product-page .product-overview h1 { margin-bottom:10px; }
  .product-page .stone-price-region { display:none; }
