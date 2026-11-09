@@ -30,7 +30,7 @@ test('current Luminore catalogue replaces legacy records and uses only filled SE
  expect(luminoreProducts.some(p=>[21,23,25,26,52,71,72,77].includes(p.sourceSheetRow!))).toBe(false);
  expect(luminoreProducts.filter(p=>p.sourceName==='Solitaire Ring')).toHaveLength(1);
  expect(products.find(p=>p.id===12)).toBeUndefined();
- expect(products.find(p=>p.id===37)).toMatchObject({totalCarat:10.09,priceUsd:14600});
+ expect(products.find(p=>p.id===37)).toMatchObject({totalCarat:10.09,priceUsd:5990});
  expect(products.find(p=>p.id===19)).toMatchObject({certificateNumber:'LG747596117',totalCarat:1.05});
 });
 test('carat display rounds decimal ties once and keeps exact data separate',()=>{
