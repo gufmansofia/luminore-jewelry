@@ -952,7 +952,7 @@
       "certificateNumber": "",
       "certificateType": "",
       "images": [
-        "/Products/Pendants/Studio Luminore 2026-11/P130-Star-Modified-Brilliant-1-21ct/01-front.jpg"
+        "/Products/Pendants/Studio Luminore 2026-11/P130-Star-Modified-Brilliant-1-21ct/01-front-white.png"
       ]
     },
     {
@@ -977,7 +977,9 @@
       "stone": "Diamond",
       "certificateNumber": "",
       "certificateType": "",
-      "images": []
+      "images": [
+        "/Products/Pendants/Studio Luminore 2026-11/P131-Horse-Head-Modified-Brilliant-1-24ct/01-front-white.png"
+      ]
     },
     {
       "row": 63,
