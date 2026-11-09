@@ -1087,7 +1087,11 @@
       "stone": "Diamond",
       "certificateNumber": "",
       "certificateType": "",
-      "images": []
+      "images": [
+        "/Products/Bracelets/Studio Luminore 2026-11/P134-Pear-Tennis-Bracelet-Yellow-Accent-12-90ct/01-elevated-clasp.png",
+        "/Products/Bracelets/Studio Luminore 2026-11/P134-Pear-Tennis-Bracelet-Yellow-Accent-12-90ct/02-top-macro.png",
+        "/Products/Bracelets/Studio Luminore 2026-11/P134-Pear-Tennis-Bracelet-Yellow-Accent-12-90ct/03-low-side-macro.png"
+      ]
     }
   ]
 }
