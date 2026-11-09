@@ -330,7 +330,11 @@
       "stone": "Natural Diamond",
       "certificateNumber": "GIA 2506255409",
       "certificateType": "GIA",
-      "images": []
+      "images": [
+        "/Products/Rings/Studio Luminore 2026-11/P117-Natural-Yellow-Diamond-Solitaire-Ring/01-front.png",
+        "/Products/Rings/Studio Luminore 2026-11/P117-Natural-Yellow-Diamond-Solitaire-Ring/02-top.png",
+        "/Products/Rings/Studio Luminore 2026-11/P117-Natural-Yellow-Diamond-Solitaire-Ring/03-side.png"
+      ]
     },
     {
       "row": 18,
