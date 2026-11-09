@@ -19,6 +19,10 @@ export interface Product {
   sourceDetails?: string;
   grossWeight?: number | null;
   certificateNumber?: string;
+  certificateDate?: string;
+  stoneCount?: number;
+  finish?: string;
+  chainIncluded?: boolean;
   allowNaturalOption?: boolean;
   id: number;
   sku: string;

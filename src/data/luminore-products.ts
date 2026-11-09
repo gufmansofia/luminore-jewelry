@@ -1,5 +1,6 @@
 import catalogue from './luminore-catalogue.json';
 import type { Product } from './products';
+import { luminoreOwnerProducts } from './luminore-owner-products';
 
 export const luminoreCatalogue = catalogue;
 const categoryNames: Record<string, [string, string]> = {
@@ -9,7 +10,7 @@ const categoryNames: Record<string, [string, string]> = {
 
 // Curated snapshot of the supplied latest catalogue. Only SELL COST is a price.
 // Zero/unfilled prices, duplicate row 26 and owner-excluded stud rows 32, 33, 34, 36 are excluded.
-export const luminoreProducts: Product[] = catalogue.products.map(row => ({
+export const luminoreSheetProducts: Product[] = catalogue.products.map(row => ({
   id: row.id, sku: `P${String(row.id).padStart(3, '0')}`,
   sourceCode: row.code, sourceName: row.sourceName, sourceBrand: 'Luminore',
   sourceUrl: `https://docs.google.com/spreadsheets/d/${catalogue.spreadsheetId}/edit#gid=${catalogue.sheetId}&range=C${row.row}:T${row.row}`,
@@ -29,3 +30,6 @@ export const luminoreProducts: Product[] = catalogue.products.map(row => ({
   images: row.images, altText: row.nameEn, seoTags: `${row.category.toLowerCase()}, ${row.nameEn.toLowerCase()}`,
   allowNaturalOption: row.stone === 'Lab-Grown Diamond',
 }));
+
+// Owner-confirmed additions have their own provenance, without inventing Sheet rows.
+export const luminoreProducts: Product[] = [...luminoreSheetProducts, ...luminoreOwnerProducts];

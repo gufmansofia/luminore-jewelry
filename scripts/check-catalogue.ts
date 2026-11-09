@@ -14,12 +14,12 @@ import {createHash} from 'node:crypto';
 const schemaProduct=(id:number)=>{const schema=pageMetadata(`/product/${id}`).schema;return (schema['@graph'] as Record<string,unknown>[])?.find(item=>item['@type']==='Product')??schema;};
 test('stock uses recorded facts and explicitly approved selling prices',()=>{
  for(const p of products){const row=facts[p.sourceCode as keyof typeof facts];if(!row)continue;expect(p.priceUsd).toBe(approvedPrices[p.id]??row.price);expect(p.totalCarat).toBe(row.carat);expect(p.metalType).toBe(row.metal);}
- expect(products).toHaveLength(105);
- expect(luminoreProducts).toHaveLength(39);
+ expect(products).toHaveLength(106);
+ expect(luminoreProducts).toHaveLength(40);
  expect(products.filter(p=>p.sourceBrand!=='Luminore')).toHaveLength(66);
  expect(new Set(products.map(p=>p.id)).size).toBe(products.length);
 });
-test('current Luminore catalogue replaces legacy records and uses only filled SELL COST rows',()=>{
+test('current Luminore catalogue retains filled SELL COST rows and owner-confirmed additions',()=>{
  expect(products.filter(p=>p.sourceBrand==='Luminore')).toEqual(luminoreProducts);
  for(const row of luminoreCatalogue.products){
   const p=products.find(p=>p.sourceSheetRow===row.row)!;
@@ -32,6 +32,26 @@ test('current Luminore catalogue replaces legacy records and uses only filled SE
  expect(products.find(p=>p.id===12)).toBeUndefined();
  expect(products.find(p=>p.id===37)).toMatchObject({totalCarat:10.09,priceUsd:5990});
  expect(products.find(p=>p.id===19)).toMatchObject({certificateNumber:'LG747596117',totalCarat:1.05});
+});
+test('Kite Cross keeps report carats distinct from the owner-confirmed jewellery weight',()=>{
+ const p=products.find(p=>p.id===135)!;
+ expect(p).toMatchObject({sourceBrand:'Luminore',priceUsd:2300,totalCarat:2.35,grossWeight:4.25,goldWeight:null,stoneCount:4,chainIncluded:true,certificateNumber:'J09261400114'});
+ expect(p.sourceSheetRow).toBeUndefined();
+ expect(p.images).toHaveLength(3);
+ expect(productSpecs(p,'en')).toEqual(expect.arrayContaining([
+  {label:'Total stone weight',value:'2.35 ct'},
+  {label:'Total jewellery weight',value:'4.25 g'},
+  {label:'Number of stones',value:'4'},
+  {label:'Chain included',value:'Yes'},
+  {label:'Report number',value:'J09261400114'},
+ ]));
+ for(const l of ['en','ru','uk'] as const){
+  expect(catalogueWeight(p,l)).toContain('2.35');
+  expect(productDescription(p,l)).toContain('2.35');
+  expect(productName(p,l)).toContain('Kite');
+ }
+ expect(schemaProduct(p.id)).toMatchObject({offers:{price:2300,priceCurrency:'USD'}});
+ expect(luminoreCatalogue.products.some(row=>row.id===135)).toBe(false);
 });
 test('carat display rounds decimal ties once and keeps exact data separate',()=>{
  for(const [weight,display] of [[0.5,'0.5'],[1,'1.0'],[12,'12.0'],[1.04,'1.0'],[1.05,'1.1'],[1.049,'1.0'],[2.05,'2.1'],[9.95,'10.0'],[4.423,'4.4'],[12.31,'12.3'],[58.76,'58.8']] as const) expect(formatCarat(weight)).toBe(display);
