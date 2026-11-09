@@ -108,6 +108,19 @@ test('alternative sitemap index covers every public URL once across language sit
  expect(allUrls).toEqual(original);
  expect(new Set(allUrls).size).toBe(allUrls.length);
 });
+test('sitemaps report the recorded catalogue release without changing unrelated page dates',()=>{
+ const combined=readFileSync('dist/sitemap.xml','utf8');
+ for(const language of languages){
+  const localized=readFileSync(`dist/sitemap-${language}.xml`,'utf8');
+  for(const route of publicRoutes()){
+   const entry=`<loc>${SITE+localePath(route,language)}</loc>`;
+   const date=blogPosts.find(post=>route===`/blog/${post.slug}`)?.updatedAt??(route==='/'||route.startsWith('/product/')||collectionRoute(route)?'2026-11-09':undefined);
+   for(const sitemap of [combined,localized]){
+    expect(sitemap).toContain(entry+(date?`<lastmod>${date}</lastmod>`:'<xhtml:link'));
+   }
+  }
+ }
+});
 test('search titles and descriptions distinguish public pages within each language',()=>{
  for(const language of languages){
   const pages=publicRoutes().map(route=>pageMetadata(route,language));
