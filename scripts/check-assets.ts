@@ -1,4 +1,3 @@
-import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { products } from "../src/data/products";
 import { blogPosts } from "../src/data/blogs";
@@ -15,9 +14,11 @@ for (const file of new Bun.Glob("**/*.{tsx,html,css}").scanSync("src")) {
 }
 const images = (await import('../src/data/image-manifest.json')).default;
 for (const image of Object.values(images)) for (const variant of image.variants) urls.add(variant.src);
-const missing = [...urls].filter(url => !existsSync(resolve("public", url.slice(1))));
+// Compare actual directory entries so macOS also catches paths that fail on Linux.
+const publicFiles = new Set(new Bun.Glob("**/*").scanSync({cwd:resolve("public"),onlyFiles:true}));
+const missing = [...urls].filter(url => !publicFiles.has(url.slice(1)));
 if (missing.length) {
-  console.error("Missing assets:\n" + missing.join("\n"));
+  console.error("Missing assets or filename case mismatches:\n" + missing.join("\n"));
   process.exit(1);
 }
 console.log(`Verified ${urls.size} local asset references.`);
