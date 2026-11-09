@@ -6,7 +6,13 @@ const caratNumber = new Intl.NumberFormat('en-US', {
 });
 
 export function formatCarat(weight: number) {
-  return caratNumber.format(weight);
+  return caratNumber.format(Math.trunc(weight * 10) / 10);
+}
+
+// Format each listed weight without interpreting or adding compound expressions.
+export function formatCaratExpression(weights: string) {
+  return weights.replace(/\d+(?:[.,]\d+)?/g,
+    weight => formatCarat(Number(weight.replace(',', '.'))));
 }
 
 export function formatCaratText(text: string) {
@@ -15,5 +21,5 @@ export function formatCaratText(text: string) {
 }
 
 export function formatStoneWeights(weights: string) {
-  return weights.split('+').map(weight => formatCarat(Number(weight.trim()))).join(' + ');
+  return weights.split('+').map(weight => formatCarat(Number(weight.trim().replace(',', '.')))).join(' + ');
 }

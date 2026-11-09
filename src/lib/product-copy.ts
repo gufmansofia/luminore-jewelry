@@ -1,12 +1,10 @@
 import type { Product } from '../data/products';
 import type { Language } from '../i18n/translations';
-import { formatCarat, formatStoneWeights } from './carat';
+import { formatCarat, formatCaratExpression, formatCaratText, formatStoneWeights } from './carat';
 export const choose = (language: Language, en: string, ru: string, uk: string) => language === 'ru' ? ru : language === 'uk' ? uk : en;
 const isLuminoreProduct = (p: Product) => p.sourceBrand === 'Luminore';
-export const productCaratNumber = (p: Product, value: number) => isLuminoreProduct(p)
- ? new Intl.NumberFormat('en-US', {maximumFractionDigits: 3, useGrouping: false}).format(value)
- : formatCarat(value);
-const listedCaratText = (p: Product, l: Language) => `${p.listedCarat?.replace(/\s*ct\b/gi, '').trim()} ${choose(l,'ct','кар.','кар.')}`;
+export const productCaratNumber = (_p: Product, value: number) => formatCarat(value);
+const listedCaratText = (p: Product, l: Language) => `${formatCaratExpression(p.listedCarat?.replace(/\s*ct\b/gi, '').trim() ?? '')} ${choose(l,'ct','кар.','кар.')}`;
 const shortEnglishNames: Record<number,string> = {
  51:'Marquise & heart diamond ring · 1.54 ct', 54:'Round & pear three-stone diamond ring · 1.49 ct',
  57:'Oval & heart diamond ring · 1.57 ct',58:'Emerald-cut & baguette diamond ring · 1.2 ct',
@@ -101,7 +99,7 @@ export function productDescription(p: Product, l: Language, natural = false, inc
  } else if(p.categoryEn==='Pendants' && /solitaire/.test(n)) {
   design=['A solitaire pendant that brings the central stone into focus.','Подвеска-солитер подчёркивает центральный камень.','Підвіска-солітер підкреслює центральний камінь.'];
  }
- const sentences=[choose(l,...design as [string,string,string])];
+ const sentences=[formatCaratText(choose(l,...design as [string,string,string]))];
  if (!includeSpecifications) return sentences[0];
  const listed=p.caratBasis==='unconfirmed'||p.caratBasis==='listed';
  if(p.totalCarat!==null) sentences.push((hasLuminoreEarringTotal(p)?totalStoneWeightLabel(l)+': ':choose(l,listed?'Listed stone weight: ':p.categoryEn==='Earrings'?'Total stone weight for the pair: ':'Total stone weight: ',listed?'Указанный вес камней: ':p.categoryEn==='Earrings'?'Общий вес камней в паре: ':'Общий вес камней: ',listed?'Зазначена вага каменів: ':p.categoryEn==='Earrings'?'Загальна вага каменів у парі: ':'Загальна вага каменів: '))+productCaratNumber(p,p.totalCarat)+choose(l,' ct.',' кар.',' кар.'));
@@ -136,7 +134,7 @@ export function productSpecs(p: Product,l: Language,natural=false) {
  if(p.categoryEn==='Pendants')result.push({label:pick('Chain included','Цепочка в комплекте','Ланцюжок у комплекті'),value:p.chainIncluded===undefined?requestDetail(l):p.chainIncluded?pick('Yes','Да','Так'):pick('No','Нет','Ні')});
  const cert=p.certificateType?.match(/\b(?:GIA|IGI)\b/g);
  result.push({label:pick('Certification','Сертификация','Сертифікація'),value:cert?.length?[...new Set(cert)].join(' & ')+pick(' certified',' — сертифицировано',' — сертифіковано'):requestDetail(l)});
- if(isLuminoreProduct(p)&&p.certificateNumber)result.push({label:pick('Report number','Номер отчёта','Номер звіту'),value:p.certificateNumber.replace(/\n/g,'; ')});
+ if(isLuminoreProduct(p)&&p.certificateNumber)result.push({label:pick('Report number','Номер отчёта','Номер звіту'),value:formatCaratText(p.certificateNumber.replace(/\n/g,'; '))});
  if(p.certificateDate)result.push({label:pick('Report date','Дата отчёта','Дата звіту'),value:new Intl.DateTimeFormat(pick('en-GB','ru-RU','uk-UA'),{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(p.certificateDate))});
  return result;
 }

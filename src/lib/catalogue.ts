@@ -1,6 +1,6 @@
 import type { Product } from '../data/products';
 import { localizeSpec, productName } from './product-copy';
-import { formatCarat } from './carat';
+import { formatCarat, formatCaratExpression } from './carat';
 import { isKidsCollectionProduct } from '../data/kids-collection';
 
 export const PAGE_SIZE = 12;
@@ -29,8 +29,8 @@ export function matchesProduct(p: Product, search: string) {
   if (!query) return true;
   const category = catalogueCategory(query);
   if (category !== 'all') return matchesCategory(p, category);
- const words = tokens([p.name, p.nameEn, p.nameUk, p.sourceName, p.sourceCode, p.sourceBrand, p.sourceBrand==='Luminore'?'Luminor люминор люминар':'',p.listedCarat,p.sku, ...aliases[p.categoryEn] ?? [], ...(isKidsCollectionProduct(p) ? aliases.Kids : []),
-    p.totalCarat===null?'':`${formatCarat(p.totalCarat)} ct кар. карат карата каратів`,
+ const words = tokens([p.name, p.nameEn, p.nameUk, p.sourceName, p.sourceCode, p.sourceBrand, p.sourceBrand==='Luminore'?'Luminor люминор люминар':'',p.listedCarat,p.listedCarat?formatCaratExpression(p.listedCarat):'',p.sku, ...aliases[p.categoryEn] ?? [], ...(isKidsCollectionProduct(p) ? aliases.Kids : []),
+    p.totalCarat===null?'':`${p.totalCarat} ${formatCarat(p.totalCarat)} ct кар. карат карата каратів`,
     ...(['en', 'ru', 'uk'] as const).flatMap(l => [productName(p,l),localizeSpec(p.metalType, l), localizeSpec(p.diamondCut, l)])].join(' '));
   return tokens(query).every(part => words.some(word => /^\d/.test(part) ? word === part : word.startsWith(part)));
 }
