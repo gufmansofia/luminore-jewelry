@@ -14,8 +14,8 @@ import {createHash} from 'node:crypto';
 const schemaProduct=(id:number)=>{const schema=pageMetadata(`/product/${id}`).schema;return (schema['@graph'] as Record<string,unknown>[])?.find(item=>item['@type']==='Product')??schema;};
 test('stock uses recorded facts and explicitly approved selling prices',()=>{
  for(const p of products){const row=facts[p.sourceCode as keyof typeof facts];if(!row)continue;expect(p.priceUsd).toBe(approvedPrices[p.id]??row.price);expect(p.totalCarat).toBe(row.carat);expect(p.metalType).toBe(row.metal);}
- expect(products).toHaveLength(107);
- expect(luminoreProducts).toHaveLength(41);
+ expect(products).toHaveLength(108);
+ expect(luminoreProducts).toHaveLength(42);
  expect(products.filter(p=>p.sourceBrand!=='Luminore')).toHaveLength(66);
  expect(new Set(products.map(p=>p.id)).size).toBe(products.length);
 });
@@ -27,7 +27,7 @@ test('current Luminore catalogue retains filled SELL COST rows and owner-confirm
   expect(p.priceUsd).toBeGreaterThan(0);
   expect(p.images).toEqual(row.images);
  }
- expect(luminoreProducts.some(p=>[21,23,25,26,52,71,72,77].includes(p.sourceSheetRow!))).toBe(false);
+ expect(luminoreProducts.some(p=>[21,23,25,26,71,72,77].includes(p.sourceSheetRow!))).toBe(false);
  expect(luminoreProducts.filter(p=>p.sourceName==='Solitaire Ring')).toHaveLength(1);
  expect(products.find(p=>p.id===12)).toBeUndefined();
  expect(products.find(p=>p.id===37)).toMatchObject({totalCarat:10.09,priceUsd:5990});

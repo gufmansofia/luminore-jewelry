@@ -828,6 +828,34 @@
       ]
     },
     {
+      "row": 52,
+      "id": 137,
+      "code": "LUM-PND-003",
+      "sourceName": "Mini Cross Pendant",
+      "nameEn": "Mini Cross Pendant",
+      "nameRu": "Подвеска «Мини-крест»",
+      "nameUk": "Підвіска «Мініхрест»",
+      "category": "Pendants",
+      "price": 2650,
+      "listedCarat": "1.70ct",
+      "carat": 1.7,
+      "caratBasis": "listed",
+      "perEarring": "",
+      "metal": "White Gold",
+      "listedWeight": null,
+      "color": "E-F",
+      "clarity": "VVS-VS",
+      "cut": "Round",
+      "stone": "Diamond",
+      "certificateNumber": "JW111261997002",
+      "certificateType": "",
+      "images": [
+        "/Products/Pendants/Studio Luminore 2026-11/P137-Mini-Cross-Pendant-1-70ct/01-front.png",
+        "/Products/Pendants/Studio Luminore 2026-11/P137-Mini-Cross-Pendant-1-70ct/02-elevated-angle.png",
+        "/Products/Pendants/Studio Luminore 2026-11/P137-Mini-Cross-Pendant-1-70ct/03-low-side.png"
+      ]
+    },
+    {
       "row": 53,
       "id": 14,
       "code": "LUM-PND-004",
