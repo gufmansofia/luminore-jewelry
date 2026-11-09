@@ -84,8 +84,7 @@
       "certificateType": "",
       "images": [
         "/Products/Rings/Studio Luminore 2026-11/P039-Two-Heart-Ring/01-front-upright-v4.png",
-        "/Products/Rings/Studio Luminore 2026-11/P039-Two-Heart-Ring/02-top-v2.png",
-        "/Products/Rings/Studio Luminore 2026-11/P039-Two-Heart-Ring/03-side-upright-v3.png"
+        "/Products/Rings/Studio Luminore 2026-11/P039-Two-Heart-Ring/02-top-v2.png"
       ]
     },
     {
@@ -837,8 +836,8 @@
       "nameUk": "Підвіска «Мініхрест»",
       "category": "Pendants",
       "price": 2650,
-      "listedCarat": "1.70ct",
-      "carat": 1.7,
+      "listedCarat": "3.00ct",
+      "carat": 3,
       "caratBasis": "listed",
       "perEarring": "",
       "metal": "White Gold",

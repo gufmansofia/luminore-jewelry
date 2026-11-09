@@ -8,9 +8,10 @@ const categoryNames: Record<string, [string, string]> = {
   Pendants: ['Подвески', 'Підвіски'], Bracelets: ['Браслеты', 'Браслети'],
 };
 
-// Construction visible in the product's own Sheet photos, without inferring gold fineness or diamond origin.
-const photoConfirmedDetails: Record<number, Partial<Product>> = {
+// Photo-confirmed construction and owner clarifications, without inferring gold fineness or diamond origin.
+const confirmedProductDetails: Record<number, Partial<Product>> = {
   137: {
+    sourceDetails: 'The owner corrected Mini Cross Pendant to 3 ct on 9 November 2026. The earlier Sheet snapshot listed 1.70 ct; this owner correction takes precedence.',
     stoneCount: 6,
     description: 'Миниатюрная подвеска-крест из белого золота с шестью круглыми бриллиантами в крапановых оправах.',
     descriptionEn: 'A miniature white gold cross pendant set with six round brilliant diamonds in prong settings.',
@@ -39,7 +40,7 @@ export const luminoreSheetProducts: Product[] = catalogue.products.map(row => ({
   careInstructions: 'Clean gently with mild soap and lukewarm water. Store separately.',
   images: row.images, altText: row.nameEn, seoTags: `${row.category.toLowerCase()}, ${row.nameEn.toLowerCase()}`,
   allowNaturalOption: row.stone === 'Lab-Grown Diamond',
-  ...photoConfirmedDetails[row.id],
+  ...confirmedProductDetails[row.id],
 }));
 
 // Owner-confirmed additions have their own provenance, without inventing Sheet rows.
