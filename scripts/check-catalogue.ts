@@ -14,8 +14,8 @@ import {createHash} from 'node:crypto';
 const schemaProduct=(id:number)=>{const schema=pageMetadata(`/product/${id}`).schema;return (schema['@graph'] as Record<string,unknown>[])?.find(item=>item['@type']==='Product')??schema;};
 test('stock uses recorded facts and explicitly approved selling prices',()=>{
  for(const p of products){const row=facts[p.sourceCode as keyof typeof facts];if(!row)continue;expect(p.priceUsd).toBe(approvedPrices[p.id]??row.price);expect(p.totalCarat).toBe(row.carat);expect(p.metalType).toBe(row.metal);}
- expect(products).toHaveLength(106);
- expect(luminoreProducts).toHaveLength(40);
+ expect(products).toHaveLength(107);
+ expect(luminoreProducts).toHaveLength(41);
  expect(products.filter(p=>p.sourceBrand!=='Luminore')).toHaveLength(66);
  expect(new Set(products.map(p=>p.id)).size).toBe(products.length);
 });
@@ -52,6 +52,23 @@ test('Kite Cross keeps report carats distinct from the owner-confirmed jewellery
  }
  expect(schemaProduct(p.id)).toMatchObject({offers:{price:2300,priceCurrency:'USD'}});
  expect(luminoreCatalogue.products.some(row=>row.id===135)).toBe(false);
+});
+test('the separate pave pear drop ring retains main, pave and gold weights without borrowing P116 facts',()=>{
+ const p=products.find(p=>p.id===136)!;
+ expect(p).toMatchObject({priceUsd:3800,totalCarat:2.8,mainStoneCarat:1,paveCarat:1.8,goldWeight:9,grossWeight:null,metalType:'Gold',gemstoneType:'Diamond'});
+ expect(p.totalCarat).toBe(p.mainStoneCarat!+p.paveCarat!);
+ expect(p.sourceSheetRow).toBeUndefined();
+ expect(p.images).toHaveLength(3);
+ expect(productSpecs(p,'en')).toEqual(expect.arrayContaining([
+  {label:'Main stone',value:'1 ct'},
+  {label:'Pavé stone weight',value:'1.8 ct'},
+  {label:'Total stone weight',value:'2.8 ct'},
+  {label:'Gold weight',value:'9 g'},
+ ]));
+ expect(productSpecs(p,'en').some(s=>s.label==='Total jewellery weight')).toBe(false);
+ expect(productSpecs(p,'en').some(s=>s.label==='Report number')).toBe(false);
+ expect(products.find(p=>p.id===116)).toMatchObject({priceUsd:1400,totalCarat:1.01});
+ expect(schemaProduct(p.id)).toMatchObject({offers:{price:3800,priceCurrency:'USD'}});
 });
 test('carat display rounds decimal ties once and keeps exact data separate',()=>{
  for(const [weight,display] of [[0.5,'0.5'],[1,'1.0'],[12,'12.0'],[1.04,'1.0'],[1.05,'1.1'],[1.049,'1.0'],[2.05,'2.1'],[9.95,'10.0'],[4.423,'4.4'],[12.31,'12.3'],[58.76,'58.8']] as const) expect(formatCarat(weight)).toBe(display);

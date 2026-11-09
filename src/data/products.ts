@@ -38,6 +38,7 @@ export interface Product {
   gemstoneType: string;
   totalCarat: number | null;
   mainStoneCarat: number | null;
+  paveCarat?: number;
   diamondColor: string;
   diamondClarity: string;
   diamondCut: string;
