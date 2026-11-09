@@ -82,7 +82,6 @@ export const luminoreOwnerProducts: Product[] = [
     descriptionUk: 'Широка округла шинка з діамантовим паве доповнена рухомою підвіскою з грушоподібним діамантом.',
     careInstructions: 'Clean gently with mild soap and lukewarm water. Store separately.',
     images: [
-      '/Products/Rings/Studio Luminore 2026-11/P136-Pave-Pear-Drop-Ring-2-80ct/01-front.png',
       '/Products/Rings/Studio Luminore 2026-11/P136-Pave-Pear-Drop-Ring-2-80ct/02-elevated-angle.png',
       '/Products/Rings/Studio Luminore 2026-11/P136-Pave-Pear-Drop-Ring-2-80ct/03-opposite-low.png',
     ],

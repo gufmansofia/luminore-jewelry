@@ -58,7 +58,7 @@ test('the separate pave pear drop ring retains main, pave and gold weights witho
  expect(p).toMatchObject({priceUsd:3800,totalCarat:2.8,mainStoneCarat:1,paveCarat:1.8,goldWeight:9,grossWeight:null,metalType:'Gold',gemstoneType:'Diamond'});
  expect(p.totalCarat).toBe(p.mainStoneCarat!+p.paveCarat!);
  expect(p.sourceSheetRow).toBeUndefined();
- expect(p.images).toHaveLength(3);
+ expect(p.images).toHaveLength(2);
  expect(productSpecs(p,'en')).toEqual(expect.arrayContaining([
   {label:'Main stone',value:'1 ct'},
   {label:'Pavé stone weight',value:'1.8 ct'},
