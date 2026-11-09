@@ -1,6 +1,21 @@
-# Kids Collection local preview — 2026-11-09
+# Kids Collection local homepage — 2026-11-09
 
 final result: passed
+
+## Approved preview added to the local homepage
+
+The owner approved the preview and requested adding it to the localhost homepage. The actual homepage now displays six categories in English, Russian and Ukrainian, using the same component, images, typography and responsive layout as the approved preview. Historical preview notes below describe the earlier stage, before this approval.
+
+- Source visual truth: `/Users/sofia.personal/Desktop/Jewelry-main/source-materials/design-previews/2026-11-09-kids-collection/preview-desktop.png` and `preview-mobile.png`.
+- Browser-rendered homepage evidence: `/Users/sofia.personal/Desktop/Jewelry-main/source-materials/design-previews/2026-11-09-kids-collection-homepage/home-desktop.png` and `home-mobile.png`.
+- Route: `http://localhost:3047/ru#categories`. Viewports and source/rendered pixel dimensions: desktop 1440 × 1024; phone 390 × 844. Density 1, no resampling.
+- Combined source/render comparisons: `comparison-desktop.png`, `comparison-mobile.png` and focused `comparison-detail.png` in the homepage evidence folder. Both source and rendered screenshots were inspected together. The actual homepage retains its surrounding hero, spotlight and other sections; these are intentionally absent from the isolated preview.
+- Fidelity: unchanged fonts, weights and wrapping; same spacing and six-column grid / two-card phone carousel; unchanged white background and border/text tokens; the approved star and horse photos remain sharp and recognizable; localized copy matches the approved preview. No actionable P0/P1/P2 differences remain.
+- Browser checks: clicking Kids on the homepage opens `/ru/collection?category=Kids` with exactly two items, on desktop and phone. Switching to Pendants shows both P130 and P131. Phone carousel reaches its end without page overflow. No console errors in either test tab.
+- Build passed (450 rendered pages, 426 public sitemap URLs). Experience tests passed (7 / 1,993 assertions); mobile tests passed (3 / 350 assertions). Generated homepages verified to contain six category links in all three languages. Product data, prices and Pendants membership were not changed.
+- Scope: localhost only; no production deployment or push.
+
+## Historical preview QA before homepage approval
 
 ## Findings
 

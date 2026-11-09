@@ -31,7 +31,7 @@
 .category-preview-kids-pair { display:flex; width:100%; height:100%; overflow:hidden; background:#fff; }
 .category-preview-photo .category-preview-kids-pair img { width:50%; height:100%; object-fit:cover; object-position:50% 86%; transform:scale(1.35); transform-origin:50% 86%; }
 @media(min-width:701px) {
-  .category-preview--kids-study .category-preview-list { grid-template-columns:repeat(6,minmax(0,1fr)); }
+  .category-preview--with-kids .category-preview-list { grid-template-columns:repeat(6,minmax(0,1fr)); }
 }
 @media(min-width:801px) {
   .atelier-content--spotlight-first #categories { padding-top:86px; }

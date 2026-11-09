@@ -25,12 +25,12 @@ const copy = {
   uk: { title: 'Прикраси за категоріями', intro: 'Природні або лабораторні діаманти.', categories: 'Категорії прикрас', previous: 'Попередні категорії', next: 'Наступні категорії' },
 };
 
-export function CategoryPreview({ previewKids = false }: { previewKids?: boolean } = {}) {
+export function CategoryPreview({ includeKids = false }: { includeKids?: boolean } = {}) {
   const { language } = useLanguage();
   const t = copy[language];
   const list = useRef<HTMLUListElement>(null);
   const [edges, setEdges] = useState({ start: true, end: false });
-  const items = previewKids ? [...categories, {
+  const items = includeKids ? [...categories, {
     category: 'Kids', productId: 130,
     names: kidsCollectionNames,
     cover: cataloguePhoto(products.find(product => product.id === 130)!),
@@ -52,7 +52,7 @@ export function CategoryPreview({ previewKids = false }: { previewKids?: boolean
     track.scrollBy({ left: direction * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
 
-  return <section id="categories" className={`category-preview${previewKids ? ' category-preview--kids-study' : ''}`} data-theme="light" aria-labelledby="category-preview-title">
+  return <section id="categories" className={`category-preview${includeKids ? ' category-preview--with-kids' : ''}`} data-theme="light" aria-labelledby="category-preview-title">
     <div className="category-preview-inner">
       <header className="category-preview-heading">
         <h2 id="category-preview-title">{t.title}</h2>

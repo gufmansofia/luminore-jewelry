@@ -33,7 +33,7 @@ export function LangSync() {
 }
 
 
-function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotlightFirst = false, previewKids = false }: { previewWhiteHero?: boolean; previewQuietHero?: boolean; spotlightFirst?: boolean; previewKids?: boolean }) {
+function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotlightFirst = false, previewKids = false, includeKids = false }: { previewWhiteHero?: boolean; previewQuietHero?: boolean; spotlightFirst?: boolean; previewKids?: boolean; includeKids?: boolean }) {
   const location = useLocation();
   const restoredScroll = useRestoredScroll();
 
@@ -59,7 +59,7 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotligh
   if (previewKids) return <div className="kids-collection-preview-shell">
     <AtelierHero homePath="/" quiet portraitPhoto />
     <main id="main-content" tabIndex={-1} className="atelier-content atelier-content--spotlight-first">
-      <CategoryPreview previewKids />
+      <CategoryPreview includeKids />
       <About />
     </main>
   </div>;
@@ -68,7 +68,7 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotligh
     <>
       {previewWhiteHero ? <WhiteHeaderHeroPreview /> : <AtelierHero homePath={previewQuietHero ? '/preview/hero-quiet' : '/'} film="hands" quiet portraitPhoto captureLayers={previewQuietHero && new URLSearchParams(location.search).get('capture') === 'layers'} />}
       <main id="main-content" tabIndex={-1} className={`atelier-content${spotlightFirst ? ' atelier-content--spotlight-first' : ''}`}>
-        {spotlightFirst ? <><ProductSpotlight /><CategoryPreview /></> : <><CategoryPreview /><ProductSpotlight /></>}
+        {spotlightFirst ? <><ProductSpotlight /><CategoryPreview includeKids={includeKids} /></> : <><CategoryPreview includeKids={includeKids} /><ProductSpotlight /></>}
         <About />
         <Products />
         <CTA />
@@ -90,7 +90,7 @@ export function SiteContent() {
         <SkipLink/>
         <div className="animate-page-enter">
           <Routes>
-            <Route path="/" element={<HomePage spotlightFirst />} />
+            <Route path="/" element={<HomePage spotlightFirst includeKids />} />
             <Route path="/preview/atelier" element={<Atelier />} />
             <Route path="/preview/kids-collection" element={<HomePage spotlightFirst previewKids />} />
             <Route path="/preview/hero" element={<HeroDirections />} />
