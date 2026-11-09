@@ -13,6 +13,26 @@ import {collectionRoute} from '../src/data/collections';
 import {productName,productDescription,productSpecs,requestDetail} from '../src/lib/product-copy';
 import {blogPosts} from '../src/data/blogs';
 const file=(route:string)=>`dist/${route==='/'?'index':route.slice(1)}.html`;
+test('search icons use stable raster URLs on every localized page and retain useful square sizes',()=>{
+ for(const language of languages)for(const route of publicRoutes()){
+  const html=readFileSync(file(localePath(route,language)),'utf8');
+  expect(html).toContain('rel="icon" type="image/png" sizes="192x192" href="/favicon-search.png"');
+  expect(html).toContain('rel="shortcut icon" type="image/x-icon" href="/favicon.ico"');
+  expect(html).toContain('rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"');
+  expect(html.match(/rel="icon"/g)).toHaveLength(1);
+ }
+ const png=readFileSync('dist/favicon-search.png');
+ expect(png.subarray(0,8)).toEqual(Buffer.from([137,80,78,71,13,10,26,10]));
+ expect(png.readUInt32BE(16)).toBe(192);
+ expect(png.readUInt32BE(20)).toBe(192);
+ // An opaque RGB image keeps the white monogram visible on light and dark search UI.
+ expect(png[25]).toBe(2);
+ const ico=readFileSync('dist/favicon.ico');
+ expect(ico.readUInt16LE(0)).toBe(0);
+ expect(ico.readUInt16LE(2)).toBe(1);
+ const sizes=Array.from({length:ico.readUInt16LE(4)},(_,i)=>ico[6+i*16]||256);
+ expect(sizes).toEqual(expect.arrayContaining([16,32,48,64]));
+});
 test('language links expose localized destinations with the current path, query and section',()=>{
  for(const language of languages)for(const route of ['/','/collection/page/2','/product/85']){
   const html=renderToStaticMarkup(createElement(LanguageProvider,{defaultLanguage:language},

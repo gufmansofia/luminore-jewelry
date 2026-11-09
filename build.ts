@@ -163,7 +163,15 @@ const fontPreloads = ["montserrat-latin", "cormorant-garamond-latin"]
   .map(font => `<link rel="preload" href="/fonts/${font}.woff2" as="font" type="font/woff2" crossorigin>`)
   .join("");
 for (const output of result.outputs.filter(output => output.path.endsWith(".html"))) {
-  await Bun.write(output.path, (await output.text()).replace("</head>", `${fontPreloads}</head>`));
+  let html = await output.text();
+  // Search engines need stable icon URLs; keep Bun's hashed assets for other media.
+  for (const file of ["favicon-search.png", "favicon.ico", "apple-touch-icon.png"]) {
+    const { name, ext } = path.parse(file);
+    const bundled = result.outputs.find(asset => path.basename(asset.path).startsWith(`${name}-`) && path.extname(asset.path) === ext);
+    if (bundled) html = html.replaceAll(path.basename(bundled.path), file);
+    else html = html.replaceAll(`../public/${file}`, `/${file}`);
+  }
+  await Bun.write(output.path, html.replace("</head>", `${fontPreloads}</head>`));
 }
 
 // Print the results

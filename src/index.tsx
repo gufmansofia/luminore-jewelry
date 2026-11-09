@@ -139,6 +139,9 @@ const server = serve({
     "/logo-full.png": async () => await serveStatic("/logo-full.png") || new Response("Not found", { status: 404 }),
     "/logo.png": async () => await serveStatic("/logo.png") || new Response("Not found", { status: 404 }),
     "/favicon.svg": async () => await serveStatic("/favicon.svg") || new Response("Not found", { status: 404 }),
+    "/favicon-search.png": async () => await serveStatic("/favicon-search.png") || new Response("Not found", { status: 404 }),
+    "/favicon.ico": async () => await serveStatic("/favicon.ico") || new Response("Not found", { status: 404 }),
+    "/apple-touch-icon.png": async () => await serveStatic("/apple-touch-icon.png") || new Response("Not found", { status: 404 }),
 
     // Serve index.html for all unmatched routes - catch-all LAST
     // Must be a direct HTMLBundle value (not returned from async fn) for Bun to bundle it
