@@ -18,6 +18,7 @@ import { BlogPost } from './components/BlogPost';
 import { BackToTop } from './components/BackToTop';
 import { Testimonials } from './components/Testimonials';
 import { CategoryPreview } from './components/CategoryPreview';
+import './previews/kids-collection.css';
 import { ProductSpotlight } from './components/ProductSpotlight';
 import { RouteScrollRestoration, useRestoredScroll } from './hooks/useRouteScroll';
 
@@ -32,7 +33,7 @@ export function LangSync() {
 }
 
 
-function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotlightFirst = false }: { previewWhiteHero?: boolean; previewQuietHero?: boolean; spotlightFirst?: boolean }) {
+function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotlightFirst = false, previewKids = false }: { previewWhiteHero?: boolean; previewQuietHero?: boolean; spotlightFirst?: boolean; previewKids?: boolean }) {
   const location = useLocation();
   const restoredScroll = useRestoredScroll();
 
@@ -54,6 +55,14 @@ function HomePage({ previewWhiteHero = false, previewQuietHero = false, spotligh
       return () => clearTimeout(timer);
     }
   }, [location.state, location.hash, restoredScroll]);
+
+  if (previewKids) return <div className="kids-collection-preview-shell">
+    <AtelierHero homePath="/" quiet portraitPhoto />
+    <main id="main-content" tabIndex={-1} className="atelier-content atelier-content--spotlight-first">
+      <CategoryPreview previewKids />
+      <About />
+    </main>
+  </div>;
 
   return (
     <>
@@ -83,6 +92,7 @@ export function SiteContent() {
           <Routes>
             <Route path="/" element={<HomePage spotlightFirst />} />
             <Route path="/preview/atelier" element={<Atelier />} />
+            <Route path="/preview/kids-collection" element={<HomePage spotlightFirst previewKids />} />
             <Route path="/preview/hero" element={<HeroDirections />} />
             <Route path="/preview/hero-wide" element={<HeroDirections wide />} />
             <Route path="/preview/hero-new" element={<HeroDirections fresh />} />

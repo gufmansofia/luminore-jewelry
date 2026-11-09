@@ -1,0 +1,4 @@
+.kids-collection-preview-shell .atelier-hero { display:none; }
+@media(max-width:700px) {
+  .kids-collection-preview-shell .atelier-content { padding-top:24px; }
+}

@@ -5,6 +5,7 @@ import { products } from '../data/products';
 import { useLanguage } from '../i18n';
 import { choose } from '../lib/product-copy';
 import { catalogueCategory, filterCatalogue, PAGE_SIZE } from '../lib/catalogue';
+import { kidsCollectionNames, kidsCollectionPath } from '../data/kids-collection';
 import { CatalogueCard } from './CatalogueCard';
 import { Reveal } from './Reveal';
 import { useReducedMotion } from '../hooks/useMotion';
@@ -71,6 +72,7 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
   const { t, language: l } = useLanguage();
   const location = useLocation();
   const navigation = useNavigationType();
+  const requestedCategory = catalogueCategory(categoryKey === 'all' ? new URLSearchParams(location.search).get('category') ?? categoryKey : categoryKey);
   const restoredScroll = useRestoredScroll();
   const navigate=useNavigate();
   const storageKey = `luminore-catalog:${location.pathname}`;
@@ -89,7 +91,9 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
   useEffect(() => {
     const query = new URLSearchParams(location.search).get('search');
     if (query !== null) { setSearch(query); setVisibleCount(PAGE_SIZE); }
-  }, [location.search]);
+    setCategory(requestedCategory);
+    setVisibleCount(PAGE_SIZE);
+  }, [location.search, requestedCategory]);
   const searchRef = useRef<HTMLInputElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -103,7 +107,7 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
     return () => animations.forEach(animation => animation.cancel());
   }, [category, sort, search, reduced]);
   const pick = (en: string, ru: string, uk: string) => choose(l, en, ru, uk);
-  const categories = [['all', t.products.all], ['Rings', t.products.rings], ['Earrings', t.products.earrings], ['Pendants', t.products.pendants], ['Bracelets', t.products.bracelets], ['Necklaces', t.products.necklaces]];
+  const categories = [['all', t.products.all], ['Rings', t.products.rings], ['Earrings', t.products.earrings], ['Pendants', t.products.pendants], ['Bracelets', t.products.bracelets], ['Necklaces', t.products.necklaces], ['Kids', kidsCollectionNames[l]]];
   const filtered = useMemo(() => filterCatalogue(products, search, category, sort), [search, category, sort]);
   const defaultView = !search && category === categoryKey && sort === 'all';
   const pageStart = paginated && defaultView ? (page - 1) * PAGE_SIZE : 0;
@@ -116,10 +120,10 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
     try { sessionStorage.setItem(storageKey, JSON.stringify(catalog)); } catch {}
   }, [storageKey, category, sort, visibleCount, search]);
   const savePosition = (selectedProduct: number) => { try { sessionStorage.setItem(storageKey, JSON.stringify({ ...catalog, selectedProduct, scrollY: window.scrollY })); } catch {} };
-  const reset = () => { setSearch(''); setCategory(categoryKey); setSort('all'); setVisibleCount(PAGE_SIZE); searchRef.current?.focus(); };
+  const reset = () => { setSearch(''); setCategory(categoryKey); setSort('all'); setVisibleCount(PAGE_SIZE); if(new URLSearchParams(location.search).has('category')) navigate(collectionPath(categoryKey),{replace:true}); searchRef.current?.focus(); };
   useEffect(() => {
     if (!location.state?.returnToCatalog && !location.state?.restoreFilters && restoredScroll === undefined) return;
-    setSearch(saved.search ?? ''); setCategory(paginated ? categoryKey : catalogueCategory(saved.activeCategory ?? categoryKey)); setSort(saved.priceSort ?? 'all'); setVisibleCount(Math.max(PAGE_SIZE,saved.visibleCount ?? PAGE_SIZE));
+    setSearch(saved.search ?? ''); setCategory(paginated ? requestedCategory : catalogueCategory(saved.activeCategory ?? categoryKey)); setSort(saved.priceSort ?? 'all'); setVisibleCount(Math.max(PAGE_SIZE,saved.visibleCount ?? PAGE_SIZE));
     if (restoredScroll !== undefined || location.state?.restoreFilters) return;
     const timer = setTimeout(() => {
       const top = sectionRef.current ? sectionRef.current.getBoundingClientRect().top + window.scrollY - 96 : 0;
@@ -154,7 +158,7 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
         </div>
       </div>
       <div className="catalogue-filter-row">
-        <CatalogueFilter label={t.products.category} value={category} options={categories} open={openFilter === 'category'} onToggle={() => setOpenFilter(openFilter === 'category' ? null : 'category')} onClose={() => setOpenFilter(current => current === 'category' ? null : current)} onChange={value => { if(paginated){navigate(collectionPath(value),{state:{restoreFilters:true,catalog:{...catalog,activeCategory:value}}});return;}setCategory(value); setVisibleCount(PAGE_SIZE); }} />
+        <CatalogueFilter label={t.products.category} value={category} options={categories} open={openFilter === 'category'} onToggle={() => setOpenFilter(openFilter === 'category' ? null : 'category')} onClose={() => setOpenFilter(current => current === 'category' ? null : current)} onChange={value => { if(paginated){navigate(value === 'Kids' ? kidsCollectionPath : collectionPath(value),{state:{restoreFilters:true,catalog:{...catalog,activeCategory:value}}});return;}setCategory(value); setVisibleCount(PAGE_SIZE); }} />
         <CatalogueFilter price label={t.products.priceSort} value={sort} options={[["all", t.products.priceSortAll], ["low-to-high", t.products.priceSortLowHigh], ["high-to-low", t.products.priceSortHighLow]]} open={openFilter === 'price'} onToggle={() => setOpenFilter(openFilter === 'price' ? null : 'price')} onClose={() => setOpenFilter(current => current === 'price' ? null : current)} onChange={value => { setSort(value); setVisibleCount(PAGE_SIZE); scrollToResults(); }} />
 
       </div>
@@ -168,7 +172,7 @@ export function Products({categoryKey='all',page=1,paginated=false,title,intro}:
         {Array.from({length:pageCount},(_,i)=><Link className="catalogue-page-number" key={i} to={pagePath(i+1)} aria-label={pick(`Page ${i+1}`,`Страница ${i+1}`,`Сторінка ${i+1}`)} aria-current={page===i+1?'page':undefined}>{i+1}</Link>)}
         {page<pageCount ? <Link className="catalogue-page-mobile" to={pagePath(page+1)} rel="next">{pick('Next','Далее','Далі')}</Link> : <span className="catalogue-page-mobile" aria-disabled="true">{pick('Next','Далее','Далі')}</span>}
       </nav>}
-      {!paginated && <div className="catalogue-pagination"><Link to="/collection" className="outline-button">{pick('Complete Collection','Вся коллекция','Уся колекція')}</Link></div>}
+      {!paginated && <div className="catalogue-pagination"><Link to={category === 'Kids' ? kidsCollectionPath : '/collection'} className="outline-button">{pick('Complete Collection','Вся коллекция','Уся колекція')}</Link></div>}
     </div>
   </section>;
 }

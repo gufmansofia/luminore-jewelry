@@ -1,63 +1,63 @@
-# Approved About Luminore Jewelry introduction — design QA
-
-Date: 2026-10-12
+# Kids Collection local preview — 2026-11-09
 
 final result: passed
 
-## Scope and visual truth
+## Findings
 
-Update the white introduction in `#about` with the approved heading and two paragraphs in English, Russian and Ukrainian. Preserve the diamond accordions, the single mobile services row, and the current Contact our manager title and outlined Telegram/WhatsApp text buttons.
+No actionable P0/P1/P2 findings remain. The sixth tile intentionally makes desktop cards narrower; the original homepage still has five tiles. Kids Collection is an additional catalogue filter, while products P130 and P131 retain their Pendants category.
 
-Source: `output/verification/about-brand/approved-preview.png`, 1536 × 1024 pixels. Existing styles are authoritative for the lower components, as explicitly requested. Previous report: `output/verification/about-brand/before/design-qa.md`.
+## Source and rendered evidence
 
-## Captures and comparison
+Source visual truth is the existing local homepage at `http://localhost:3047/ru#categories`. The implementation is `http://localhost:3047/ru/preview/kids-collection`. It reuses the actual header, category component, fonts, product assets, carousel and About section. The preview isolates this section; unrelated homepage hero and spotlight content are omitted.
 
-Implementation: built site at `http://127.0.0.1:3073/#about`. Actual responsive pages are embedded in the ignored verification surface at `http://127.0.0.1:3074/`. These local test files are not deployed.
+All evidence is in `/Users/sofia.personal/Desktop/Jewelry-main/source-materials/design-previews/2026-11-09-kids-collection/`:
 
-Captures: `output/verification/about-brand/local-desktop.jpg` (1280px wide), `local-mobile.jpg` (390 × 1054), and `local-mobile-320.jpg` (320 × 1085). Actual-site iframe viewports are 1280/390/320 × 1400 CSS pixels so the complete section can be captured. Captures have one image pixel per CSS pixel. These are responsive browser captures, not physical devices.
+| Evidence | Source | Implementation | CSS viewport / image pixels |
+| --- | --- | --- | --- |
+| Desktop, Russian, light, categories visible | `reference-desktop.png` | `preview-desktop.png` | 1440 × 1024 / 1440 × 1024 each |
+| Phone, Russian, light, carousel at start | `reference-mobile.png` | `preview-mobile-start.png` | 390 × 844 / 390 × 844 each |
+| Phone, carousel at end | Existing carousel design above | `preview-mobile.png` | 390 × 844 / 390 × 844 |
+| Shared catalogue with Kids selected | Existing collection controls | `filtered-catalogue-desktop.png`, `filtered-catalogue-mobile.png` | 1440 × 1024 and 390 × 844 |
 
-Full comparison: `output/verification/about-brand/comparison.jpg` places the approved desktop/mobile image and actual captures together in one opened comparison input. Compare interior content with proportional scaling; the concept presentation frame is not website chrome. Unscaled 390 and 320 captures were also opened for focused review of typography, complete copy, service labels and contact buttons. No asset crop is needed because this change adds no image assets.
+Screenshots contain browser-rendered page content, without browser chrome. Device scale factor is 1; no density resampling was needed. Full-view source and implementation were placed together and inspected in `comparison-desktop.png` and `comparison-mobile.png`. The focused desktop category comparison is `comparison-category-detail.png`; it makes typography, tile imagery and labels readable at the same source scale. The final phone capture additionally verifies the new tile at the end of the carousel.
 
-## Findings and required fidelity surfaces
+## Required fidelity surfaces
 
-No actionable P0/P1/P2 difference within the approved change.
+- **Fonts and typography:** Existing serif display heading, editorial labels, navigation font, weights, tracking and line heights retained. Mobile heading wrapping matches the original. The longer Russian Kids label fits without truncation.
+- **Spacing and layout rhythm:** Same header, section width, heading spacing, white space, tile borders and About layout. Desktop uses six equal columns for the preview. Phone retains the original two-card horizontal carousel and arrows; no page-level horizontal overflow or obscured controls was observed.
+- **Colors and tokens:** Existing white background, dark text, faint borders and muted arrow states retained. No new palette or visual tokens introduced.
+- **Image quality and fidelity:** Uses the real approved white-background star and horse-head photos. Their subjects remain recognizable side by side, without invented product art, halos or clipped stones. Existing five category images remain unchanged, including Kite Cross for Pendants.
+- **Copy and content:** Existing copy retained. New label is Kids Collection / Детская коллекция / Дитяча колекція. No implementation instructions appear in the product UI. Prices, product descriptions, product counts and primary categories are unchanged.
 
-Fonts: Cormorant Garamond heading and Montserrat body, weight 400. Heading is 48px desktop/36px mobile; body remains 17px/15px. Consistent tracking and weight, clean two-line mobile title, complete paragraphs at 390 and 320px. Existing graphite text styling is retained.
+## Primary interaction checks
 
-Layout: centered white introduction, existing 670px text width and side padding, 16px between paragraphs. Section height grows naturally. All four services have equal y-coordinates. At 390px their x-coordinates are 12, 103.5, 195 and 286.5; at 320px they are 6, 83, 160 and 237. scrollWidth equals viewport width. Contact buttons retain 1px borders, 52px height and 12px horizontal gap.
+Verified in the browser at desktop and phone sizes:
 
-Colors: existing white, #191b1d heading, #52565b body and #25282b graphite. No new color, radius, shadow or gradient.
+1. Kids tile opens the general catalogue at `/ru/collection?category=Kids`, with the Kids filter selected and exactly two products.
+2. The normal category selector includes All, Pendants and Kids Collection. Switching to Pendants shows both P130 and P131 there too.
+3. Switching to All opens the full catalogue (12 items on its first page; 107 products in the catalogue).
+4. Opening P130 and returning restores the Kids filter and two results.
+5. Reloading the Kids query route preserves the filter.
+6. Mobile carousel reaches the new tile; next arrow is disabled at the end and previous remains available.
 
-Assets: existing wordmark and service SVGs are reused. No generated replacement icons or mockup pixels become site assets.
-
-Copy: approved localized headings and paragraphs display correctly. Existing stone/service/contact copy is retained. No city, address or unconfirmed legal claim. Mobile services use their existing lowercase site style even though the raster concept used capitals; the user's requirement to preserve the actual site takes precedence.
-
-## Interactions and validation
-
-- Actual language menu switched English → Russian → Ukrainian; About content checked.
-- Natural-diamond accordion opened with aria-expanded=true.
-- Product 85 navigation and image zoom/zoom-out worked.
-- Diamond-care article opened with its title, image and chapter links.
-- Mobile bespoke film loaded bespoke-film-mobile.mp4, readyState=4, paused=false.
-- Actual local-site console error log was empty.
-- Asset validation: 813 references passed.
-- Production build: 468 prerendered pages, 447 localized sitemap URLs.
-- SEO suite: 8 tests passed, 25,830 assertions.
-
-Browser viewport overrides did not change the direct tab's measured viewport, so responsive layout used actual-site iframes; core interaction checks used the direct tab. No physical-device keyboard flow is involved in this change.
+Console error checks returned no errors in either final test tab. The scoped preview does not reproduce unrelated lower homepage sections; those sections are outside this visual study.
 
 ## Comparison history
 
-First normalized comparison found no actionable P0/P1/P2 issue; no implementation fixes followed that comparison. Captures during viewport changes were replaced by aligned captures after navigation settled. This was capture normalization, not a design-fix iteration.
+1. **P2, resolved:** The initial phone preview included the end of the animated spotlight above the category section, changing the requested section composition. Evidence: `preview-mobile-before-fix.png`.
+2. **Fix:** Isolated the preview to the existing header, category section and About section, with scoped CSS hiding the hero content. Normal homepage content was retained.
+3. **Post-fix comparison:** `preview-mobile-start.png` versus `reference-mobile.png` in `comparison-mobile.png`, plus final `preview-mobile.png`. The stray spotlight content is gone; spacing, typography and carousel composition match the existing component.
 
 ## Implementation checklist
 
-- [x] Approved copy in three languages and consistent regular fonts.
-- [x] Existing accordions, services row and manager buttons preserved.
-- [x] Desktop, 390px and 320px layouts checked.
-- [x] Relevant interactions, build, assets and SEO checks passed.
-- [x] Source and actual implementation compared together.
+- [x] Keep P130 and P131 in Pendants and add overlapping Kids membership.
+- [x] Add a working Kids filter in the shared catalogue, including localized search aliases.
+- [x] Preserve filter navigation, product return and reload behavior.
+- [x] Show six categories only on the local visual preview; retain five on the normal homepage.
+- [x] Verify desktop and phone screenshots, required fidelity surfaces and console errors.
+- [x] Build passed: 450 rendered pages, 426 public sitemap URLs; preview is noindex and excluded from the public sitemap.
+- [x] Experience tests: 7 passed / 1,993 assertions. SEO tests: 10 passed / 29,530 assertions. Mobile tests: 3 passed / 350 assertions. Asset check: 910 references validated.
 
-## Follow-up polish
+## Open questions and follow-up polish
 
-No blocking polish items. Physical-device testing and Search Console indexing speed are outside this copy change.
+None blocking this local preview. No production deployment was performed.

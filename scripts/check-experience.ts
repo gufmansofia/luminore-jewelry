@@ -13,6 +13,18 @@ test('category queries find rings in each language without matching earrings', (
  expect(filterCatalogue(products,'кольцо','Earrings','all')).toHaveLength(0);
  expect(filterCatalogue(products,'','Серьги','all')).toHaveLength(products.filter(p=>p.categoryEn==='Earrings').length);
 });
+test('Kids Collection is an additional filter and keeps both pieces in Pendants', () => {
+ const kids = filterCatalogue(products,'','Kids','all');
+ expect(kids.map(p=>p.id)).toEqual([130,131]);
+ expect(kids.every(p=>p.categoryEn==='Pendants')).toBe(true);
+ const pendants = filterCatalogue(products,'','Pendants','all');
+ for(const piece of kids)expect(pendants.some(p=>p.id===piece.id)).toBe(true);
+ for(const query of ['Kids Collection','детская коллекция','дитяча колекція']){
+  expect(filterCatalogue(products,query,'all','all').map(p=>p.id)).toEqual([130,131]);
+ }
+ expect(filterCatalogue(products,'','Kids','all','5000-15000')).toHaveLength(0);
+ expect(filterCatalogue(products,'крест','Kids','all')).toHaveLength(0);
+});
 test('search supports source codes, partial names, reordered words and unknown queries',()=>{
  expect(products.filter(p=>matchesProduct(p,'RNG-016')).map(p=>p.id)).toEqual([49]);
  expect(products.filter(p=>matchesProduct(p,'rng016')).map(p=>p.id)).toEqual([49]);

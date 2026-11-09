@@ -5,6 +5,7 @@ import { products } from '../data/products';
 import { collectionPath } from '../data/collections';
 import { cataloguePhoto } from '../lib/catalogue-photo';
 import { ProductImage } from './ProductImage';
+import { kidsCollectionNames, kidsCollectionPath, kidsCollectionProductIds } from '../data/kids-collection';
 import '../styles/category-preview.css';
 
 const categories = [
@@ -24,11 +25,16 @@ const copy = {
   uk: { title: 'Прикраси за категоріями', intro: 'Природні або лабораторні діаманти.', categories: 'Категорії прикрас', previous: 'Попередні категорії', next: 'Наступні категорії' },
 };
 
-export function CategoryPreview() {
+export function CategoryPreview({ previewKids = false }: { previewKids?: boolean } = {}) {
   const { language } = useLanguage();
   const t = copy[language];
   const list = useRef<HTMLUListElement>(null);
   const [edges, setEdges] = useState({ start: true, end: false });
+  const items = previewKids ? [...categories, {
+    category: 'Kids', productId: 130,
+    names: kidsCollectionNames,
+    cover: cataloguePhoto(products.find(product => product.id === 130)!),
+  }] : categories;
   useEffect(() => {
     const track = list.current;
     if (!track) return;
@@ -46,7 +52,7 @@ export function CategoryPreview() {
     track.scrollBy({ left: direction * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
 
-  return <section id="categories" className="category-preview" data-theme="light" aria-labelledby="category-preview-title">
+  return <section id="categories" className={`category-preview${previewKids ? ' category-preview--kids-study' : ''}`} data-theme="light" aria-labelledby="category-preview-title">
     <div className="category-preview-inner">
       <header className="category-preview-heading">
         <h2 id="category-preview-title">{t.title}</h2>
@@ -55,10 +61,12 @@ export function CategoryPreview() {
       <div className="category-preview-carousel">
       <button type="button" className="category-arrow category-arrow--previous" aria-label={t.previous} aria-controls="category-preview-list" disabled={edges.start} onClick={() => browse(-1)}><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="M7 1 1 6l6 5Z" fill="currentColor" /></svg></button>
       <ul ref={list} id="category-preview-list" className="category-preview-list" aria-label={t.categories}>
-        {categories.map(item => <li key={item.category}>
-          <Link className="category-preview-card" to={collectionPath(item.category)}>
+        {items.map(item => <li key={item.category}>
+          <Link className="category-preview-card" to={item.category === 'Kids' ? kidsCollectionPath : collectionPath(item.category)}>
             <div className="category-preview-photo" style={item.cover.style}>
+              {item.category === 'Kids' ? <div className="category-preview-kids-pair">{kidsCollectionProductIds.map(id => <ProductImage key={id} src={products.find(product => product.id === id)!.images[0]} alt="" loading="lazy" sizes="200px" />)}</div> :
               <ProductImage src={item.cover.src} alt="" loading="lazy" sizes={`(max-width: 700px) ${50 * item.cover.scale}vw, (min-width: 1280px) ${225 * item.cover.scale}px, ${18 * item.cover.scale}vw`} />
+              }
             </div>
             <h3>{item.names[language]}</h3>
           </Link>

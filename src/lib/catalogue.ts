@@ -1,6 +1,7 @@
 import type { Product } from '../data/products';
 import { localizeSpec, productName } from './product-copy';
 import { formatCarat } from './carat';
+import { isKidsCollectionProduct } from '../data/kids-collection';
 
 export const PAGE_SIZE = 12;
 // Opening selection approved from the collection preview on 3 October 2026.
@@ -12,18 +13,23 @@ const aliases: Record<string, string[]> = {
   Pendants: ['pendant', 'pendants', 'подвеска', 'подвески', 'підвіска', 'підвіски', 'кулон', 'кулоны', 'кулони'],
   Bracelets: ['bracelet', 'bracelets', 'браслет', 'браслеты', 'браслети'],
   Necklaces: ['necklace', 'necklaces', 'колье', 'кольє', 'намисто'],
+  Kids: ['kids', 'kids collection', 'детская коллекция', 'детские украшения', 'дитяча колекція', 'дитячі прикраси'],
 };
 export const normalizeSearch = (value: string) => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ё/g, 'е').trim();
 export function catalogueCategory(value = 'all') {
   return Object.keys(aliases).find(key => key === value || aliases[key].some(alias => normalizeSearch(alias) === normalizeSearch(value))) ?? 'all';
+}
+export function matchesCategory(p: Product, category: string) {
+  const selected = catalogueCategory(category);
+  return selected === 'all' || (selected === 'Kids' ? isKidsCollectionProduct(p) : p.categoryEn === selected);
 }
 const tokens = (value: string) => normalizeSearch(value).replace(/([\p{L}])(\d)|(\d)([\p{L}])/gu, '$1$3 $2$4').split(/[^\p{L}\p{N}.]+/u).filter(Boolean);
 export function matchesProduct(p: Product, search: string) {
   const query = normalizeSearch(search);
   if (!query) return true;
   const category = catalogueCategory(query);
-  if (category !== 'all') return p.categoryEn === category;
- const words = tokens([p.name, p.nameEn, p.nameUk, p.sourceName, p.sourceCode, p.sourceBrand, p.sourceBrand==='Luminore'?'Luminor люминор люминар':'',p.listedCarat,p.sku, ...aliases[p.categoryEn] ?? [],
+  if (category !== 'all') return matchesCategory(p, category);
+ const words = tokens([p.name, p.nameEn, p.nameUk, p.sourceName, p.sourceCode, p.sourceBrand, p.sourceBrand==='Luminore'?'Luminor люминор люминар':'',p.listedCarat,p.sku, ...aliases[p.categoryEn] ?? [], ...(isKidsCollectionProduct(p) ? aliases.Kids : []),
     p.totalCarat===null?'':`${formatCarat(p.totalCarat)} ct кар. карат карата каратів`,
     ...(['en', 'ru', 'uk'] as const).flatMap(l => [productName(p,l),localizeSpec(p.metalType, l), localizeSpec(p.diamondCut, l)])].join(' '));
   return tokens(query).every(part => words.some(word => /^\d/.test(part) ? word === part : word.startsWith(part)));
@@ -36,7 +42,7 @@ export function withinBudget(price: number | null, budget: string) {
   return true;
 }
 export function filterCatalogue(items: Product[], search: string, category: string, sort: string, budget = 'all') {
-  return items.filter(p => withinBudget(p.priceUsd, budget) && (category === 'all' || p.categoryEn === catalogueCategory(category)) && matchesProduct(p, search)).sort((a, b) => {
+  return items.filter(p => withinBudget(p.priceUsd, budget) && matchesCategory(p, category) && matchesProduct(p, search)).sort((a, b) => {
     if (sort === 'low-to-high') return (a.priceUsd ?? Infinity) - (b.priceUsd ?? Infinity);
     if (sort === 'high-to-low') return (b.priceUsd ?? -Infinity) - (a.priceUsd ?? -Infinity);
     return (featuredRanks.get(a.id) ?? featuredProductIds.length) - (featuredRanks.get(b.id) ?? featuredProductIds.length) || Number(b.images.length>0)-Number(a.images.length>0) || a.id - b.id;
