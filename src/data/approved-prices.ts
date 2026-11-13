@@ -3,7 +3,7 @@
 export const approvedPrices: Record<number, number> = {
   7: 1800,
   49: 2900,
-  50: 2900,
+  50: 2400, // Owner-approved price on 2026-11-13.
   53: 3900,
   57: 3400,
   58: 2200,

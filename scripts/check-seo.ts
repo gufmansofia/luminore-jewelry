@@ -114,7 +114,7 @@ test('sitemaps report the recorded catalogue release without changing unrelated 
   const localized=readFileSync(`dist/sitemap-${language}.xml`,'utf8');
   for(const route of publicRoutes()){
    const entry=`<loc>${SITE+localePath(route,language)}</loc>`;
-   const date=blogPosts.find(post=>route===`/blog/${post.slug}`)?.updatedAt??(route==='/'||route.startsWith('/product/')||collectionRoute(route)?'2026-11-09':undefined);
+   const date=['/product/50','/collection/page/3','/collections/rings/page/2'].includes(route)?'2026-11-13':blogPosts.find(post=>route===`/blog/${post.slug}`)?.updatedAt??(route==='/'||route.startsWith('/product/')||collectionRoute(route)?'2026-11-09':undefined);
    for(const sitemap of [combined,localized]){
     expect(sitemap).toContain(entry+(date?`<lastmod>${date}</lastmod>`:'<xhtml:link'));
    }
