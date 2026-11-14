@@ -22,6 +22,7 @@ This localhost-only prototype deliberately follows the owner's email-only entry 
 
 - All 108 products are copied once from the current curated catalogue, retaining their IDs, SKUs, prices, exact weights, multilingual copy, photos and collections.
 - New products receive an automatic unique SKU. Drafts can have incomplete pricing or photography; local publication requires a positive price and a photograph.
+- Saving a new piece or edited card closes the editor and opens **Черновики**, with filters cleared and the saved item first. A **Черновик** badge appears on its photograph. Failed saves keep the editor open.
 - Existing edits are saved as drafts, separate from the published snapshot. Owners and Publishers may publish into the **local copy only**. Editors cannot publish or manage invitations.
 - A saved, unpublished draft can be deleted after confirmation and restored from **Черновики → Корзина** with the same SKU, photos and history. Deletion is recoverable; SKUs of deleted drafts are not reused. All invited editors can manage shared drafts.
 - For an existing published piece, **Отменить черновые изменения** discards only its draft edits. The published copy is retained. Saved discarded edits remain recoverable through the owner's revision history. Unsaved form inputs can also be cancelled after confirmation.
