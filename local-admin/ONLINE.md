@@ -1,6 +1,6 @@
 # Online admin rollout
 
-The separate online admin is published at https://luminore-jewelry-admin.sgufman06.chatgpt.site/admin. It uses trusted Sites ChatGPT identity, an invited-email allowlist, D1 records and R2 uploads. The loopback-only Bun prototype remains separate and must never be exposed to the internet.
+The separate online admin is published at https://luminore-jewelry-admin.sgufman06.chatgpt.site/admin. Version 5 uses owner-requested email-only entry, an invited-email allowlist, D1 records and R2 uploads. There is no password, OTP, email delivery or external sign-in provider. The owner explicitly accepted that anyone who knows an allowed email can enter as that member. Random HttpOnly cookie sessions are stored as hashes, checked against current membership, and invalidated on logout or revocation. The loopback-only Bun prototype remains separate and must never be exposed to the internet.
 
 The website can consume only approved snapshots during its build by setting `ADMIN_CATALOGUE_URL=https://luminore-jewelry-admin.sgufman06.chatgpt.site/catalogue.json`. Leave the setting unset until catalogue migration, the Google Sheets bridge and a production deploy hook have been verified. Without it, the existing curated stock stays unchanged.
 
@@ -8,7 +8,7 @@ The website can consume only approved snapshots during its build by setting `ADM
 
 The Google stock spreadsheet is `1QSFCK1olOhxoxPO004xyABNHbVxB2xD8P_FexZikEJ4`, tab `Stock`, headers on row 6, data from row 7, columns A:O. Descriptions and translations are mirrored separately to `Website text!A:F` using the same permanent SKU. The Apps Script bridge extends the existing native tables so new rows remain inside their filters and dropdown columns. Drafts must never be sent there. A copied workbook must be used for the end-to-end test. Native tools in a chat do not constitute permanent credentials for the hosted application.
 
-Current rollout limits: owner sign-in, migration to the hosted database, permanent Google Sheets authorization and the complete live publication flow still require verification/configuration. The authorized Vercel main-branch hook has been created and stored as a Sites runtime secret; it has not been triggered. Publication is blocked in the online API until the external connections exist. The website integration in this commit is prepared but not activated on the official domain.
+The initial catalogue transfer completed: all 110 records matched the local source, including published snapshots, pending edits and trash. Both owner addresses remain configured; live email-only entry and catalogue access have been verified. Subsequent team edits remain in the hosted database. Current rollout limits are permanent Google Sheets authorization and the complete live publication flow. The authorized Vercel main-branch hook has been created and stored as a Sites runtime secret; it has not been triggered. Publication is blocked in the online API until the external connections exist. The website integration is prepared but not activated on the official domain.
 
 Publication additionally requires `PUBLICATION_ENABLED=true` after verification. It remains unset during rollout. An interrupted catalogue import can resume from the same transfer file after reloading; existing team edits are preserved. Publication delivery uses a bounded lease to prevent overlapping retries and resumes without duplicating the permanent SKU or a synchronized sheet row.
 
@@ -16,4 +16,6 @@ A separate test workbook and Apps Script project have been staged. The Google de
 
 Google Sheets API v4 has been staged in the Apps Script service picker. Its displayed API terms and the Google authorization must still be confirmed by the owner before the live test. All independent code checks pass; no end-to-end live delivery is claimed before that test.
 
-Multiple catalogue owners are supported by the primary `ADMIN_OWNER_EMAIL` plus optional comma-separated `ADMIN_OWNER_EMAILS` runtime secrets. Owners sign in using their own verified ChatGPT email. All configured owners appear in team access management after an owner signs in; adding an additional owner preserves the primary owner. Emails are not hard-coded into website source.
+Multiple catalogue owners are supported by the primary `ADMIN_OWNER_EMAIL` plus optional comma-separated `ADMIN_OWNER_EMAILS` runtime secrets. Owners enter their configured email; staff enter an email previously added by an owner. All configured owners appear in team access management after an owner signs in; adding an additional owner preserves the primary owner. Emails are not hard-coded into website source.
+
+The custom hostname `admin.luminorejewelry.com` has been registered with Sites but is not active. Its DNS is hosted by Websupport; the CNAME and verification TXT records still need to be set there before hostname/SSL validation can complete. The existing Sites URL continues to serve the admin.
