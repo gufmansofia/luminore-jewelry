@@ -1,4 +1,4 @@
-# Luminore Studio — localhost prototype
+# Luminore Admin — localhost prototype
 
 The selected photo catalogue runs separately from the public website. It is not a production authentication system.
 

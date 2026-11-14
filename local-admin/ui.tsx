@@ -35,7 +35,7 @@ export function Photo({src,name,className='',eager=false}:{src?:string;name:stri
 }
 export function Field({label,children,hint}:{label:string;children:ReactNode;hint?:string}) {return <label className="studio-field"><span>{label}</span>{children}{hint&&<small>{hint}</small>}</label>;}
 export function Status({product}:{product:AdminProduct}){const status=productStatus(product);return <span className={`studio-status studio-status--${status}`}>{statusLabels[status]}</span>;}
-export function Loading(){return <div className="studio-loading" role="status"><span className="studio-wordmark">LUMINORE</span><span className="studio-spinner"/>Открываем студию…</div>;}
+export function Loading(){return <div className="studio-loading" role="status"><span className="studio-wordmark">LUMINORE</span><span className="studio-spinner"/>Открываем панель…</div>;}
 export function Confirm({title,description,action,onCancel,onConfirm,busy=false,danger=false,error=''}:{title:string;description:string;action:string;onCancel:()=>void;onConfirm:()=>void;busy?:boolean;danger?:boolean;error?:string}) {
   const ref=useRef<HTMLDialogElement>(null);
   useEffect(()=>{ref.current?.showModal();return()=>ref.current?.close();},[]);
