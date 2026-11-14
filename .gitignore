@@ -58,6 +58,7 @@ output.mp4
 # Local originals and personal tool settings
 /source-materials/
 /.claude/
+/.local-admin/
 
 # Bun is the only package manager
 /package-lock.json

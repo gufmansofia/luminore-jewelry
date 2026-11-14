@@ -6,6 +6,8 @@
   "main": "src/index.tsx",
   "module": "src/index.tsx",
   "scripts": {
+    "dev:admin": "bun --hot local-admin/server.ts",
+    "test:admin": "bun test ./local-admin/admin.test.ts",
     "dev": "bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun src/index.tsx",
     "build": "bun run build.ts",

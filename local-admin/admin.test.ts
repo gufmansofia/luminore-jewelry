@@ -1,0 +1,121 @@
+import { afterEach, describe, expect, test } from 'bun:test';
+import { AdminStore, seedProduct } from './store';
+import { createAdminApi, imageExtension, sessionCookie } from './api';
+import { products } from '../src/data/products';
+import { emptyProduct } from './types';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { createHash } from 'node:crypto';
+
+const stores:AdminStore[]=[];
+const folders:string[]=[];
+afterEach(async()=>{stores.splice(0).forEach(s=>s.close());for(const path of folders.splice(0))await rm(path,{recursive:true,force:true});});
+function setup(){const store=new AdminStore(':memory:','owner@example.com',products.map(seedProduct));stores.push(store);return store;}
+function request(path:string,method='GET',value?:unknown,cookie?:string,extra:Record<string,string>={}){
+  return new Request(`http://localhost:3048/api${path}`,{method,headers:{'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{}),...extra},...(value===undefined?{}:{body:JSON.stringify(value)})});
+}
+function session(token:string){return `${sessionCookie}=${token}`;}
+describe('local invitation-only prototype',()=>{
+  test('only an invited address can sign in; invitation matching is normalized',async()=>{
+    const store=setup(),api=createAdminApi(store,'/tmp/unused-studio-uploads');
+    const denied=await api(request('/login','POST',{email:'stranger@example.com'}));
+    expect(denied.status).toBe(403);expect(store.member('stranger@example.com')).toBeNull();
+    const owner=store.login('owner@example.com').user;
+    store.invite(owner,'  Editor@Example.com  ','editor');
+    const response=await api(request('/login','POST',{email:'EDITOR@example.com'}));
+    expect(response.status).toBe(200);
+    expect(response.headers.get('set-cookie')).toContain('HttpOnly; SameSite=Strict');
+    expect((await response.json()).user).toMatchObject({email:'editor@example.com',role:'editor',status:'active'});
+  });
+  test('catalogue, new products, and invitations cannot be reached without a session',async()=>{
+    const api=createAdminApi(setup(),'/tmp/unused-studio-uploads');
+    for(const [path,method] of [['/products','GET'],['/products','POST'],['/members','GET'],['/uploads','POST']] as const){
+      expect((await api(request(path,method,method==='POST'?{}:undefined))).status).toBe(401);
+    }
+  });
+  test('editors cannot invite people, revoke access, restore versions, or publish',async()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    store.invite(owner,'editor@example.com','editor');
+    const cookie=session(store.login('editor@example.com').token),api=createAdminApi(store,'/tmp/unused-studio-uploads');
+    expect((await api(request('/members','POST',{email:'other@example.com',role:'publisher'},cookie))).status).toBe(403);
+    expect((await api(request('/members','DELETE',{email:owner.email},cookie))).status).toBe(403);
+    expect((await api(request('/products/50/publish','POST',{version:1},cookie))).status).toBe(403);
+    expect((await api(request('/products/50/restore','POST',{version:1,revision:1},cookie))).status).toBe(403);
+  });
+  test('revocation invalidates existing sessions as well as subsequent sign-ins',async()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    store.invite(owner,'editor@example.com','editor');
+    const token=store.login('editor@example.com').token;
+    expect(store.session(token)?.email).toBe('editor@example.com');
+    store.revoke(owner,'editor@example.com');
+    expect(store.session(token)).toBeNull();
+    expect(()=>store.login('editor@example.com')).toThrow();
+    expect(()=>store.revoke(owner,'owner@example.com')).toThrow();
+  });
+  test('all 108 existing products keep their IDs, exact carats, brands and approved prices',()=>{
+    const store=setup();expect(store.list()).toHaveLength(108);
+    expect(store.product(50).data).toMatchObject({sku:'P050',brand:'Zoke',price:2400,totalCarat:4.27});
+    expect(store.product(1).data).toMatchObject({sku:'P001',price:1700,totalCarat:2});
+    expect(store.product(133).data.totalCarat).toBe(11.85);
+    expect(store.product(117).data.stoneType).toBe('Natural Diamond');
+  });
+  test('draft edits never replace the published copy or modify website source',async()=>{
+    const sourcePath=join(import.meta.dir,'../src/data/approved-prices.ts');
+    const hash=(data:Buffer)=>createHash('sha256').update(data).digest('hex');
+    const before=hash(await readFile(sourcePath));
+    const store=setup(),owner=store.login('owner@example.com').user,original=store.product(50);
+    const edited=store.save(owner,50,{...original.data,price:2450},original.version);
+    expect(edited.data.price).toBe(2450);expect(edited.published!.price).toBe(2400);expect(edited.hasChanges).toBe(true);
+    const published=store.publish(owner,50,edited.version);
+    expect(published.published!.price).toBe(2450);expect(published.hasChanges).toBe(false);
+    expect(products.find(p=>p.id===50)?.priceUsd).toBe(2400);
+    expect(hash(await readFile(sourcePath))).toBe(before);
+  });
+  test('concurrent stale edits are rejected and existing SKUs cannot be replaced',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user,p=store.product(24);
+    const updated=store.save(owner,24,{...p.data,sku:'P999',id:999,price:4100},p.version);
+    expect(updated.data.sku).toBe('P024');expect(updated.data.id).toBe(24);
+    expect(()=>store.save(owner,24,p.data,p.version)).toThrow('Карточку уже изменили');
+  });
+  test('new products get unique automatic SKUs and remain drafts until complete',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    const data={...emptyProduct(),names:{en:'New ring',ru:'',uk:''}};
+    const a=store.create(owner,data),b=store.create(owner,data);
+    expect(a.data.sku).toBe('P138');expect(b.data.sku).toBe('P139');expect(a.published).toBeNull();
+    expect(()=>store.publish(owner,a.data.id,a.version)).toThrow('добавьте цену');
+    const edited=store.save(owner,a.data.id,{...a.data,price:1100,images:[store.product(24).data.images[0]]},a.version);
+    expect(store.publish(owner,a.data.id,edited.version).published?.price).toBe(1100);
+  });
+  test('restoring a saved revision creates a draft without changing the published version',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user,p=store.product(24);
+    const changed=store.save(owner,24,{...p.data,price:4300},p.version);
+    const revision=store.history(24)[0]!;
+    const restored=store.restore(owner,24,revision.id,changed.version);
+    expect(restored.data.price).toBe(4050);expect(restored.published?.price).toBe(4050);expect(restored.hasChanges).toBe(true);
+  });
+  test('non-local hosts, cross-site requests and unsupported image formats are rejected',async()=>{
+    const store=setup(),api=createAdminApi(store,'/tmp/unused-studio-uploads');
+    const cross=await api(request('/login','POST',{email:'owner@example.com'},undefined,{Origin:'https://example.com'}));expect(cross.status).toBe(403);
+    const remote=await api(new Request('https://www.luminorejewelry.com/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}));expect(remote.status).toBe(403);
+    expect(imageExtension(new TextEncoder().encode('<svg onload="alert(1)"></svg>'))).toBeNull();
+    expect(imageExtension(new Uint8Array([137,80,78,71,13,10,26,10]))).toBe('png');
+  });
+  test('uploads are authenticated, named by the server, and reject SVG disguised as a photo',async()=>{
+    const folder=await mkdtemp(join(tmpdir(),'luminore-admin-test-'));folders.push(folder);
+    const store=setup(),cookie=session(store.login('owner@example.com').token),api=createAdminApi(store,folder);
+    const bad=new FormData();bad.append('photo',new File(['<svg/>'],'photo.png',{type:'image/png'}));
+    expect((await api(new Request('http://localhost:3048/api/uploads',{method:'POST',headers:{Cookie:cookie},body:bad}))).status).toBe(415);
+    const good=new FormData();good.append('photo',new File([new Uint8Array([137,80,78,71,13,10,26,10,0,0])],'../../unsafe.png',{type:'image/png'}));
+    const response=await api(new Request('http://localhost:3048/api/uploads',{method:'POST',headers:{Cookie:cookie},body:good}));
+    expect(response.status).toBe(201);expect((await response.json()).src).toMatch(/^\/admin-uploads\/[a-f0-9-]+\.png$/);
+  });
+  test('catalogue changes and invitations survive a server restart',async()=>{
+    const directory=await mkdtemp(join(tmpdir(),'luminore-admin-store-'));folders.push(directory);
+    const file=join(directory,'catalogue.sqlite');
+    const first=new AdminStore(file,'owner@example.com'),owner=first.login('owner@example.com').user;
+    first.invite(owner,'editor@example.com','editor');const p=first.product(50);first.save(owner,50,{...p.data,price:2500},p.version);first.close();
+    const second=new AdminStore(file,'owner@example.com');stores.push(second);
+    expect(second.member('editor@example.com')?.status).toBe('invited');expect(second.product(50).data.price).toBe(2500);expect(second.product(50).published?.price).toBe(2400);
+  });
+});

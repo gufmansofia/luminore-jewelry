@@ -9,6 +9,12 @@ bun run dev
 
 Development runs at http://localhost:3000. Use `PORT=3001 bun run dev` for another port.
 
+The invitation-only **local admin prototype** is a separate application at
+http://localhost:3048/admin. Run `bun run dev:admin`; see
+[local-admin/README.md](local-admin/README.md) for the owner email, local storage,
+roles and limitations of the explicitly requested email-only demo sign-in.
+It is excluded from the public website build and must not be deployed.
+
 ```sh
 bun run check:assets
 bun run build
