@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { formatCarat } from '../src/lib/carat';
-import { categories, emptyProduct, productTitle, publicationMissing, type AdminProduct, type DraftDeletion, type Locale, type Member, type ProductData, type Revision } from './types';
+import { categories, emptyProduct, productIdentifier, productTitle, publicationMissing, type AdminProduct, type DraftDeletion, type Locale, type Member, type ProductData, type Revision } from './types';
 import { ApiError, api, Confirm, date, Field, Icon, Loading } from './ui';
 import { ProductPreview } from './preview';
 import { DraftWriter, draftFingerprint, hasDraftContent } from './draft-writer';
@@ -85,7 +85,7 @@ export function ProductEditor({user,update,notify,onDelete,onSaved}:Props) {
     try{
       const current=await persist();if(!current)return;
       const result=await api<{product:AdminProduct}>(`/products/${current.data.id}/publish`,{method:'POST',body:JSON.stringify({version:current.version})});
-      hydrate(result.product);update(result.product);notify('Карточка опубликована в локальном прототипе.');
+      hydrate(result.product);update(result.product);notify(`Карточка опубликована локально · SKU ${result.product.data.sku}.`);
     }catch(e){setError((e as Error).message);}finally{setBusy('');}
   }
   async function restoreVersion(){
@@ -126,13 +126,13 @@ export function ProductEditor({user,update,notify,onDelete,onSaved}:Props) {
   const canClose=!!record||hasDraftContent(draft);
   const saveState=saving?'Сохраняется…':autoError?'Не сохранено':dirty?'Ожидает сохранения':record?'Сохранено':'Новый черновик';
   const deletionDescription=record?.published
-    ?`Черновые изменения «${productTitle(record.data)}» (${record.data.sku}) будут отменены. Опубликованная версия останется прежней.`
-    :record?`«${productTitle(record.data)}» (${record.data.sku}) будет перемещён в корзину вместе с фотографиями. Его можно восстановить.`:'Эта карточка ещё не сохранена. Введённые данные будут удалены.';
+    ?`Черновые изменения «${productTitle(record.data)}» (${productIdentifier(record)}) будут отменены. Опубликованная версия останется прежней.`
+    :record?`«${productTitle(record.data)}» (${productIdentifier(record)}) будет перемещён в корзину вместе с фотографиями. Его можно восстановить.`:'Эта карточка ещё не сохранена. Введённые данные будут удалены.';
   return <>
     {preview&&<ProductPreview data={draft} locale={locale} setLocale={setLocale} onClose={closePreview}/>}
     <div className="studio-editor" hidden={preview}>
       <button className="studio-back" onClick={goBack}><Icon name="arrow"/>Каталог</button>
-      <div className="studio-editor-heading"><div>{record&&<p className="studio-eyebrow">{record.data.sku}</p>}<h1>{draft.names.en.trim()||'Новое украшение'}</h1><span className={`studio-save-state${autoError?' has-error':''}`} role="status">{saving&&<span className="studio-spinner"/>}{saveState}</span></div></div>
+      <div className="studio-editor-heading"><div>{record&&<p className="studio-eyebrow">{productIdentifier(record)}</p>}<h1>{draft.names.en.trim()||'Новое украшение'}</h1><span className={`studio-save-state${autoError?' has-error':''}`} role="status">{saving&&<span className="studio-spinner"/>}{saveState}</span></div></div>
       {autoError&&<div className="studio-error" role="alert"><span>{autoError}</span>{conflict?<button type="button" className="studio-text-button" onClick={()=>setReloadOpen(true)}>Открыть актуальную версию</button>:<button type="button" className="studio-text-button" disabled={saving} onClick={()=>persist().catch(()=>{})}>Повторить сохранение</button>}</div>}
       <form ref={form} onSubmit={submit} className="studio-editor-layout">
         <fieldset className="studio-editor-main" disabled={!!busy}>
@@ -166,7 +166,7 @@ export function ProductEditor({user,update,notify,onDelete,onSaved}:Props) {
           <button className="studio-primary studio-save-desktop" type="submit" disabled={!!busy||uploadPending||!canClose||conflict}><Icon name="check"/>{busy==='saving'?'Сохраняем…':'Сохранить и закрыть'}</button>
           <button className="studio-secondary studio-preview-desktop" type="button" onClick={showPreview} disabled={!!busy}><Icon name="eye"/>Предпросмотр</button>
           {uploadPending&&<p className="studio-field-note">Дождитесь загрузки фото. Если есть ошибка, повторите загрузку или уберите этот файл из очереди.</p>}
-          {canPublish&&record&&(record.hasChanges||dirty)&&<><hr/><button type="button" className="studio-primary studio-publish" disabled={disabled||missing.length>0||conflict} onClick={publish}>{busy==='publishing'?'Публикуем…':'Опубликовать локально'}</button><p className="studio-field-note">Обновится только локальная копия.</p></>}
+          {canPublish&&record&&(record.hasChanges||dirty)&&<><hr/><button type="button" className="studio-primary studio-publish" disabled={disabled||missing.length>0||conflict} onClick={publish}>{busy==='publishing'?'Публикуем…':'Опубликовать локально'}</button><p className="studio-field-note">{record.published?'SKU сохранится. Обновится только локальная копия.':'Постоянный SKU присвоится при публикации. Обновится только локальная копия.'}</p></>}
           {user.role==='editor'&&<p className="studio-field-note">Публикация доступна владельцу или редактору с правом публикации.</p>}
           {canDeleteDraft&&<button type="button" className="studio-draft-delete studio-delete-desktop" disabled={disabled} onClick={()=>{setDeletionError('');setDeletionOpen(true);}}><Icon name="trash"/>{deleteLabel}</button>}
           {record&&record.position>=0&&<a className="studio-text-button" href={`https://www.luminorejewelry.com/product/${record.data.id}`} target="_blank" rel="noopener noreferrer">Посмотреть на сайте<Icon name="external"/></a>}

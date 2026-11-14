@@ -69,6 +69,8 @@ export function publicationMissing(p: ProductData): string[] {
   return [!p.names.en.trim() ? 'название' : '', !p.price ? 'цену' : '', !p.images.length ? 'фото' : ''].filter(Boolean);
 }
 export const productTitle = (p: ProductData) => p.names.en.trim() || 'Без названия';
+export const productIdentifier = (p: AdminProduct) => p.published ? p.data.sku : `Черновик №${p.data.id}`;
+export const isDraftIdentifier = (sku: string) => /^D\d+$/.test(sku);
 export function emptyProduct(): ProductData {
   return {
     id: 0, sku: 'Авто', brand: 'Luminore', category: 'Rings', names: { en: '', ru: '', uk: '' }, descriptions: { en: '', ru: '', uk: '' },

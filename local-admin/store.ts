@@ -69,7 +69,8 @@ export class AdminStore {
       CREATE TABLE IF NOT EXISTS sessions(tokenHash TEXT PRIMARY KEY, email TEXT NOT NULL REFERENCES members(email), expiresAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, sku TEXT UNIQUE NOT NULL, data TEXT NOT NULL, published TEXT, hasChanges INTEGER NOT NULL DEFAULT 0, version INTEGER NOT NULL DEFAULT 1, updatedAt TEXT NOT NULL, updatedBy TEXT NOT NULL, position INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS revisions(id INTEGER PRIMARY KEY AUTOINCREMENT, productId INTEGER NOT NULL REFERENCES products(id), action TEXT NOT NULL, actor TEXT NOT NULL, createdAt TEXT NOT NULL, beforeData TEXT);
-      CREATE TABLE IF NOT EXISTS draft_keys(key TEXT PRIMARY KEY, actor TEXT NOT NULL, productId INTEGER NOT NULL REFERENCES products(id));`);
+      CREATE TABLE IF NOT EXISTS draft_keys(key TEXT PRIMARY KEY, actor TEXT NOT NULL, productId INTEGER NOT NULL REFERENCES products(id));
+      CREATE TABLE IF NOT EXISTS sku_registry(sku TEXT PRIMARY KEY, productId INTEGER);`);
     // Preserve existing local catalogues and invitations when upgrading the prototype.
     const columns = new Set((this.db.query('PRAGMA table_info(products)').all() as { name: string }[]).map(column => column.name));
     this.db.transaction(() => {
@@ -82,6 +83,17 @@ export class AdminStore {
     if (!count.n) this.db.transaction(() => {
       const statement = this.db.query('INSERT INTO products(id,sku,data,published,hasChanges,version,updatedAt,updatedBy,position) VALUES (?, ?, ?, ?, 0, 1, ?, ?, ?)');
       seeds.forEach((p, position) => statement.run(p.id, p.sku, JSON.stringify(p), JSON.stringify(p), now(), owner, position));
+    })();
+    this.db.transaction(() => {
+      this.db.exec('INSERT OR IGNORE INTO sku_registry SELECT sku,id FROM products WHERE published IS NOT NULL');
+      const drafts=this.db.query('SELECT id,sku,data FROM products WHERE published IS NULL').all() as Pick<ProductRow,'id'|'sku'|'data'>[];
+      for(const draft of drafts){
+        const temporary=`D${String(draft.id).padStart(3,'0')}`;
+        if(draft.sku===temporary)continue;
+        const data=JSON.parse(draft.data);data.sku=temporary;
+        // Invalidate open old forms without touching names, prices, photos or history.
+        this.db.query('UPDATE products SET sku=?,data=?,version=version+1 WHERE id=?').run(temporary,JSON.stringify(data),draft.id);
+      }
     })();
   }
   close() { this.db.close(); }
@@ -136,7 +148,7 @@ export class AdminStore {
         if (existing) { const p=this.product(existing.productId); if(p.version!==1) throw new AdminError(409,'Карточка уже сохранена. Откройте её в черновиках.'); return p; }
       }
       const { n } = this.db.query('SELECT coalesce(max(id),0)+1 AS n FROM products').get() as { n: number };
-      const p = validateProduct(input, n, `P${String(n).padStart(3, '0')}`);
+      const p = validateProduct(input, n, `D${String(n).padStart(3, '0')}`);
       if (!p.names.en && !p.images.length) throw new AdminError(400, 'Добавьте название или фотографию, чтобы создать черновик.');
       this.db.query('INSERT INTO products(id,sku,data,published,hasChanges,version,updatedAt,updatedBy,position) VALUES (?, ?, ?, NULL, 1, 1, ?, ?, -1)').run(p.id, p.sku, JSON.stringify(p), now(), actor.email);
       if (draftKey) this.db.query('INSERT INTO draft_keys VALUES (?, ?, ?)').run(String(draftKey),actor.email,p.id);
@@ -159,7 +171,14 @@ export class AdminStore {
       const p = this.product(id); this.version(p, version);
       const missing=publicationMissing(p.data);
       if (missing.length) throw new AdminError(400, `Для публикации добавьте ${missing.join(', ')}.`);
-      this.db.query('UPDATE products SET published=data, hasChanges=0, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(now(), actor.email, id);
+      const data={...p.data};
+      if(!p.published){
+        const reserved=this.db.query('SELECT sku FROM sku_registry').all() as {sku:string}[];
+        const highest=reserved.reduce((max,row)=>/^P\d+$/.test(row.sku)?Math.max(max,Number(row.sku.slice(1))):max,0);
+        data.sku=`P${String(highest+1).padStart(3,'0')}`;
+        this.db.query('INSERT INTO sku_registry VALUES (?,?)').run(data.sku,id);
+      }
+      this.db.query('UPDATE products SET sku=?,data=?,published=?,hasChanges=0,version=version+1,updatedAt=?,updatedBy=? WHERE id=?').run(data.sku,JSON.stringify(data),JSON.stringify(data),now(),actor.email,id);
       this.record(id, 'published', actor, p.data);
       return this.product(id);
     })();
@@ -197,7 +216,8 @@ export class AdminStore {
     if (!row?.beforeData) throw new AdminError(404, 'Версия не найдена.');
     return this.db.transaction(() => {
       const p = this.product(id); this.version(p, version);
-      this.db.query('UPDATE products SET data=?, hasChanges=1, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(row.beforeData, now(), actor.email, id);
+      const restored=validateProduct(JSON.parse(row.beforeData!),p.data.id,p.data.sku);
+      this.db.query('UPDATE products SET data=?, hasChanges=1, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(JSON.stringify(restored), now(), actor.email, id);
       this.record(id, 'restored', actor, p.data);
       return this.product(id);
     })();

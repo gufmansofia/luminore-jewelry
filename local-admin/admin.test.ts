@@ -81,14 +81,14 @@ describe('local invitation-only prototype',()=>{
     expect(updated.data.sku).toBe('P024');expect(updated.data.id).toBe(24);
     expect(()=>store.save(owner,24,p.data,p.version)).toThrow('Карточку уже изменили');
   });
-  test('new products get unique automatic SKUs and remain drafts until complete',()=>{
+  test('new products keep temporary numbers until their first successful publication',()=>{
     const store=setup(),owner=store.login('owner@example.com').user;
     const data={...emptyProduct(),names:{en:'New ring',ru:'',uk:''}};
     const a=store.create(owner,data),b=store.create(owner,data);
-    expect(a.data.sku).toBe('P138');expect(b.data.sku).toBe('P139');expect(a.published).toBeNull();
+    expect(a.data.sku).toBe('D138');expect(b.data.sku).toBe('D139');expect(a.published).toBeNull();
     expect(()=>store.publish(owner,a.data.id,a.version)).toThrow('добавьте цену');
     const edited=store.save(owner,a.data.id,{...a.data,price:1100,images:[store.product(24).data.images[0]]},a.version);
-    expect(store.publish(owner,a.data.id,edited.version).published?.price).toBe(1100);
+    const published=store.publish(owner,a.data.id,edited.version);expect(published.published?.price).toBe(1100);expect(published.data.sku).toBe('P138');
   });
   test('restoring a saved revision creates a draft without changing the published version',()=>{
     const store=setup(),owner=store.login('owner@example.com').user,p=store.product(24);
@@ -131,9 +131,9 @@ describe('local invitation-only prototype',()=>{
     expect(()=>store.save(owner,draft.data.id,draft.data,result.product.version)).toThrow();
     expect(()=>store.publish(owner,draft.data.id,result.product.version)).toThrow();
     const next=store.create(owner,{...emptyProduct(),names:{en:'Another draft',ru:'',uk:''}});
-    expect(next.data.sku).toBe('P139');
+    expect(next.data.sku).toBe('D139');
     const restored=store.restoreDraft(owner,draft.data.id,result.product.version);
-    expect(restored.data).toEqual(draft.data);expect(restored.data.sku).toBe('P138');expect(restored.published).toBeNull();
+    expect(restored.data).toEqual(draft.data);expect(restored.data.sku).toBe('D138');expect(restored.published).toBeNull();
     expect(restored.deletedAt).toBeNull();expect(store.trash()).toHaveLength(0);
     expect(store.history(draft.data.id).map(r=>r.action)).toEqual(['undeleted','deleted','created']);
   });
@@ -189,11 +189,11 @@ describe('local invitation-only prototype',()=>{
     old.query('INSERT INTO products VALUES(?,?,?,?,?,?,?,?,?)').run(138,'P138',JSON.stringify(draft),null,1,1,timestamp,'owner@example.com',-1);
     old.query("INSERT INTO members VALUES(?,'editor','invited',?,NULL)").run('existing@example.com',timestamp);old.close();
     const upgraded=new AdminStore(file,'owner@example.com');
-    expect(upgraded.product(24).data).toEqual(published);expect(upgraded.product(138).data).toEqual(draft);expect(upgraded.member('existing@example.com')?.role).toBe('editor');
-    const deleted=upgraded.deleteDraft(upgraded.login('owner@example.com').user,138,1);upgraded.close();
+    const migrated={...draft,sku:'D138'};expect(upgraded.product(24).data).toEqual(published);expect(upgraded.product(138).data).toEqual(migrated);expect(upgraded.member('existing@example.com')?.role).toBe('editor');
+    const deleted=upgraded.deleteDraft(upgraded.login('owner@example.com').user,138,upgraded.product(138).version);upgraded.close();
     const reopened=new AdminStore(file,'owner@example.com');stores.push(reopened);
-    expect(reopened.list()).toHaveLength(1);expect(reopened.trash()[0]!.data).toEqual(draft);
-    expect(reopened.restoreDraft(reopened.login('owner@example.com').user,138,deleted.product.version).data).toEqual(draft);
+    expect(reopened.list()).toHaveLength(1);expect(reopened.trash()[0]!.data).toEqual(migrated);
+    expect(reopened.restoreDraft(reopened.login('owner@example.com').user,138,deleted.product.version).data).toEqual(migrated);
     expect(reopened.product(24).published).toEqual(published);
   });
 });
@@ -241,7 +241,7 @@ describe('simpler draft editing and photos',()=>{
     },()=>{});
     const data={...emptyProduct(),names:{en:'Retry ring',ru:'',uk:''}};
     await expect(writer.save(data)).rejects.toThrow('Connection lost');
-    const saved=await writer.save(data);expect(saved.data.sku).toBe('P138');expect(store.list()).toHaveLength(109);
+    const saved=await writer.save(data);expect(saved.data.sku).toBe('D138');expect(store.list()).toHaveLength(109);
   });
   test('a stale autosave pauses further writes and never overwrites another editor',async()=>{
     const store=setup(),owner=store.login('owner@example.com').user,initial=store.product(24);let calls=0;
@@ -264,5 +264,56 @@ describe('simpler draft editing and photos',()=>{
     expect(await command.exited).toBe(0);
     const input=new Uint8Array(await Bun.file(target).arrayBuffer());expect(isHeic(input)).toBe(true);
     const jpeg=await convertHeic(input);expect(imageExtension(jpeg)).toBe('jpg');
+  });
+});
+
+
+describe('permanent SKU assignment at publication',()=>{
+  test('drafts and deleted drafts do not consume permanent SKU numbers; publication order assigns them',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    const ready={...emptyProduct(),names:{en:'Ready ring',ru:'',uk:''},price:2300,images:[store.product(24).data.images[0]!]};
+    const a=store.create(owner,ready),b=store.create(owner,ready);
+    store.deleteDraft(owner,a.data.id,a.version);
+    const c=store.create(owner,ready);
+    expect([a.data.sku,b.data.sku,c.data.sku]).toEqual(['D138','D139','D140']);
+    const first=store.publish(owner,c.data.id,c.version),second=store.publish(owner,b.data.id,b.version);
+    expect(first.data).toMatchObject({id:140,sku:'P138'});expect(first.published?.sku).toBe('P138');
+    expect(second.data).toMatchObject({id:139,sku:'P139'});expect(second.published?.sku).toBe('P139');
+    expect(store.restoreDraft(owner,a.data.id,store.trash()[0]!.version).data.sku).toBe('D138');
+    const third=store.publish(owner,a.data.id,store.product(a.data.id).version);expect(third.data.sku).toBe('P140');
+  });
+  test('editing, repeated publication and restoring pre-publication history retain the permanent SKU',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    const draft=store.create(owner,{...emptyProduct(),names:{en:'Original draft name',ru:'',uk:''}});
+    const saved=store.save(owner,draft.data.id,{...draft.data,names:{...draft.data.names,en:'Published name'},price:1500,images:[store.product(24).data.images[0]!] },draft.version);
+    const revision=store.history(draft.data.id)[0]!;
+    const published=store.publish(owner,draft.data.id,saved.version);
+    expect(published.data.sku).toBe('P138');
+    const restored=store.restore(owner,published.data.id,revision.id,published.version);
+    expect(restored.data).toMatchObject({sku:'P138',names:{en:'Original draft name'},price:null});expect(restored.published?.sku).toBe('P138');
+    const ready=store.save(owner,restored.data.id,{...restored.data,sku:'P999',id:999,price:1600,images:[store.product(24).data.images[0]!]},restored.version);
+    const republished=store.publish(owner,ready.data.id,ready.version);
+    expect(republished.data).toMatchObject({id:draft.data.id,sku:'P138',price:1600});
+    expect(store.publish(owner,republished.data.id,republished.version).data.sku).toBe('P138');
+    const next=store.create(owner,{...ready.data,names:{en:'Next ring',ru:'',uk:''}});
+    expect(store.publish(owner,next.data.id,next.version).data.sku).toBe('P139');
+  });
+  test('failed or unauthorized publication never allocates a permanent SKU',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    store.invite(owner,'editor@example.com','editor');const editor=store.login('editor@example.com').user;
+    const bad=store.create(owner,{...emptyProduct(),names:{en:'Incomplete',ru:'',uk:''}});
+    expect(()=>store.publish(owner,bad.data.id,bad.version)).toThrow('добавьте цену');expect(store.product(bad.data.id).data.sku).toBe('D138');
+    const ready=store.create(owner,{...bad.data,price:2300,images:[store.product(24).data.images[0]!]});
+    expect(()=>store.publish(editor,ready.data.id,ready.version)).toThrow('нет прав публикации');
+    expect(store.product(ready.data.id).data.sku).toBe('D139');expect(store.publish(owner,ready.data.id,ready.version).data.sku).toBe('P138');
+  });
+  test('SKU reservations and assignments survive restarts and preserve every existing published SKU',async()=>{
+    const folder=await mkdtemp(join(tmpdir(),'luminore-sku-test-'));folders.push(folder);const file=join(folder,'catalogue.sqlite');
+    const first=new AdminStore(file,'owner@example.com'),owner=first.login('owner@example.com').user;
+    const ready={...emptyProduct(),names:{en:'Restart ring',ru:'',uk:''},price:1200,images:[first.product(24).data.images[0]!]};
+    const draft=first.create(owner,ready);expect(first.publish(owner,draft.data.id,draft.version).data.sku).toBe('P138');first.close();
+    const second=new AdminStore(file,'owner@example.com');stores.push(second);
+    for(const product of products)expect(second.product(product.id).data.sku).toBe(product.sku);
+    const next=second.create(second.login('owner@example.com').user,ready);expect(second.publish(owner,next.data.id,next.version).data.sku).toBe('P139');
   });
 });
