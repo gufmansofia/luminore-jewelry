@@ -8,4 +8,8 @@ The website can consume only approved snapshots during its build by setting `ADM
 
 The Google stock spreadsheet is `1QSFCK1olOhxoxPO004xyABNHbVxB2xD8P_FexZikEJ4`, tab `Stock`, headers on row 6, data from row 7, columns A:O. Drafts must never be sent there. A copied workbook must be used for the end-to-end test. Native tools in a chat do not constitute permanent credentials for the hosted application.
 
-Current rollout limits: owner sign-in, migration to the hosted database, permanent Google Sheets authorization and the Vercel deploy hook still require verification/configuration. Publication is blocked in the online API until the external connections exist. The website integration in this commit is prepared but not activated on the official domain.
+Current rollout limits: owner sign-in, migration to the hosted database, permanent Google Sheets authorization and the complete live publication flow still require verification/configuration. The authorized Vercel main-branch hook has been created and stored as a Sites runtime secret; it has not been triggered. Publication is blocked in the online API until the external connections exist. The website integration in this commit is prepared but not activated on the official domain.
+
+Publication additionally requires `PUBLICATION_ENABLED=true` after verification. It remains unset during rollout. An interrupted catalogue import can resume from the same transfer file after reloading; existing team edits are preserved. Publication delivery uses a bounded lease to prevent overlapping retries and resumes without duplicating the permanent SKU or a synchronized sheet row.
+
+A separate test workbook and Apps Script project have been staged. The Google deployment is waiting for its authorization dialog; no script writes have been made to the working spreadsheet.
