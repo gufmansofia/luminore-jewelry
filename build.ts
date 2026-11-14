@@ -4,7 +4,7 @@ import plugin from "bun-plugin-tailwind";
 import { existsSync } from "fs";
 import { rm, cp } from "fs/promises";
 import path from "path";
-import { buildSeo } from "./scripts/build-seo";
+import { syncAdminCatalogue } from "./scripts/sync-admin-catalogue";
 import { checkFonts } from "./scripts/check-fonts";
 
 // Print help text if requested
@@ -127,6 +127,8 @@ console.log("\n🚀 Starting build process...\n");
 
 // Parse CLI arguments with our magical parser
 const cliConfig = parseArgs();
+const adminCatalogue=await syncAdminCatalogue();
+const {buildSeo}=await import("./scripts/build-seo");
 const outdir = cliConfig.outdir || path.join(process.cwd(), "dist");
 
 if (existsSync(outdir)) {
@@ -208,6 +210,7 @@ if (existsSync(vercelJsonPath)) {
 }
 
 await buildSeo(outdir);
+await Bun.write(path.join(outdir,".well-known/luminore-catalogue.json"),JSON.stringify({publications:adminCatalogue.publications??{}}));
 await checkFonts(outdir);
 
 console.table(outputTable);

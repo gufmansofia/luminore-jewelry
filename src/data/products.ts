@@ -1,3 +1,5 @@
+import adminCatalogue from './admin-catalogue.json';
+import {mergeAdminProducts,type PublishedAdminProduct} from './admin-products';
 import stockFacts from "./stock-facts.json";
 import { approvedPrices } from "./approved-prices";
 import { stockProducts } from "./stock-products";
@@ -5,6 +7,9 @@ import { spotlightPieces } from "./spotlight";
 import { luminoreProducts } from "./luminore-products";
 
 export interface Product {
+  adminManaged?: boolean;
+  adminKids?: boolean;
+  adminPhotoOverride?: boolean;
   sourceSheetRow?: number;
   listedCarat?: string;
   listedWeight?: number | null;
@@ -689,7 +694,7 @@ const legacyProducts: Product[] = [
 
 // Replace the entire historical Luminore selection with the latest owner catalogue.
 // RNG-034 is the original Zoke oval ring, retained with every other Zoke record.
-export const products: Product[] = [
+export const products: Product[] = mergeAdminProducts([
   ...luminoreProducts,
   ...legacyProducts.filter(product => product.sourceBrand === 'Zoke' || product.sourceCode === 'RNG-034'),
-];
+], adminCatalogue.products as PublishedAdminProduct[]);

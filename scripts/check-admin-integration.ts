@@ -1,0 +1,10 @@
+import {test,expect} from 'bun:test';
+import {mergeAdminProducts,type PublishedAdminProduct} from '../src/data/admin-products';
+import {products} from '../src/data/products';
+import {productName,productDescription} from '../src/lib/product-copy';
+import {isKidsCollectionProduct} from '../src/data/kids-collection';
+const data=(base=products[0]!):PublishedAdminProduct=>({id:base.id,sku:base.sku,brand:'Luminore',category:'Pendants',names:{en:'Changed pendant',ru:'Подвеска',uk:'Підвіска'},descriptions:{en:'Approved copy.',ru:'Описание.',uk:'Опис.'},price:2400,totalCarat:1.85,metal:'18 karat white gold',stoneType:'Lab-Grown Diamond',cut:'Round',colour:'F',clarity:'VVS',size:'',grossWeight:4.25,goldWeight:4,mainStoneCarat:1,paveCarat:0.85,certificate:'IGI',certificateNumber:'123',chainIncluded:true,kids:true,images:['https://luminore-jewelry-admin.sgufman06.chatgpt.site/media/example.jpg'],altText:'Pendant'});
+test('empty admin catalogue leaves the published inventory intact',()=>expect(mergeAdminProducts(products,[])).toEqual(products));
+test('approved edits preserve card identity, price, translations, category and Kids filter',()=>{const incoming=data(),result=mergeAdminProducts(products,[incoming]),p=result.find(p=>p.sku===incoming.sku)!;expect(result.length).toBe(products.length);expect(p.id).toBe(incoming.id);expect(p.priceUsd).toBe(2400);expect(productName(p,'ru')).toBe('Подвеска');expect(productDescription(p,'en',false,false)).toBe('Approved copy.');expect(p.categoryEn).toBe('Pendants');expect(isKidsCollectionProduct(p)).toBe(true);});
+test('new permanent SKU adds a separate product without changing the rest',()=>{const incoming={...data(),id:999,sku:'P999'},result=mergeAdminProducts(products,[incoming]);expect(result).toHaveLength(products.length+1);expect(result.filter(p=>p.id!==999)).toEqual(products);});
+test('a conflicting SKU or ID fails the build rather than overwriting another item',()=>{expect(()=>mergeAdminProducts(products,[{...data(),id:999}])).toThrow('identity conflict');expect(()=>mergeAdminProducts(products,[{...data(),sku:'P999'}])).toThrow('identity conflict');});

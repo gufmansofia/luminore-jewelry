@@ -16,7 +16,7 @@ const images = (await import('../src/data/image-manifest.json')).default;
 for (const image of Object.values(images)) for (const variant of image.variants) urls.add(variant.src);
 // Compare actual directory entries so macOS also catches paths that fail on Linux.
 const publicFiles = new Set(new Bun.Glob("**/*").scanSync({cwd:resolve("public"),onlyFiles:true}));
-const missing = [...urls].filter(url => !publicFiles.has(url.slice(1)));
+const missing = [...urls].filter(url => !url.startsWith('https://') && !publicFiles.has(url.slice(1)));
 if (missing.length) {
   console.error("Missing assets or filename case mismatches:\n" + missing.join("\n"));
   process.exit(1);

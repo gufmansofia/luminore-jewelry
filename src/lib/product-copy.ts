@@ -12,7 +12,7 @@ const shortEnglishNames: Record<number,string> = {
  47:'Vivid green halo earrings · 6 ct',48:'Vivid green halo ring · 4.5 ct',
 };
 export const productName = (p: Product, l: Language) => {
- const name=p.id===7?choose(l,p.nameEn,'Кольцо-солитер с овальным бриллиантом 2 ct','Каблучка-солітер з овальним діамантом 2 ct'):choose(l,isLuminoreProduct(p)?p.nameEn:shortEnglishNames[p.id]??p.nameEn,p.name,p.nameUk);
+ const name=p.adminManaged?choose(l,p.nameEn,p.name,p.nameUk):p.id===7?choose(l,p.nameEn,'Кольцо-солитер с овальным бриллиантом 2 ct','Каблучка-солітер з овальним діамантом 2 ct'):choose(l,isLuminoreProduct(p)?p.nameEn:shortEnglishNames[p.id]??p.nameEn,p.name,p.nameUk);
  // Keep weights in descriptions/specifications, not in customer-facing names.
  return name.replace(/\s*(?:[·,]\s*)?\d+(?:[.,]\d+)?\s*(?:ct\b|кар\.)(?:\s+(?:total|stones)\b)?/gi,'')
   .replace(/\s*The /g,' ').replaceAll('Three Stones','Three-stone').trim();
@@ -78,7 +78,7 @@ export function productDescription(p: Product, l: Language, natural = false, inc
   'Цей дизайн можна замовити з природними діамантами. Камені, метал, розміри та остаточну вартість узгодимо індивідуально перед замовленням.');
  const n=p.nameEn.toLowerCase();
  let design: [string,string,string] = [productName(p,'en')+'.', productName(p,'ru')+'.',productName(p,'uk')+'.'];
- if(isLuminoreProduct(p)) {
+ if(p.adminManaged||isLuminoreProduct(p)) {
   design=[p.descriptionEn,p.description,p.descriptionUk];
  } else if(p.categoryEn==='Rings') {
   if(/three.stone|three stone|three stones/.test(n)) design=['A three-stone ring with a central stone framed by a pair of side stones.','Кольцо с тремя камнями: центральный камень обрамлён парой боковых.','Каблучка з трьома каменями: центральний камінь обрамлений парою бічних.'];
