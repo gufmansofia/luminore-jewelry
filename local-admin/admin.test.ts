@@ -2,7 +2,9 @@ import { afterEach, describe, expect, test } from 'bun:test';
 import { AdminStore, seedProduct } from './store';
 import { createAdminApi, imageExtension, sessionCookie } from './api';
 import { products } from '../src/data/products';
-import { emptyProduct } from './types';
+import { emptyProduct, publicationMissing, productStatus } from './types';
+import { DraftWriter, draftFingerprint, hasDraftContent } from './draft-writer';
+import { convertHeic, isHeic } from './heic';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -193,5 +195,74 @@ describe('local invitation-only prototype',()=>{
     expect(reopened.list()).toHaveLength(1);expect(reopened.trash()[0]!.data).toEqual(draft);
     expect(reopened.restoreDraft(reopened.login('owner@example.com').user,138,deleted.product.version).data).toEqual(draft);
     expect(reopened.product(24).published).toEqual(published);
+  });
+});
+
+
+describe('simpler draft editing and photos',()=>{
+  test('the gallery accepts more than 16 photos and preserves the whole order',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    const images=Array.from({length:120},(_,i)=>`/Products/photo-${i}.jpg`);
+    const draft=store.create(owner,{...emptyProduct(),names:{en:'Large gallery',ru:'',uk:''},images});
+    expect(draft.data.images).toEqual(images);
+    const reordered=[images[119]!,...images.slice(0,119)];
+    expect(store.save(owner,draft.data.id,{...draft.data,images:reordered},draft.version).data.images).toEqual(reordered);
+  });
+  test('empty forms cannot create products, while photo-only drafts can be saved but not published',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    expect(hasDraftContent(emptyProduct())).toBe(false);
+    expect(()=>store.create(owner,emptyProduct())).toThrow('название или фотографию');
+    const draft=store.create(owner,{...emptyProduct(),images:[store.product(24).data.images[0]!],price:1200});
+    expect(hasDraftContent(draft.data)).toBe(true);
+    expect(publicationMissing(draft.data)).toEqual(['название']);expect(productStatus(draft)).toBe('draft');
+    expect(()=>store.publish(owner,draft.data.id,draft.version)).toThrow('название');
+    const complete=store.save(owner,draft.data.id,{...draft.data,names:{en:'Photo-first ring',ru:'',uk:''}},draft.version);
+    expect(productStatus(complete)).toBe('ready');
+    expect(productStatus(store.publish(owner,complete.data.id,complete.version))).toBe('published');
+  });
+  test('queued saves create one draft and serialize edits against the latest version',async()=>{
+    const store=setup(),owner=store.login('owner@example.com').user,calls:(number|null)[]=[];
+    let release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;});
+    const writer=new DraftWriter(null,async(record,data,key)=>{calls.push(record?.version??null);if(!record)await gate;return record?store.save(owner,record.data.id,data,record.version):store.create(owner,data,key);},()=>{});
+    const first={...emptyProduct(),names:{en:'First name',ru:'',uk:''}};
+    const a=writer.save(first),b=writer.save({...first,names:{...first.names,en:'Latest name'},price:2300});
+    await Promise.resolve();expect(calls).toEqual([null]);release();await a;const saved=await b;
+    expect(calls).toEqual([null,1]);expect(saved.data.names.en).toBe('Latest name');expect(saved.data.price).toBe(2300);
+    expect(draftFingerprint({...first,names:{...first.names,en:'Latest name'},price:2300})).toBe(draftFingerprint(saved.data));
+    expect(store.list()).toHaveLength(109);
+    const same=await writer.save({...saved.data,names:{...saved.data.names,en:' Latest name '}});
+    expect(same.version).toBe(2);expect(draftFingerprint(same.data)).toBe(draftFingerprint(saved.data));
+  });
+  test('a lost creation response can be retried without duplicating the product',async()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;let loseResponse=true;
+    const writer=new DraftWriter(null,async(record,data,key)=>{
+      const saved=record?store.save(owner,record.data.id,data,record.version):store.create(owner,data,key);
+      if(loseResponse){loseResponse=false;throw new Error('Connection lost');}return saved;
+    },()=>{});
+    const data={...emptyProduct(),names:{en:'Retry ring',ru:'',uk:''}};
+    await expect(writer.save(data)).rejects.toThrow('Connection lost');
+    const saved=await writer.save(data);expect(saved.data.sku).toBe('P138');expect(store.list()).toHaveLength(109);
+  });
+  test('a stale autosave pauses further writes and never overwrites another editor',async()=>{
+    const store=setup(),owner=store.login('owner@example.com').user,initial=store.product(24);let calls=0;
+    const other=store.save(owner,24,{...initial.data,price:4567},initial.version);
+    const writer=new DraftWriter(initial,async(record,data)=>{calls++;return store.save(owner,24,data,record!.version);},()=>{});
+    await expect(writer.save({...initial.data,price:1111})).rejects.toMatchObject({status:409});
+    await expect(writer.save({...initial.data,price:2222})).rejects.toMatchObject({status:409});
+    expect(calls).toBe(1);expect(store.product(24).data.price).toBe(other.data.price);
+  });
+  test('HEIC detection accepts HEVC still images and rejects video and AVIF containers',()=>{
+    const box=(brand:string)=>new Uint8Array([0,0,0,20,...Buffer.from('ftyp'+brand),0,0,0,0,...Buffer.from(brand)]);
+    expect(isHeic(box('heic'))).toBe(true);expect(isHeic(box('heix'))).toBe(true);
+    expect(isHeic(box('mp42'))).toBe(false);expect(isHeic(box('avif'))).toBe(false);
+    expect(isHeic(new Uint8Array([1,2,3]))).toBe(false);
+  });
+  test.skipIf(process.platform!=='darwin')('a real HEIC file is converted locally to a browser-viewable JPEG',async()=>{
+    const folder=await mkdtemp(join(tmpdir(),'luminore-heic-test-'));folders.push(folder);
+    const target=join(folder,'test.heic');
+    const command=Bun.spawn(['/usr/bin/sips','-Z','64','-s','format','heic','public/Products/Rings/Yellow Pear Ring (P024)/yellow-pear-front-v1.png','--out',target],{stdout:'ignore',stderr:'ignore'});
+    expect(await command.exited).toBe(0);
+    const input=new Uint8Array(await Bun.file(target).arrayBuffer());expect(isHeic(input)).toBe(true);
+    const jpeg=await convertHeic(input);expect(imageExtension(jpeg)).toBe('jpg');
   });
 });

@@ -1,0 +1,10 @@
+import React, { useState } from 'react';
+import { formatCarat } from '../src/lib/carat';
+import { categories, type ProductData, type Locale } from './types';
+import { Icon, Photo, usd } from './ui';
+
+export function ProductPreview({data:p,locale,setLocale,onClose}:{data:ProductData;locale:Locale;setLocale:(l:Locale)=>void;onClose:()=>void}){
+  const [image,setImage]=useState(0);
+  return <div className="studio-preview"><button className="studio-back" onClick={onClose}><Icon name="arrow"/>К редактированию</button><div className="studio-preview-title"><p className="studio-eyebrow">ПРЕДПРОСМОТР КАРТОЧКИ</p><div className="studio-language-tabs" role="group" aria-label="Язык предпросмотра">{(['en','ru','uk'] as Locale[]).map(l=><button key={l} aria-pressed={l===locale} onClick={()=>setLocale(l)}>{l.toUpperCase()}</button>)}</div></div><div className="studio-preview-layout"><div><div className="studio-preview-image"><Photo src={p.images[image]||p.images[0]} name={p.names[locale]||p.names.en} eager/></div>{p.images.length>1&&<div className="studio-preview-thumbs">{p.images.map((src,i)=><button key={src} aria-label={`Ракурс ${i+1}`} aria-pressed={i===image} onClick={()=>setImage(i)}><Photo src={src} name={`Ракурс ${i+1}`}/></button>)}</div>}</div><div className="studio-preview-copy"><p className="studio-eyebrow">{p.brand} · {categories[p.category]}</p><h1>{p.names[locale]||p.names.en||'Название украшения'}</h1>{p.totalCarat!==null&&<p className="studio-preview-weight">{p.category==='Earrings'?'Total stone weight: ':''}{formatCarat(p.totalCarat)} ct</p>}<p className="studio-preview-price">{usd(p.price)}</p><p className="studio-preview-description">{p.descriptions[locale]||p.descriptions.en}</p><dl>{[['SKU',p.sku],['Металл',p.metal],['Тип камня',p.stoneType],['Огранка',p.cut],['Цвет',p.colour],['Чистота',p.clarity],['Коллекция',p.kids?'Kids Collection':'']].filter(([,v])=>v).map(([key,value])=><div key={key}><dt>{key}</dt><dd>{value}</dd></div>)}</dl><button className="studio-secondary" onClick={onClose}>Продолжить редактирование</button></div></div></div>;
+}
+

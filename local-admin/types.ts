@@ -62,9 +62,13 @@ export interface Revision {
 }
 export interface SessionInfo { user: Member; localOnly: true }
 export function productStatus(p: AdminProduct) {
-  return !p.published ? 'draft' : p.hasChanges ? 'changed' : 'published';
+  return !p.published || p.hasChanges ? (publicationMissing(p.data).length ? 'draft' : 'ready') : 'published';
 }
-export const statusLabels = { draft: 'Черновик', changed: 'Есть изменения', published: 'Опубликовано' };
+export const statusLabels = { draft: 'Черновик', ready: 'Готово к публикации', published: 'Опубликовано локально' };
+export function publicationMissing(p: ProductData): string[] {
+  return [!p.names.en.trim() ? 'название' : '', !p.price ? 'цену' : '', !p.images.length ? 'фото' : ''].filter(Boolean);
+}
+export const productTitle = (p: ProductData) => p.names.en.trim() || 'Без названия';
 export function emptyProduct(): ProductData {
   return {
     id: 0, sku: 'Авто', brand: 'Luminore', category: 'Rings', names: { en: '', ru: '', uk: '' }, descriptions: { en: '', ru: '', uk: '' },

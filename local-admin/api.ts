@@ -2,6 +2,7 @@ import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { AdminError, type AdminStore } from './store';
+import { convertHeic, isHeic } from './heic';
 
 export const sessionCookie = 'luminore_local_admin';
 const cookieValue = (req: Request) => req.headers.get('cookie')?.split(';').map(p => p.trim()).find(p => p.startsWith(`${sessionCookie}=`))?.slice(sessionCookie.length + 1);
@@ -22,7 +23,7 @@ const json = (value: unknown, status=200, headers: Record<string,string>={}) => 
 async function body(req: Request) {
   if (!req.headers.get('content-type')?.startsWith('application/json')) throw new AdminError(415, 'Ожидаются данные карточки.');
   const raw = await req.text();
-  if (raw.length > 200_000) throw new AdminError(413, 'Слишком много данных. Фотографии загружаются отдельно.');
+  if (raw.length > 8_000_000) throw new AdminError(413, 'Слишком много данных. Фотографии загружаются отдельно.');
   try { return JSON.parse(raw); } catch { throw new AdminError(400, 'Не удалось прочитать данные.'); }
 }
 export function createAdminApi(store: AdminStore, uploadDirectory: string) {
@@ -43,7 +44,7 @@ export function createAdminApi(store: AdminStore, uploadDirectory: string) {
       }
       if (pathname === '/api/products') {
         if (method === 'GET') return json({products:store.list(),trash:store.trash()});
-        if (method === 'POST') return json({product:store.create(actor,(await body(req)).data)},201);
+        if (method === 'POST') { const p=await body(req); return json({product:store.create(actor,p.data,p.draftKey)},201); }
       }
       const product = pathname.match(/^\/api\/products\/(\d+)(?:\/(history|publish|restore|restore-draft))?$/);
       if (product) {
@@ -65,8 +66,10 @@ export function createAdminApi(store: AdminStore, uploadDirectory: string) {
         const form = await req.formData(), file = form.get('photo');
         if (!(file instanceof File) || !file.size) throw new AdminError(400, 'Выберите фотографию.');
         if (file.size > 15 * 1024 * 1024) throw new AdminError(413, 'Размер фотографии должен быть не больше 15 МБ.');
-        const bytes = new Uint8Array(await file.arrayBuffer()), ext=imageExtension(bytes);
-        if (!ext) throw new AdminError(415, 'Поддерживаются фотографии JPG, PNG и WebP.');
+        let bytes:Uint8Array = new Uint8Array(await file.arrayBuffer());
+        if (isHeic(bytes)) bytes = await convertHeic(bytes);
+        const ext=imageExtension(bytes);
+        if (!ext) throw new AdminError(415, 'Поддерживаются фотографии JPG, PNG, WebP и HEIC. Видео не принимаются.');
         await mkdir(uploadDirectory,{recursive:true});
         const name=`${randomUUID()}.${ext}`;
         await Bun.write(join(uploadDirectory,name),bytes);

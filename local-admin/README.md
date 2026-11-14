@@ -22,11 +22,13 @@ This localhost-only prototype deliberately follows the owner's email-only entry 
 
 - All 108 products are copied once from the current curated catalogue, retaining their IDs, SKUs, prices, exact weights, multilingual copy, photos and collections.
 - New products receive an automatic unique SKU. Drafts can have incomplete pricing or photography; local publication requires a positive price and a photograph.
-- Saving a new piece or edited card closes the editor and opens **Черновики**, with filters cleared and the saved item first. A **Черновик** badge appears on its photograph. Failed saves keep the editor open.
+- Edits autosave into the local draft after a short pause. The editor shows pending, saving, saved or failed status. Empty new forms create nothing; a name or successful photo upload starts a draft. Initial creation is idempotent, saves are serialized, and stale versions pause writes rather than overwrite another editor. **Сохранить и закрыть** waits for saving, then opens **Черновики** with filters cleared and the saved item first. Failed saves keep the editor open.
 - Existing edits are saved as drafts, separate from the published snapshot. Owners and Publishers may publish into the **local copy only**. Editors cannot publish or manage invitations.
 - A saved, unpublished draft can be deleted after confirmation and restored from **Черновики → Корзина** with the same SKU, photos and history. Deletion is recoverable; SKUs of deleted drafts are not reused. All invited editors can manage shared drafts.
 - For an existing published piece, **Отменить черновые изменения** discards only its draft edits. The published copy is retained. Saved discarded edits remain recoverable through the owner's revision history. Unsaved form inputs can also be cancelled after confirmation.
-- Photos can be uploaded, removed from a gallery, made primary or reordered. Uploads accept JPEG, PNG and WebP, up to 15 MB each. Original site files are never deleted or overwritten.
+- Photo count has no per-product limit. Batch uploads run one file at a time with progress and per-file retry/removal. Uploaded File objects are released from the queue. JPEG, PNG, WebP and HEIC/HEIF photos are accepted, up to 15 MB each. HEIC is converted on the Mac with its built-in `sips` tool; videos are rejected. Photo controls support main-image selection, mouse drag-and-drop, touch hold-and-drag, accessible previous/next buttons, and undoing removal. The full gallery remains visible. Original site files are never deleted or overwritten.
+- The editor exposes only the essential fields initially. Category-specific details, translations, certificates and history open on demand. Existing hidden data is retained when switching category. New drafts default to lab-grown diamond and 18 karat white gold; existing pieces, including the natural-diamond ring, are retained.
+- Incomplete drafts show what is missing; a positive price, English name and at least one photo are required for local publication. Completed drafts are marked ready. Invitations are in the owner’s account menu; Catalogue and Drafts remain in the main navigation.
 - Changes, history, sessions and invitations persist in `.local-admin/catalogue.sqlite`. New photos are stored in `.local-admin/uploads/`. Both are ignored by Git and sit outside `public/`.
 - Optimistic version checks prevent silently overwriting another person's newer changes. Owners can restore a preceding saved version as a draft.
 - Revoking access terminates that member's sessions. The owner's access cannot be removed from the interface.
@@ -41,4 +43,4 @@ The server binds to `127.0.0.1` only and refuses production/Vercel execution. Mu
 bun run test:admin
 ```
 
-The suite checks invitation restrictions, server-side roles, revocation, source isolation, exact weights, concurrent edits, automatic SKU allocation, draft publication, restoration, upload handling and persistence.
+The suite checks invitation restrictions, server-side roles, revocation, source isolation, exact weights, concurrent edits, automatic SKU allocation, draft publication, restoration, upload handling, galleries over 16 photos, photo-only drafts, idempotent and serialized autosaves, HEIC conversion, and persistence. The native HEIC encoding test needs access to macOS image services.

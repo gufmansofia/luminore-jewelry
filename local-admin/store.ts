@@ -4,7 +4,7 @@ import { products as websiteProducts } from '../src/data/products';
 import type { Product } from '../src/data/products';
 import { productDescription, productName } from '../src/lib/product-copy';
 import { isKidsCollectionProduct } from '../src/data/kids-collection';
-import { categories, type AdminProduct, type DraftDeletion, type Member, type ProductData, type Revision } from './types';
+import { categories, publicationMissing, type AdminProduct, type DraftDeletion, type Member, type ProductData, type Revision } from './types';
 
 export class AdminError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -40,9 +40,8 @@ function validateProduct(input: unknown, id: number, sku: string): ProductData {
   if (!['Luminore', 'Zoke'].includes(p.brand)) throw new AdminError(400, 'Выберите бренд.');
   if (!Object.hasOwn(categories, p.category)) throw new AdminError(400, 'Выберите категорию.');
   const names = { en: text(p.names?.en, 180), ru: text(p.names?.ru, 180), uk: text(p.names?.uk, 180) };
-  if (!names.en) throw new AdminError(400, 'Добавьте название украшения на английском.');
   const images = Array.isArray(p.images) ? p.images : [];
-  if (images.length > 16 || images.some((src: unknown) => typeof src !== 'string' || !/^\/(?:Products\/|optimized\/|admin-uploads\/[a-f0-9-]+\.(?:jpg|png|webp)$)/.test(src) || src.includes('..') || src.includes('\\'))) {
+  if (images.some((src: unknown) => typeof src !== 'string' || !/^\/(?:Products\/|optimized\/|admin-uploads\/[a-f0-9-]+\.(?:jpg|png|webp)$)/.test(src) || src.includes('..') || src.includes('\\'))) {
     throw new AdminError(400, 'Добавьте фотографии через кнопку загрузки.');
   }
   return {
@@ -69,7 +68,8 @@ export class AdminStore {
       CREATE TABLE IF NOT EXISTS members(email TEXT PRIMARY KEY, role TEXT NOT NULL, status TEXT NOT NULL, invitedAt TEXT NOT NULL, lastLoginAt TEXT);
       CREATE TABLE IF NOT EXISTS sessions(tokenHash TEXT PRIMARY KEY, email TEXT NOT NULL REFERENCES members(email), expiresAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, sku TEXT UNIQUE NOT NULL, data TEXT NOT NULL, published TEXT, hasChanges INTEGER NOT NULL DEFAULT 0, version INTEGER NOT NULL DEFAULT 1, updatedAt TEXT NOT NULL, updatedBy TEXT NOT NULL, position INTEGER NOT NULL);
-      CREATE TABLE IF NOT EXISTS revisions(id INTEGER PRIMARY KEY AUTOINCREMENT, productId INTEGER NOT NULL REFERENCES products(id), action TEXT NOT NULL, actor TEXT NOT NULL, createdAt TEXT NOT NULL, beforeData TEXT);`);
+      CREATE TABLE IF NOT EXISTS revisions(id INTEGER PRIMARY KEY AUTOINCREMENT, productId INTEGER NOT NULL REFERENCES products(id), action TEXT NOT NULL, actor TEXT NOT NULL, createdAt TEXT NOT NULL, beforeData TEXT);
+      CREATE TABLE IF NOT EXISTS draft_keys(key TEXT PRIMARY KEY, actor TEXT NOT NULL, productId INTEGER NOT NULL REFERENCES products(id));`);
     // Preserve existing local catalogues and invitations when upgrading the prototype.
     const columns = new Set((this.db.query('PRAGMA table_info(products)').all() as { name: string }[]).map(column => column.name));
     this.db.transaction(() => {
@@ -128,11 +128,18 @@ export class AdminStore {
   record(id: number, action: Revision['action'], actor: Member, before: ProductData | null) {
     this.db.query('INSERT INTO revisions(productId, action, actor, createdAt, beforeData) VALUES (?, ?, ?, ?, ?)').run(id, action, actor.email, now(), before ? JSON.stringify(before) : null);
   }
-  create(actor: Member, input: unknown) {
+  create(actor: Member, input: unknown, draftKey?: unknown) {
     return this.db.transaction(() => {
+      if (draftKey !== undefined) {
+        if (typeof draftKey !== 'string' || !/^[a-f0-9-]{36}$/.test(draftKey)) throw new AdminError(400, 'Откройте новую карточку и повторите сохранение.');
+        const existing = this.db.query('SELECT productId FROM draft_keys WHERE key=? AND actor=?').get(draftKey, actor.email) as { productId:number } | null;
+        if (existing) { const p=this.product(existing.productId); if(p.version!==1) throw new AdminError(409,'Карточка уже сохранена. Откройте её в черновиках.'); return p; }
+      }
       const { n } = this.db.query('SELECT coalesce(max(id),0)+1 AS n FROM products').get() as { n: number };
       const p = validateProduct(input, n, `P${String(n).padStart(3, '0')}`);
+      if (!p.names.en && !p.images.length) throw new AdminError(400, 'Добавьте название или фотографию, чтобы создать черновик.');
       this.db.query('INSERT INTO products(id,sku,data,published,hasChanges,version,updatedAt,updatedBy,position) VALUES (?, ?, ?, NULL, 1, 1, ?, ?, -1)').run(p.id, p.sku, JSON.stringify(p), now(), actor.email);
+      if (draftKey) this.db.query('INSERT INTO draft_keys VALUES (?, ?, ?)').run(String(draftKey),actor.email,p.id);
       this.record(p.id, 'created', actor, null);
       return this.product(p.id);
     })();
@@ -150,7 +157,8 @@ export class AdminStore {
     if (actor.role === 'editor') throw new AdminError(403, 'У вас нет прав публикации. Черновик может опубликовать владелец.');
     return this.db.transaction(() => {
       const p = this.product(id); this.version(p, version);
-      if (!p.data.price || !p.data.images.length) throw new AdminError(400, 'Для публикации добавьте цену и хотя бы одну фотографию.');
+      const missing=publicationMissing(p.data);
+      if (missing.length) throw new AdminError(400, `Для публикации добавьте ${missing.join(', ')}.`);
       this.db.query('UPDATE products SET published=data, hasChanges=0, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(now(), actor.email, id);
       this.record(id, 'published', actor, p.data);
       return this.product(id);
