@@ -15,3 +15,5 @@ Publication additionally requires `PUBLICATION_ENABLED=true` after verification.
 A separate test workbook and Apps Script project have been staged. The Google deployment is waiting for its authorization dialog; no script writes have been made to the working spreadsheet.
 
 Google Sheets API v4 has been staged in the Apps Script service picker. Its displayed API terms and the Google authorization must still be confirmed by the owner before the live test. All independent code checks pass; no end-to-end live delivery is claimed before that test.
+
+Multiple catalogue owners are supported by the primary `ADMIN_OWNER_EMAIL` plus optional comma-separated `ADMIN_OWNER_EMAILS` runtime secrets. Owners sign in using their own verified ChatGPT email. All configured owners appear in team access management after an owner signs in; adding an additional owner preserves the primary owner. Emails are not hard-coded into website source.
