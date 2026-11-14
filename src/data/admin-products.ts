@@ -3,8 +3,11 @@ const categoryNames:Record<string,[string,string]>={Rings:['Кольца','Ка�
 export interface PublishedAdminProduct{
  id:number;sku:string;brand:'Luminore'|'Zoke';category:string;names:{en:string;ru:string;uk:string};descriptions:{en:string;ru:string;uk:string};price:number;totalCarat:number|null;metal:string;stoneType:string;cut:string;colour:string;clarity:string;size:string;grossWeight:number|null;goldWeight:number|null;mainStoneCarat:number|null;paveCarat:number|null;certificate:string;certificateNumber:string;chainIncluded:boolean|null;kids:boolean;images:string[];altText:string;
 }
-export function mergeAdminProducts(baseline:Product[],incoming:PublishedAdminProduct[]):Product[]{
- const result=[...baseline];
+export interface RemovedAdminProduct {id:number;sku:string}
+export function mergeAdminProducts(baseline:Product[],incoming:PublishedAdminProduct[],removed:RemovedAdminProduct[]=[]):Product[]{
+ const removedSkus=new Set<string>();
+ for(const p of removed){if(!Number.isInteger(p.id)||p.id<1||!/^P\d+$/.test(p.sku)||removedSkus.has(p.sku)||incoming.some(row=>row.sku===p.sku||row.id===p.id)||baseline.some(row=>(row.id===p.id&&row.sku!==p.sku)||(row.sku===p.sku&&row.id!==p.id)))throw new Error('Invalid removed product identity');removedSkus.add(p.sku);}
+ const result=baseline.filter(p=>!removedSkus.has(p.sku));
  for(const p of incoming){
   if(!Number.isInteger(p.id)||p.id<1||!/^P\d+$/.test(p.sku)||!categoryNames[p.category]||!p.names.en.trim()||!Number.isFinite(p.price)||p.price<=0)throw new Error('Invalid published product');
   const index=result.findIndex(row=>row.sku===p.sku),base=index<0?undefined:result[index];

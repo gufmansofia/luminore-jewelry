@@ -697,4 +697,4 @@ const legacyProducts: Product[] = [
 export const products: Product[] = mergeAdminProducts([
   ...luminoreProducts,
   ...legacyProducts.filter(product => product.sourceBrand === 'Zoke' || product.sourceCode === 'RNG-034'),
-], adminCatalogue.products as PublishedAdminProduct[]);
+], adminCatalogue.products as PublishedAdminProduct[], (adminCatalogue as {removed?:{id:number;sku:string}[]}).removed||[]);
