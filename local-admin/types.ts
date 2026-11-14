@@ -48,11 +48,14 @@ export interface AdminProduct {
   updatedAt: string;
   updatedBy: string;
   position: number;
+  deletedAt: string | null;
+  deletedBy: string | null;
 }
+export interface DraftDeletion { kind: 'deleted' | 'discarded'; product: AdminProduct }
 export interface Revision {
   id: number;
   productId: number;
-  action: 'created' | 'saved' | 'published' | 'restored';
+  action: 'created' | 'saved' | 'published' | 'restored' | 'deleted' | 'undeleted' | 'discarded';
   actor: string;
   createdAt: string;
   restorable: boolean;

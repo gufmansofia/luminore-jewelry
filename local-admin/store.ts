@@ -4,7 +4,7 @@ import { products as websiteProducts } from '../src/data/products';
 import type { Product } from '../src/data/products';
 import { productDescription, productName } from '../src/lib/product-copy';
 import { isKidsCollectionProduct } from '../src/data/kids-collection';
-import { categories, type AdminProduct, type Member, type ProductData, type Revision } from './types';
+import { categories, type AdminProduct, type DraftDeletion, type Member, type ProductData, type Revision } from './types';
 
 export class AdminError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -56,10 +56,10 @@ function validateProduct(input: unknown, id: number, sku: string): ProductData {
     kids: p.kids === true, images: [...new Set(images)] as string[], altText: text(p.altText) || names.en,
   };
 }
-type ProductRow = { id: number; sku: string; data: string; published: string | null; hasChanges: number; version: number; updatedAt: string; updatedBy: string; position: number };
+type ProductRow = { id: number; sku: string; data: string; published: string | null; hasChanges: number; version: number; updatedAt: string; updatedBy: string; position: number; deletedAt: string | null; deletedBy: string | null };
 function decode(row: ProductRow): AdminProduct {
   return { data: JSON.parse(row.data), published: row.published ? JSON.parse(row.published) : null, hasChanges: !!row.hasChanges,
-    version: row.version, updatedAt: row.updatedAt, updatedBy: row.updatedBy, position: row.position };
+    version: row.version, updatedAt: row.updatedAt, updatedBy: row.updatedBy, position: row.position, deletedAt: row.deletedAt, deletedBy: row.deletedBy };
 }
 export class AdminStore {
   db: Database;
@@ -70,11 +70,17 @@ export class AdminStore {
       CREATE TABLE IF NOT EXISTS sessions(tokenHash TEXT PRIMARY KEY, email TEXT NOT NULL REFERENCES members(email), expiresAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, sku TEXT UNIQUE NOT NULL, data TEXT NOT NULL, published TEXT, hasChanges INTEGER NOT NULL DEFAULT 0, version INTEGER NOT NULL DEFAULT 1, updatedAt TEXT NOT NULL, updatedBy TEXT NOT NULL, position INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS revisions(id INTEGER PRIMARY KEY AUTOINCREMENT, productId INTEGER NOT NULL REFERENCES products(id), action TEXT NOT NULL, actor TEXT NOT NULL, createdAt TEXT NOT NULL, beforeData TEXT);`);
+    // Preserve existing local catalogues and invitations when upgrading the prototype.
+    const columns = new Set((this.db.query('PRAGMA table_info(products)').all() as { name: string }[]).map(column => column.name));
+    this.db.transaction(() => {
+      if (!columns.has('deletedAt')) this.db.exec('ALTER TABLE products ADD COLUMN deletedAt TEXT');
+      if (!columns.has('deletedBy')) this.db.exec('ALTER TABLE products ADD COLUMN deletedBy TEXT');
+    })();
     const owner = normalizeEmail(ownerEmail);
     this.db.query(`INSERT OR IGNORE INTO members VALUES (?, 'owner', 'active', ?, NULL)`).run(owner, now());
     const count = this.db.query('SELECT count(*) AS n FROM products').get() as { n: number };
     if (!count.n) this.db.transaction(() => {
-      const statement = this.db.query('INSERT INTO products VALUES (?, ?, ?, ?, 0, 1, ?, ?, ?)');
+      const statement = this.db.query('INSERT INTO products(id,sku,data,published,hasChanges,version,updatedAt,updatedBy,position) VALUES (?, ?, ?, ?, 0, 1, ?, ?, ?)');
       seeds.forEach((p, position) => statement.run(p.id, p.sku, JSON.stringify(p), JSON.stringify(p), now(), owner, position));
     })();
   }
@@ -111,10 +117,11 @@ export class AdminStore {
     if (!this.member(email)) throw new AdminError(404, 'Приглашение не найдено.');
     this.db.transaction(() => { this.db.query("UPDATE members SET status='revoked' WHERE email=?").run(email); this.db.query('DELETE FROM sessions WHERE email=?').run(email); })();
   }
-  list() { return (this.db.query('SELECT * FROM products ORDER BY position').all() as ProductRow[]).map(decode); }
-  product(id: number) {
+  list() { return (this.db.query('SELECT * FROM products WHERE deletedAt IS NULL ORDER BY position').all() as ProductRow[]).map(decode); }
+  trash() { return (this.db.query('SELECT * FROM products WHERE deletedAt IS NOT NULL ORDER BY deletedAt DESC').all() as ProductRow[]).map(decode); }
+  product(id: number, includeDeleted = false) {
     const row = this.db.query('SELECT * FROM products WHERE id=?').get(id) as ProductRow | null;
-    if (!row) throw new AdminError(404, 'Украшение не найдено.');
+    if (!row || (row.deletedAt && !includeDeleted)) throw new AdminError(404, 'Украшение не найдено.');
     return decode(row);
   }
   version(p: AdminProduct, value: unknown) { if (p.version !== value) throw new AdminError(409, 'Карточку уже изменили. Откройте её заново, чтобы не потерять чужие правки.'); }
@@ -125,7 +132,7 @@ export class AdminStore {
     return this.db.transaction(() => {
       const { n } = this.db.query('SELECT coalesce(max(id),0)+1 AS n FROM products').get() as { n: number };
       const p = validateProduct(input, n, `P${String(n).padStart(3, '0')}`);
-      this.db.query('INSERT INTO products VALUES (?, ?, ?, NULL, 1, 1, ?, ?, -1)').run(p.id, p.sku, JSON.stringify(p), now(), actor.email);
+      this.db.query('INSERT INTO products(id,sku,data,published,hasChanges,version,updatedAt,updatedBy,position) VALUES (?, ?, ?, NULL, 1, 1, ?, ?, -1)').run(p.id, p.sku, JSON.stringify(p), now(), actor.email);
       this.record(p.id, 'created', actor, null);
       return this.product(p.id);
     })();
@@ -146,6 +153,29 @@ export class AdminStore {
       if (!p.data.price || !p.data.images.length) throw new AdminError(400, 'Для публикации добавьте цену и хотя бы одну фотографию.');
       this.db.query('UPDATE products SET published=data, hasChanges=0, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(now(), actor.email, id);
       this.record(id, 'published', actor, p.data);
+      return this.product(id);
+    })();
+  }
+  deleteDraft(actor: Member, id: number, version: unknown): DraftDeletion {
+    return this.db.transaction((): DraftDeletion => {
+      const p = this.product(id); this.version(p, version);
+      if (p.published) {
+        if (!p.hasChanges) throw new AdminError(400, 'У опубликованной карточки нет черновых изменений. Удалить её этой кнопкой нельзя.');
+        this.db.query('UPDATE products SET data=published, hasChanges=0, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(now(), actor.email, id);
+        this.record(id, 'discarded', actor, p.data);
+        return { kind: 'discarded', product: this.product(id) };
+      }
+      this.db.query('UPDATE products SET deletedAt=?, deletedBy=?, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(now(), actor.email, now(), actor.email, id);
+      this.record(id, 'deleted', actor, p.data);
+      return { kind: 'deleted', product: this.product(id, true) };
+    })();
+  }
+  restoreDraft(actor: Member, id: number, version: unknown) {
+    return this.db.transaction(() => {
+      const p = this.product(id, true); this.version(p, version);
+      if (!p.deletedAt || p.published) throw new AdminError(400, 'Этот черновик не находится в корзине.');
+      this.db.query('UPDATE products SET deletedAt=NULL, deletedBy=NULL, version=version+1, updatedAt=?, updatedBy=? WHERE id=?').run(now(), actor.email, id);
+      this.record(id, 'undeleted', actor, null);
       return this.product(id);
     })();
   }

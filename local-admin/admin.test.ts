@@ -7,6 +7,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
+import { Database } from 'bun:sqlite';
 
 const stores:AdminStore[]=[];
 const folders:string[]=[];
@@ -117,5 +118,80 @@ describe('local invitation-only prototype',()=>{
     first.invite(owner,'editor@example.com','editor');const p=first.product(50);first.save(owner,50,{...p.data,price:2500},p.version);first.close();
     const second=new AdminStore(file,'owner@example.com');stores.push(second);
     expect(second.member('editor@example.com')?.status).toBe('invited');expect(second.product(50).data.price).toBe(2500);expect(second.product(50).published?.price).toBe(2400);
+  });
+  test('deleting an unpublished draft preserves its data, SKU, photos and history in recoverable trash',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    const draft=store.create(owner,{...emptyProduct(),names:{en:'Draft to remove',ru:'',uk:''},price:1100,images:[store.product(24).data.images[0]]});
+    const result=store.deleteDraft(owner,draft.data.id,draft.version);
+    expect(result.kind).toBe('deleted');expect(result.product.deletedBy).toBe(owner.email);expect(result.product.deletedAt).not.toBeNull();
+    expect(store.list()).toHaveLength(108);expect(store.trash()).toHaveLength(1);expect(store.trash()[0]!.data).toEqual(draft.data);
+    expect(()=>store.product(draft.data.id)).toThrow('Украшение не найдено');
+    expect(()=>store.save(owner,draft.data.id,draft.data,result.product.version)).toThrow();
+    expect(()=>store.publish(owner,draft.data.id,result.product.version)).toThrow();
+    const next=store.create(owner,{...emptyProduct(),names:{en:'Another draft',ru:'',uk:''}});
+    expect(next.data.sku).toBe('P139');
+    const restored=store.restoreDraft(owner,draft.data.id,result.product.version);
+    expect(restored.data).toEqual(draft.data);expect(restored.data.sku).toBe('P138');expect(restored.published).toBeNull();
+    expect(restored.deletedAt).toBeNull();expect(store.trash()).toHaveLength(0);
+    expect(store.history(draft.data.id).map(r=>r.action)).toEqual(['undeleted','deleted','created']);
+  });
+  test('discarding an existing product draft keeps the published piece and allows historical recovery',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user,original=store.product(50);
+    const edited=store.save(owner,50,{...original.data,price:2450,names:{...original.data.names,en:'Wrong edited ring'}},original.version);
+    const result=store.deleteDraft(owner,50,edited.version);
+    expect(result.kind).toBe('discarded');expect(result.product.data).toEqual(original.data);expect(result.product.published).toEqual(original.published);
+    expect(result.product.hasChanges).toBe(false);expect(result.product.deletedAt).toBeNull();expect(store.trash()).toHaveLength(0);
+    const revision=store.history(50)[0]!;expect(revision.action).toBe('discarded');
+    const recovered=store.restore(owner,50,revision.id,result.product.version);
+    expect(recovered.data.price).toBe(2450);expect(recovered.published?.price).toBe(2400);
+  });
+  test('a published product without draft changes cannot be removed',()=>{
+    const store=setup(),owner=store.login('owner@example.com').user,original=store.product(24);
+    expect(()=>store.deleteDraft(owner,24,original.version)).toThrow('Удалить её этой кнопкой нельзя');
+    expect(store.product(24)).toEqual(original);expect(store.trash()).toHaveLength(0);expect(store.list()).toHaveLength(108);
+  });
+  test('delete and restore require authentication and reject stale versions',async()=>{
+    const store=setup(),owner=store.login('owner@example.com'),api=createAdminApi(store,'/tmp/unused-studio-uploads');
+    const p=store.create(owner.user,{...emptyProduct(),names:{en:'Versioned draft',ru:'',uk:''}}),cookie=session(owner.token);
+    expect((await api(request(`/products/${p.data.id}`,'DELETE',{version:p.version}))).status).toBe(401);
+    const changed=store.save(owner.user,p.data.id,{...p.data,price:1100},p.version);
+    expect((await api(request(`/products/${p.data.id}`,'DELETE',{version:p.version},cookie))).status).toBe(409);
+    expect(store.trash()).toHaveLength(0);
+    const response=await api(request(`/products/${p.data.id}`,'DELETE',{version:changed.version},cookie));
+    expect(response.status).toBe(200);const deleted=await response.json();
+    expect((await api(request(`/products/${p.data.id}/restore-draft`,'POST',{version:deleted.product.version}))).status).toBe(401);
+    expect((await api(request(`/products/${p.data.id}/restore-draft`,'POST',{version:changed.version},cookie))).status).toBe(409);
+    const restored=await api(request(`/products/${p.data.id}/restore-draft`,'POST',{version:deleted.product.version},cookie));
+    expect(restored.status).toBe(200);expect((await restored.json()).product.data.price).toBe(1100);
+  });
+  test('an invited editor can delete and restore shared drafts without gaining publication rights',async()=>{
+    const store=setup(),owner=store.login('owner@example.com').user;
+    store.invite(owner,'editor@example.com','editor');const cookie=session(store.login('editor@example.com').token);
+    const api=createAdminApi(store,'/tmp/unused-studio-uploads');
+    const p=store.create(owner,{...emptyProduct(),names:{en:'Team draft',ru:'',uk:''}});
+    const response=await api(request(`/products/${p.data.id}`,'DELETE',{version:p.version},cookie));expect(response.status).toBe(200);
+    const deleted=await response.json();
+    expect(deleted.product.deletedBy).toBe('editor@example.com');
+    expect((await api(request(`/products/${p.data.id}/restore-draft`,'POST',{version:deleted.product.version},cookie))).status).toBe(200);
+    expect((await api(request('/products/50','DELETE',{version:1},cookie))).status).toBe(400);
+    expect((await api(request('/products/50/publish','POST',{version:1},cookie))).status).toBe(403);
+  });
+  test('upgrading an existing local database preserves products, invitations and deleted drafts across restarts',async()=>{
+    const directory=await mkdtemp(join(tmpdir(),'luminore-admin-upgrade-'));folders.push(directory);const file=join(directory,'old.sqlite');
+    const old=new Database(file,{create:true});
+    old.exec('CREATE TABLE products(id INTEGER PRIMARY KEY,sku TEXT UNIQUE NOT NULL,data TEXT NOT NULL,published TEXT,hasChanges INTEGER NOT NULL,version INTEGER NOT NULL,updatedAt TEXT NOT NULL,updatedBy TEXT NOT NULL,position INTEGER NOT NULL); CREATE TABLE members(email TEXT PRIMARY KEY,role TEXT NOT NULL,status TEXT NOT NULL,invitedAt TEXT NOT NULL,lastLoginAt TEXT);');
+    const published=seedProduct(products.find(p=>p.id===24)!);
+    const draft={...emptyProduct(),id:138,sku:'P138',names:{en:'Existing local draft',ru:'',uk:''},images:[published.images[0]]};
+    const timestamp=new Date().toISOString();
+    old.query('INSERT INTO products VALUES(?,?,?,?,?,?,?,?,?)').run(24,'P024',JSON.stringify(published),JSON.stringify(published),0,1,timestamp,'owner@example.com',0);
+    old.query('INSERT INTO products VALUES(?,?,?,?,?,?,?,?,?)').run(138,'P138',JSON.stringify(draft),null,1,1,timestamp,'owner@example.com',-1);
+    old.query("INSERT INTO members VALUES(?,'editor','invited',?,NULL)").run('existing@example.com',timestamp);old.close();
+    const upgraded=new AdminStore(file,'owner@example.com');
+    expect(upgraded.product(24).data).toEqual(published);expect(upgraded.product(138).data).toEqual(draft);expect(upgraded.member('existing@example.com')?.role).toBe('editor');
+    const deleted=upgraded.deleteDraft(upgraded.login('owner@example.com').user,138,1);upgraded.close();
+    const reopened=new AdminStore(file,'owner@example.com');stores.push(reopened);
+    expect(reopened.list()).toHaveLength(1);expect(reopened.trash()[0]!.data).toEqual(draft);
+    expect(reopened.restoreDraft(reopened.login('owner@example.com').user,138,deleted.product.version).data).toEqual(draft);
+    expect(reopened.product(24).published).toEqual(published);
   });
 });

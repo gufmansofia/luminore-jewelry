@@ -42,17 +42,19 @@ export function createAdminApi(store: AdminStore, uploadDirectory: string) {
         store.logout(token); return json({ok:true},200,{'Set-Cookie':`${sessionCookie}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`});
       }
       if (pathname === '/api/products') {
-        if (method === 'GET') return json({products:store.list()});
+        if (method === 'GET') return json({products:store.list(),trash:store.trash()});
         if (method === 'POST') return json({product:store.create(actor,(await body(req)).data)},201);
       }
-      const product = pathname.match(/^\/api\/products\/(\d+)(?:\/(history|publish|restore))?$/);
+      const product = pathname.match(/^\/api\/products\/(\d+)(?:\/(history|publish|restore|restore-draft))?$/);
       if (product) {
         const id = Number(product[1]), action = product[2];
         if (!action && method === 'GET') return json({product:store.product(id)});
         if (!action && method === 'PUT') { const p=await body(req); return json({product:store.save(actor,id,p.data,p.version)}); }
+        if (!action && method === 'DELETE') return json(store.deleteDraft(actor,id,(await body(req)).version));
         if (action === 'history' && method === 'GET') return json({revisions:store.history(id)});
         if (action === 'publish' && method === 'POST') return json({product:store.publish(actor,id,(await body(req)).version)});
         if (action === 'restore' && method === 'POST') { const p=await body(req); return json({product:store.restore(actor,id,Number(p.revision),p.version)}); }
+        if (action === 'restore-draft' && method === 'POST') return json({product:store.restoreDraft(actor,id,(await body(req)).version)});
       }
       if (pathname === '/api/members') {
         if (method === 'GET') return json({members:store.members(actor)});
