@@ -127,7 +127,7 @@ body:has([role="dialog"]) .back-to-top { visibility:hidden; }
  .footer-disclosure[data-open="false"]>ul { display:none; }
  footer .footer-disclosure a { display:flex; align-items:center; min-height:44px; }
  footer .footer-disclosure li { margin:0; }
- footer a[href^="tel:"],footer a[href^="mailto:"],footer a[href^="https://t.me"],footer a[href^="https://wa.me"],footer a[href$="/terms"],footer a[href$="/privacy"] { display:inline-flex; align-items:center; min-height:44px; }
+footer a[href^="tel:"],footer a[href^="mailto:"],footer a[href^="https://t.me"],footer a[href^="tg://"],footer a[href^="https://wa.me"],footer a[href$="/terms"],footer a[href$="/privacy"] { display:inline-flex; align-items:center; min-height:44px; }
  footer .footer-brand .header-logo { width:160px; }
  .information-body p { font-size:16px; line-height:1.65; }
  .info-dialog-content { padding:20px; }

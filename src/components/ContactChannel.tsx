@@ -1,5 +1,7 @@
+import { TELEGRAM_LINK } from '../lib/contact-links';
+
 const channels = {
-  Telegram: 'https://t.me/luminore_jewelry',
+  Telegram: TELEGRAM_LINK,
   WhatsApp: 'https://wa.me/421940600708',
   Instagram: 'https://www.instagram.com/luminore_jewelry/',
 } as const;

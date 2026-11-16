@@ -1,6 +1,7 @@
 import { test, expect } from 'bun:test';
 import { readSavedPieces, toggleSavedPiece } from '../src/lib/saved-pieces';
 import { enquiryMessage, telegramEnquiryUrl } from '../src/lib/enquiry';
+import { TELEGRAM_LINK } from '../src/lib/contact-links';
 import { enquiryBudgetOptions, validEnquiryBudget } from '../src/lib/enquiry-budget';
 import { articleChapters } from '../src/lib/article-chapters';
 import { blogPosts } from '../src/data/blogs';
@@ -16,9 +17,9 @@ test('saved pieces survive stale data without duplicates or a two-piece storage 
 test('guided preferences reach the Luminore Telegram draft in all languages without pretending a collection request is bespoke', () => {
   for (const language of ['en', 'ru', 'uk'] as const) {
     const draft = enquiryMessage({ name: 'Anna', piece: 'Ring', ringShape: 'oval', stone: 'natural', direction: 'collection', details: 'Oval & pear + side stones' }, language, true);
-    const url = new URL(telegramEnquiryUrl(draft));
-    expect(url.origin + url.pathname).toBe('https://t.me/luminore_jewelry');
-    expect(url.searchParams.get('text')).toBe(draft);
+    const url = telegramEnquiryUrl(draft);
+    expect(url.startsWith(`${TELEGRAM_LINK}&text=`)).toBe(true);
+    expect(decodeURIComponent(url.slice(url.indexOf('&text=') + 6))).toBe(draft);
     expect(draft).toContain('Oval & pear + side stones');
     expect(draft).not.toMatch(/undefined|discuss a bespoke piece|обсудить украшение на заказ|обговорити прикрасу на замовлення/);
     expect(draft).toContain(({ en: 'Natural', ru: 'Натуральные', uk: 'Природні' })[language]);
@@ -46,7 +47,7 @@ test('natural diamond budgets reach Telegram for every piece type and language',
     for (const piece of ['Rings', 'Earrings', 'Bracelets', 'Pendants', 'Necklaces', 'Other']) {
       for (const [value, label] of options) {
         const draft = enquiryMessage({ name: 'Anna', piece, stone: 'natural', budget: label, details: '' }, language, true);
-        expect(new URL(telegramEnquiryUrl(draft)).searchParams.get('text')).toContain(label);
+        expect(decodeURIComponent(telegramEnquiryUrl(draft).slice(telegramEnquiryUrl(draft).indexOf('&text=') + 6))).toContain(label);
         expect(validEnquiryBudget(value, 'natural')).toBe(value);
       }
     }

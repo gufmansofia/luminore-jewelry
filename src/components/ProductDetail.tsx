@@ -14,6 +14,7 @@ import {collectionPath,collectionRoute} from '../data/collections';
 import {localePath} from '../lib/locale-path';
 import {SITE} from '../lib/seo';
 import {SavePieceButton} from './SavedPieces';
+import {telegramMessageLink} from '../lib/contact-links';
 import '../styles/product-detail.css';
 import {useBackNavigation} from '../hooks/useBackNavigation';
 import {useRestoredScroll} from '../hooks/useRouteScroll';
@@ -41,7 +42,7 @@ export function ProductDetail(){
  const price=natural||p.priceUsd===null?t.product.priceOnEnquiry:usd(p.priceUsd);
  const message=pick(`Hello! I’m interested in ${name}.`,`Здравствуйте! Меня интересует ${name}.`,`Добрий день! Мене цікавить ${name}.`)+' '+(natural?pick('Natural diamonds. Price on request.','Натуральные бриллианты. Цена по запросу.','Природні діаманти. Ціна за запитом.'):price)+' '+`${SITE}${localePath(`/product/${p.id}`,l)}`;
  const whatsapp=`https://wa.me/421940600708?text=${encodeURIComponent(message)}`;
- const telegram=`https://t.me/luminore_jewelry?text=${encodeURIComponent(message)}`;
+ const telegram=telegramMessageLink(message);
  const related=products.filter(other=>other.categoryEn===p.categoryEn&&other.id!==p.id).slice(0,3);
  return <div className="product-page" data-theme="light">
  <DetailHeader theme="light" back={pick('Back','Назад','Назад')} onBack={back}/>

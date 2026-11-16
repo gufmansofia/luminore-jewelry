@@ -6,8 +6,8 @@ import { useLanguage } from '../i18n';
 
 import {information} from '../data/information';
 import {HeaderLogo} from './HeaderLogo';
+import {TELEGRAM_LINK} from '../lib/contact-links';
 
-const TELEGRAM_LINK = 'https://t.me/luminore_jewelry';
 const WHATSAPP_LINK = 'https://wa.me/421940600708';
 
 function InfoPopup({ onClose, language, infoKey }: { onClose: () => void; language: string; infoKey: string }) {
@@ -236,7 +236,7 @@ export function Footer({theme='dark'}:{theme?:'dark'|'light'}) {
                   </a>
                 </li>
                 <li>
-                  <a href="https://t.me/luminore_jewelry" target="_blank" rel="noopener noreferrer" className="font-body text-silver/70 hover:text-accent transition-colors text-sm">
+                  <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className="font-body text-silver/70 hover:text-accent transition-colors text-sm">
                     Telegram
                   </a>
                 </li>

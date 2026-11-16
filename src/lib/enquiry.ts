@@ -1,6 +1,7 @@
 import type { Language } from '../i18n/translations';
 import { choose } from './product-copy';
 import { ringShapeLabel, type RingShape } from './ring-shapes';
+import { telegramMessageLink } from './contact-links';
 export type Enquiry = { name: string; email?: string; phone?: string; piece?: string; budget?: string; details: string; ringShape?: RingShape; stone?: 'natural' | 'lab' | 'undecided'; direction?: 'collection' | 'bespoke' | 'undecided' };
 export function enquiryMessage(values: Enquiry, language: Language, bespoke: boolean) {
   const pick = (en: string, ru: string, uk: string) => choose(language, en, ru, uk);
@@ -18,4 +19,4 @@ export function enquiryMessage(values: Enquiry, language: Language, bespoke: boo
   ].filter(Boolean).join('\n');
 }
 export const whatsappEnquiryUrl = (message: string) => `https://wa.me/421940600708?text=${encodeURIComponent(message)}`;
-export const telegramEnquiryUrl = (message: string) => `https://t.me/luminore_jewelry?text=${encodeURIComponent(message)}`;
+export const telegramEnquiryUrl = (message: string) => telegramMessageLink(message);
