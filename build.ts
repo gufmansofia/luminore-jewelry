@@ -167,7 +167,7 @@ const fontPreloads = ["montserrat-latin", "cormorant-garamond-latin"]
 for (const output of result.outputs.filter(output => output.path.endsWith(".html"))) {
   let html = await output.text();
   // Search engines need stable icon URLs; keep Bun's hashed assets for other media.
-  for (const file of ["favicon-search.png", "favicon.ico", "apple-touch-icon.png"]) {
+  for (const file of ["favicon-48.png", "favicon-search.png", "favicon.ico", "apple-touch-icon.png"]) {
     const { name, ext } = path.parse(file);
     const bundled = result.outputs.find(asset => path.basename(asset.path).startsWith(`${name}-`) && path.extname(asset.path) === ext);
     if (bundled) html = html.replaceAll(path.basename(bundled.path), file);

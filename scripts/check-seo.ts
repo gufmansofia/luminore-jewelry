@@ -16,10 +16,11 @@ const file=(route:string)=>`dist/${route==='/'?'index':route.slice(1)}.html`;
 test('search icons use stable raster URLs on every localized page and retain useful square sizes',()=>{
  for(const language of languages)for(const route of publicRoutes()){
   const html=readFileSync(file(localePath(route,language)),'utf8');
+  expect(html).toContain('rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png"');
   expect(html).toContain('rel="icon" type="image/png" sizes="192x192" href="/favicon-search.png"');
   expect(html).toContain('rel="shortcut icon" type="image/x-icon" href="/favicon.ico"');
   expect(html).toContain('rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"');
-  expect(html.match(/rel="icon"/g)).toHaveLength(1);
+  expect(html.match(/rel="icon"/g)).toHaveLength(2);
  }
  const png=readFileSync('dist/favicon-search.png');
  expect(png.subarray(0,8)).toEqual(Buffer.from([137,80,78,71,13,10,26,10]));
