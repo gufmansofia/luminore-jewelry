@@ -93,6 +93,10 @@ test('sitemap and robots use the production domain',()=>{
  for(const match of sitemap.matchAll(/(?:<loc>|href=")(https?:\/\/[^<"]+)/g))expect(new URL(match[1]).origin).toBe(origin);
  expect(readFileSync('dist/robots.txt','utf8')).toContain(`Sitemap: ${origin}/sitemap.xml`);
 });
+test('the Vercel alias permanently redirects to the canonical Luminore domain',()=>{
+ const config=JSON.parse(readFileSync('vercel.json','utf8'));
+ expect(config.redirects).toContainEqual({source:'/(.*)',has:[{type:'host',value:'luminore-jewelry.vercel.app'}],destination:'https://www.luminorejewelry.com/$1',permanent:true});
+});
 test('alternative sitemap index covers every public URL once across language sitemaps',()=>{
  const index=readFileSync('dist/sitemap-index.xml','utf8');
  expect(index).toContain('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');

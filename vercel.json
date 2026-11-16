@@ -4,5 +4,18 @@
   "installCommand": "bun install --frozen-lockfile",
   "outputDirectory": "dist",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "luminore-jewelry.vercel.app"
+        }
+      ],
+      "destination": "https://www.luminorejewelry.com/$1",
+      "permanent": true
+    }
+  ]
 }
