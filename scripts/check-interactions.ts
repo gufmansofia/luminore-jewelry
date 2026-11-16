@@ -18,8 +18,8 @@ test('guided preferences reach the Luminore Telegram draft in all languages with
   for (const language of ['en', 'ru', 'uk'] as const) {
     const draft = enquiryMessage({ name: 'Anna', piece: 'Ring', ringShape: 'oval', stone: 'natural', direction: 'collection', details: 'Oval & pear + side stones' }, language, true);
     const url = telegramEnquiryUrl(draft);
-    expect(url.startsWith(`${TELEGRAM_LINK}&text=`)).toBe(true);
-    expect(decodeURIComponent(url.slice(url.indexOf('&text=') + 6))).toBe(draft);
+    expect(url.startsWith(`${TELEGRAM_LINK}?text=`)).toBe(true);
+    expect(decodeURIComponent(url.slice(url.indexOf('?text=') + 6))).toBe(draft);
     expect(draft).toContain('Oval & pear + side stones');
     expect(draft).not.toMatch(/undefined|discuss a bespoke piece|обсудить украшение на заказ|обговорити прикрасу на замовлення/);
     expect(draft).toContain(({ en: 'Natural', ru: 'Натуральные', uk: 'Природні' })[language]);
@@ -47,7 +47,7 @@ test('natural diamond budgets reach Telegram for every piece type and language',
     for (const piece of ['Rings', 'Earrings', 'Bracelets', 'Pendants', 'Necklaces', 'Other']) {
       for (const [value, label] of options) {
         const draft = enquiryMessage({ name: 'Anna', piece, stone: 'natural', budget: label, details: '' }, language, true);
-        expect(decodeURIComponent(telegramEnquiryUrl(draft).slice(telegramEnquiryUrl(draft).indexOf('&text=') + 6))).toContain(label);
+        expect(decodeURIComponent(telegramEnquiryUrl(draft).slice(telegramEnquiryUrl(draft).indexOf('?text=') + 6))).toContain(label);
         expect(validEnquiryBudget(value, 'natural')).toBe(value);
       }
     }
